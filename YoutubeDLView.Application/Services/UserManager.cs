@@ -6,33 +6,29 @@ using YoutubeDLView.Application.Interfaces;
 using YoutubeDLView.Domain.Common;
 using YoutubeDLView.Domain.Entities;
 using YoutubeDLView.Domain.Enums;
+using YoutubeDLView.Domain.Interfaces;
 
 namespace YoutubeDLView.Application.Services
 {
-    public class UserManager
+    public class UserManager: IUserManager
     {
         private readonly IYoutubeDLViewDb _dbContext;
-        private readonly RandomGenerator _randomGenerator;
+        private readonly IRandomGenerator _randomGenerator;
         
+        /// <inheritdoc />
         public IEnumerable<User> Users { get; }
         
-        public UserManager(IYoutubeDLViewDb dbContext, RandomGenerator randomGenerator)
+        public UserManager(IYoutubeDLViewDb dbContext, IRandomGenerator randomGenerator)
         {
             _dbContext = dbContext;
             _randomGenerator = randomGenerator;
-            Users = Enumerable.ToList<User>(dbContext.Users);
+            Users = dbContext.Users.ToList<User>();
         }
 
-        /// <summary>
-        /// Creates a new user with the given information
-        /// </summary>
-        /// <param name="username">The username of the new user</param>
-        /// <param name="password">The password of the new user</param>
-        /// <param name="role">The role of the new user</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<Result<User>> CreateUser(string username, string password, UserRole role)
         {
-            if (Queryable.Any<User>(_dbContext.Users, x => x.Username == username)) return Result.Fail<User>("Duplicate username");
+            if (_dbContext.Users.Any<User>(x => x.Username == username)) return Result.Fail<User>("Duplicate username");
             
             User user = new User(username, password, role, _randomGenerator.GenerateString(20));
             EntityEntry<User> addedUser = _dbContext.Users.Add(user);
@@ -40,11 +36,7 @@ namespace YoutubeDLView.Application.Services
             return Result.Ok(addedUser.Entity);
         }
 
-        /// <summary>
-        /// Updates a user's refresh key
-        /// </summary>
-        /// <param name="user">The user to update</param>
-        /// <returns>The updated <see cref="YoutubeDLView.Domain.Entities.User"/></returns>
+        /// <inheritdoc />
         public async Task<User> UpdateRefreshKey(User user)
         {
             user.RefreshKey = _randomGenerator.GenerateString(20);
@@ -52,11 +44,7 @@ namespace YoutubeDLView.Application.Services
             return user;
         }
 
-        /// <summary>
-        /// Updates a user's refresh key by user id
-        /// </summary>
-        /// <param name="userId">The id of the user to update</param>
-        /// <returns>The updated <see cref="YoutubeDLView.Domain.Entities.User"/></returns>
+        /// <inheritdoc />
         public async Task<Result<User>> UpdateRefreshKey(string userId)
         {
             User user = Users.FirstOrDefault(x => x.Id == userId);

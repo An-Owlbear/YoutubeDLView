@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Security.Cryptography;
+using YoutubeDLView.Domain.Interfaces;
 
 namespace YoutubeDLView.Application.Services
 {
-    public class RandomGenerator
+    public class RandomGenerator : IRandomGenerator
     {
         private readonly RNGCryptoServiceProvider _generator;
 
@@ -12,6 +13,7 @@ namespace YoutubeDLView.Application.Services
             _generator = new RNGCryptoServiceProvider();
         }
         
+        /// <ihneritdoc />
         public string GenerateString(int byteLength)
         {
             byte[] bytes = new byte[byteLength];

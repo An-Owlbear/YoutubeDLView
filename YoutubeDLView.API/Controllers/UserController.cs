@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using YoutubeDLView.Application.Services;
 using YoutubeDLView.Domain.Common;
 using YoutubeDLView.Domain.Enums;
+using YoutubeDLView.Domain.Interfaces;
 
 namespace YoutubeDLView.API.Controllers
 {
@@ -14,13 +15,13 @@ namespace YoutubeDLView.API.Controllers
     [Route("Users")]
     public class UserController : ControllerBase
     {
-        private readonly UserManager _userManager;
+        private readonly IUserManager _userManager;
 
         /// <summary>
         /// Initializes an instance of <see cref="UserController"/>
         /// </summary>
         /// <param name="userManager">An instance of <see cref="UserManager"/></param>
-        public UserController(UserManager userManager)
+        public UserController(IUserManager userManager)
         {
             _userManager = userManager;
         }
