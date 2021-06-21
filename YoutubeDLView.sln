@@ -4,7 +4,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeDLView.API", "Youtub
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeDLView.Data", "YoutubeDLView.Data\YoutubeDLView.Data.csproj", "{59CF69AD-7FBD-4BE3-A1D2-C293F848B7C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeDLView.Common", "YoutubeDLView.Common\YoutubeDLView.Common.csproj", "{E817946C-CCA7-4A51-8C9B-489265E7167D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeDLView.Application", "YoutubeDLView.Application\YoutubeDLView.Application.csproj", "{E817946C-CCA7-4A51-8C9B-489265E7167D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeDLView.Domain", "YoutubeDLView.Domain\YoutubeDLView.Domain.csproj", "{5571B8CA-51DE-4AC0-935B-566B02E729D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +26,9 @@ Global
 		{E817946C-CCA7-4A51-8C9B-489265E7167D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E817946C-CCA7-4A51-8C9B-489265E7167D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E817946C-CCA7-4A51-8C9B-489265E7167D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5571B8CA-51DE-4AC0-935B-566B02E729D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5571B8CA-51DE-4AC0-935B-566B02E729D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5571B8CA-51DE-4AC0-935B-566B02E729D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5571B8CA-51DE-4AC0-935B-566B02E729D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

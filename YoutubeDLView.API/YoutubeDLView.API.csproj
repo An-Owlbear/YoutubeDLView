@@ -13,9 +13,5 @@
     <ItemGroup>
       <ProjectReference Include="..\YoutubeDLView.Data\YoutubeDLView.Data.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Services" />
-    </ItemGroup>
     
 </Project>

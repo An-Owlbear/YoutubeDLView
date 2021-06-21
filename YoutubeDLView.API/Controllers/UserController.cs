@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using YoutubeDLView.Common;
-using YoutubeDLView.Common.Models;
-using YoutubeDLView.Data.Enums;
-using YoutubeDLView.Data.Services;
+using YoutubeDLView.Application.Services;
+using YoutubeDLView.Domain.Common;
+using YoutubeDLView.Domain.Enums;
 
 namespace YoutubeDLView.API.Controllers
 {

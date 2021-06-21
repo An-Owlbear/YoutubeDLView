@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace YoutubeDLView.Common.Services
+namespace YoutubeDLView.Application.Services
 {
     public class RandomGenerator
     {

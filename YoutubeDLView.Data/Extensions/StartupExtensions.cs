@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using YoutubeDLView.Data.Services;
+using YoutubeDLView.Application.Services;
 
 namespace YoutubeDLView.Data.Extensions
 {

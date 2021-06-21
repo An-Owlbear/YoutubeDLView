@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using YoutubeDLView.Data.Enums;
+using YoutubeDLView.Domain.Enums;
 
-namespace YoutubeDLView.Data.Models
+namespace YoutubeDLView.Domain.Entities
 {
     public class User
     {

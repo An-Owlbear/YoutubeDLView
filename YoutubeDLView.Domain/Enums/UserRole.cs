@@ -1,4 +1,4 @@
-﻿namespace YoutubeDLView.Data.Enums
+﻿namespace YoutubeDLView.Domain.Enums
 {
     public enum UserRole
     {

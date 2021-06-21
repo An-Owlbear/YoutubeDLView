@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using YoutubeDLView.Data.Models;
+using YoutubeDLView.Application.Interfaces;
+using YoutubeDLView.Domain.Entities;
 
 namespace YoutubeDLView.Data
 {
-    public class YoutubeDLViewDb : DbContext
+    public class YoutubeDLViewDb : DbContext, IYoutubeDLViewDb
     {
         public DbSet<User> Users { get; set; }
 
