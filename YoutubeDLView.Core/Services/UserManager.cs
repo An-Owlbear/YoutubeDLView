@@ -21,18 +21,18 @@ namespace YoutubeDLView.Core.Services
         {
             _dbContext = dbContext;
             _randomGenerator = randomGenerator;
-            Users = Enumerable.ToList<User>(dbContext.Users);
+            Users = dbContext.Users.ToList();
         }
 
         /// <inheritdoc />
         public async Task<Result<User>> CreateUser(string username, string password, UserRole role)
         {
-            if (Queryable.Any<User>(_dbContext.Users, x => x.Username == username)) return Result.Fail<User>("Duplicate username");
+            if (_dbContext.Users.Any(x => x.Username == username)) return Result.Fail<User>("Duplicate username");
             
-            User user = new User(username, password, role, _randomGenerator.GenerateString(20));
+            User user = new(username, password, role, _randomGenerator.GenerateString(20));
             EntityEntry<User> addedUser = _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
-            return Result.Ok<User>(addedUser.Entity);
+            return Result.Ok(addedUser.Entity);
         }
 
         /// <inheritdoc />

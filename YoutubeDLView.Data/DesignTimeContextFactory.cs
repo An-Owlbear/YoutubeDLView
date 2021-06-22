@@ -10,7 +10,7 @@ namespace YoutubeDLView.Data
     {
         public YoutubeDLViewDb CreateDbContext(string[] args)
         {
-            DbContextOptionsBuilder<YoutubeDLViewDb> builder = new ();
+            DbContextOptionsBuilder<YoutubeDLViewDb> builder = new();
             builder.UseSqlite("Filename=YoutubeDLView.db");
             return new YoutubeDLViewDb(builder.Options);
         }
