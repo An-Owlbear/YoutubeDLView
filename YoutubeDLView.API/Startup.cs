@@ -8,10 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using YoutubeDLView.API.Services;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Interfaces;
 using YoutubeDLView.Core.Services;
-using YoutubeDLView.Data;
 using YoutubeDLView.Data.Extensions;
 
 namespace YoutubeDLView.API
@@ -41,6 +41,7 @@ namespace YoutubeDLView.API
             services.AddYoutubeDLViewDb();
             services.AddUserManager();
             services.AddSingleton<IRandomGenerator, RandomGenerator>();
+            services.AddScoped<IJwtTokenHandler, JwtTokenHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IYoutubeDLViewDb dbContext)
