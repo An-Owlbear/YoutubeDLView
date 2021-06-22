@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\YoutubeDLView.Application\YoutubeDLView.Application.csproj" />
+      <ProjectReference Include="..\YoutubeDLView.Core\YoutubeDLView.Core.csproj" />
     </ItemGroup>
 
 </Project>

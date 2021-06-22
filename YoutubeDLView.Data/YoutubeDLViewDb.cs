@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using YoutubeDLView.Application.Interfaces;
-using YoutubeDLView.Domain.Entities;
+using YoutubeDLView.Core.Entities;
+using YoutubeDLView.Core.Interfaces;
 
 namespace YoutubeDLView.Data
 {

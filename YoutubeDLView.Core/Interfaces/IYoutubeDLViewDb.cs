@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using YoutubeDLView.Domain.Entities;
+using YoutubeDLView.Core.Entities;
 
-namespace YoutubeDLView.Application.Interfaces
+namespace YoutubeDLView.Core.Interfaces
 {
     public interface IYoutubeDLViewDb
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Security.Cryptography;
-using YoutubeDLView.Domain.Interfaces;
+using YoutubeDLView.Core.Interfaces;
 
-namespace YoutubeDLView.Application.Services
+namespace YoutubeDLView.Core.Services
 {
     public class RandomGenerator : IRandomGenerator
     {

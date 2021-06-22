@@ -8,10 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using YoutubeDLView.Application.Interfaces;
-using YoutubeDLView.Application.Services;
+using YoutubeDLView.Core.Interfaces;
+using YoutubeDLView.Core.Services;
 using YoutubeDLView.Data.Extensions;
-using YoutubeDLView.Domain.Interfaces;
 
 namespace YoutubeDLView.API
 {

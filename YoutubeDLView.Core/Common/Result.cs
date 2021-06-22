@@ -1,4 +1,4 @@
-﻿namespace YoutubeDLView.Domain.Common
+﻿namespace YoutubeDLView.Core.Common
 {
     // Class Representing the result of result of an operation
     public class Result

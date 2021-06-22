@@ -2,13 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using YoutubeDLView.Application.Interfaces;
-using YoutubeDLView.Domain.Common;
-using YoutubeDLView.Domain.Entities;
-using YoutubeDLView.Domain.Enums;
-using YoutubeDLView.Domain.Interfaces;
+using YoutubeDLView.Core.Common;
+using YoutubeDLView.Core.Entities;
+using YoutubeDLView.Core.Enums;
+using YoutubeDLView.Core.Interfaces;
 
-namespace YoutubeDLView.Application.Services
+namespace YoutubeDLView.Core.Services
 {
     public class UserManager: IUserManager
     {
@@ -22,18 +21,18 @@ namespace YoutubeDLView.Application.Services
         {
             _dbContext = dbContext;
             _randomGenerator = randomGenerator;
-            Users = dbContext.Users.ToList<User>();
+            Users = Enumerable.ToList<User>(dbContext.Users);
         }
 
         /// <inheritdoc />
         public async Task<Result<User>> CreateUser(string username, string password, UserRole role)
         {
-            if (_dbContext.Users.Any<User>(x => x.Username == username)) return Result.Fail<User>("Duplicate username");
+            if (Queryable.Any<User>(_dbContext.Users, x => x.Username == username)) return Result.Fail<User>("Duplicate username");
             
             User user = new User(username, password, role, _randomGenerator.GenerateString(20));
             EntityEntry<User> addedUser = _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
-            return Result.Ok(addedUser.Entity);
+            return Result.Ok<User>(addedUser.Entity);
         }
 
         /// <inheritdoc />

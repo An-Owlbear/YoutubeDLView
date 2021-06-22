@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using YoutubeDLView.Domain.Common;
-using YoutubeDLView.Domain.Entities;
-using YoutubeDLView.Domain.Enums;
+using YoutubeDLView.Core.Common;
+using YoutubeDLView.Core.Entities;
+using YoutubeDLView.Core.Enums;
 
-namespace YoutubeDLView.Domain.Interfaces
+namespace YoutubeDLView.Core.Interfaces
 {
     public interface IUserManager
     {
@@ -37,7 +37,7 @@ namespace YoutubeDLView.Domain.Interfaces
         /// This overload returns a <see cref="User"/> encapsulated in a <see cref="Result"/> in order to account for
         /// the possibility of an invalid id being passed
         /// </remarks>
-        /// <returns>The updated <see cref="YoutubeDLView.Domain.Entities.User"/></returns>
+        /// <returns>The updated <see cref="User"/></returns>
         Task<Result<User>> UpdateRefreshKey(string userId);
     }
 }

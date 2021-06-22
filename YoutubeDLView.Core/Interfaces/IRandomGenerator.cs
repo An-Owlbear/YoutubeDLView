@@ -1,4 +1,4 @@
-﻿namespace YoutubeDLView.Domain.Interfaces
+﻿namespace YoutubeDLView.Core.Interfaces
 {
     public interface IRandomGenerator
     {
