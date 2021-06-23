@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using YoutubeDLView.API.Auth;
 using YoutubeDLView.Api.Models;
 using YoutubeDLView.API.Services;
@@ -33,6 +34,15 @@ namespace YoutubeDLView.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "YoutubeDLView.API", Version = "v1" });
+                c.AddSecurityDefinition("JWT Authorization", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer"
+                });
+                c.OperationFilter<SecurityRequirementsOperationFilter>(true, "JWT Authorization");
+                
                 string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
