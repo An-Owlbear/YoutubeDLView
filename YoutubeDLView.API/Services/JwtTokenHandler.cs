@@ -35,11 +35,6 @@ namespace YoutubeDLView.API.Services
             return handler.WriteToken(token);
         }
 
-        public Result<ClaimsPrincipal> ValidateAccessToken(string token, TokenValidationParameters validationParameters)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Creates a JWT refresh token for the given user
         /// </summary>
@@ -52,10 +47,25 @@ namespace YoutubeDLView.API.Services
             SecurityToken token = handler.CreateToken(tokenDescriptor);
             return handler.WriteToken(token);
         }
-
-        public Result<ClaimsPrincipal> ValidateRefreshToken(string token, TokenValidationParameters validationParameters)
+        
+        /// <summary>
+        /// Validates the given token
+        /// </summary>
+        /// <param name="token">The token to validate</param>
+        /// <param name="validationParameters">The options to use when validated the token</param>
+        /// <returns></returns>
+        public Result<ClaimsPrincipal> ValidateToken(string token, TokenValidationParameters validationParameters)
         {
-            throw new NotImplementedException();
+            JwtSecurityTokenHandler handler = new();
+            try
+            {
+                ClaimsPrincipal validatedClaims = handler.ValidateToken(token, validationParameters, out _);
+                return Result.Ok(validatedClaims);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail<ClaimsPrincipal>(e.Message);
+            }
         }
 
         // Creates a ClaimsIdentity from the given user
