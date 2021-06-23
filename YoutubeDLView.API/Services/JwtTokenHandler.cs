@@ -13,8 +13,7 @@ namespace YoutubeDLView.API.Services
     public class JwtTokenHandler : IJwtTokenHandler
     {
         private readonly YoutubeDLViewConfig _config;
-
-
+        
         public JwtTokenHandler(IOptionsSnapshot<YoutubeDLViewConfig> config)
         {
             _config = config.Value;

@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using YoutubeDLView.API.Auth;
+using YoutubeDLView.Api.Models;
 using YoutubeDLView.API.Services;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Interfaces;
@@ -36,8 +38,18 @@ namespace YoutubeDLView.API
                 c.IncludeXmlComments(xmlPath);
             });
 
-            services.Configure<YoutubeDLViewConfig>(Configuration.GetSection("YoutubeDLViewConfig"));
+            YoutubeDLViewConfig youtubeDlViewConfig =
+                Configuration.GetSection("YoutubeDLViewConfig").Get<YoutubeDLViewConfig>();
+            services.AddAuthentication("JwtAuthScheme")
+                .AddScheme<JwtAuthOptions, JwtAuthHandler>("JwtAuthScheme", options =>
+                {
+                    options.Url = youtubeDlViewConfig.Url;
+                    options.Secret = youtubeDlViewConfig.AccessTokenSecret;
+                });
+            services.AddAuthorization();
             
+            services.Configure<YoutubeDLViewConfig>(Configuration.GetSection("YoutubeDLViewConfig"));
+
             services.AddYoutubeDLViewDb();
             services.AddUserManager();
             services.AddSingleton<IRandomGenerator, RandomGenerator>();
@@ -57,6 +69,7 @@ namespace YoutubeDLView.API
 
             app.UsePathBase("/api");
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
