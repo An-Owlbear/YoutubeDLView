@@ -18,6 +18,7 @@ namespace YoutubeDLView.API.Services
         public JwtTokenHandler(IOptionsSnapshot<YoutubeDLViewConfig> config)
         {
             _config = config.Value;
+            _tokenHandler = new JwtSecurityTokenHandler();
         }
 
         /// <summary>
@@ -29,9 +30,8 @@ namespace YoutubeDLView.API.Services
         {
             SecurityTokenDescriptor tokenDescriptor =
                 createTokenDescriptor(user, TimeSpan.FromHours(1), _config.AccessTokenSecret);
-            JwtSecurityTokenHandler handler = new();
-            SecurityToken token = handler.CreateToken(tokenDescriptor);
-            return handler.WriteToken(token);
+            SecurityToken token = _tokenHandler.CreateToken(tokenDescriptor);
+            return _tokenHandler.WriteToken(token);
         }
 
         /// <summary>
@@ -42,23 +42,33 @@ namespace YoutubeDLView.API.Services
         public string CreateRefreshToken(User user)
         {
             SecurityTokenDescriptor tokenDescriptor = createTokenDescriptor(user, null, _config.RefreshTokenSecret);
-            JwtSecurityTokenHandler handler = new();
-            SecurityToken token = handler.CreateToken(tokenDescriptor);
-            return handler.WriteToken(token);
+            SecurityToken token = _tokenHandler.CreateToken(tokenDescriptor);
+            return _tokenHandler.WriteToken(token);
         }
-        
+
         /// <summary>
-        /// Validates the given token
+        /// Validates the given access token
         /// </summary>
         /// <param name="token">The token to validate</param>
-        /// <param name="validationParameters">The options to use when validated the token</param>
-        /// <returns></returns>
-        public Result<ClaimsPrincipal> ValidateToken(string token, TokenValidationParameters validationParameters)
+        /// <returns>The result of the validation, if successful containing the resulting <see cref="ClaimsPrincipal"/></returns>
+        public Result<ClaimsPrincipal> ValidateAccessToken(string token) =>
+            validateToken(token, createTokenValidationParameters(_config.AccessTokenSecret));
+
+        /// <summary>
+        /// Validates the given refresh token
+        /// </summary>
+        /// <param name="token">The token to validate</param>
+        /// <returns>The result of the validation, if successful containing the resulting <see cref="ClaimsPrincipal"/></returns>
+        public Result<ClaimsPrincipal> ValidateRefreshToken(string token) =>
+            validateToken(token, createTokenValidationParameters(_config.RefreshTokenSecret));
+        
+        
+        // Validates the given JWT token using the given TokenValidationParameters
+        private Result<ClaimsPrincipal> validateToken(string token, TokenValidationParameters validationParameters)
         {
-            JwtSecurityTokenHandler handler = new();
             try
             {
-                ClaimsPrincipal validatedClaims = handler.ValidateToken(token, validationParameters, out _);
+                ClaimsPrincipal validatedClaims = _tokenHandler.ValidateToken(token, validationParameters, out _);
                 return Result.Ok(validatedClaims);
             }
             catch (Exception e)
@@ -66,19 +76,7 @@ namespace YoutubeDLView.API.Services
                 return Result.Fail<ClaimsPrincipal>(e.Message);
             }
         }
-
-        public Result<ClaimsPrincipal> ValidateAccessToken(string token)
-        {
-            JwtSecurityTokenHandler handler = new();
-            return ValidateToken(token, createTokenValidationParameters(_config.AccessTokenSecret));
-        }
-
-        public Result<ClaimsPrincipal> ValidateRefreshToken(string token)
-        {
-            JwtSecurityTokenHandler handler = new();
-            return ValidateToken(token, createTokenValidationParameters(_config.RefreshTokenSecret));
-        }
-
+        
         // Creates a ClaimsIdentity from the given user
         private ClaimsIdentity createClaims(User user) => new(new[] 
         {
