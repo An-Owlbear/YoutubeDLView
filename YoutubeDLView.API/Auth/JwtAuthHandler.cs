@@ -48,7 +48,7 @@ namespace YoutubeDLView.API.Auth
         {
             // Ensures Authorization header is set
             if (!Request.Headers.ContainsKey(HeaderNames.Authorization))
-                return Task.FromResult(AuthenticateResult.Fail("Authorization header not found"));
+                return Task.FromResult(AuthenticateResult.NoResult());
 
             string header = Request.Headers[HeaderNames.Authorization].ToString();
 
