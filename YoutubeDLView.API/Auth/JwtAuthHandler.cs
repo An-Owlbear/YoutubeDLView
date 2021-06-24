@@ -1,25 +1,21 @@
 ﻿using System.Security.Claims;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
-using YoutubeDLView.Api.Models;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Interfaces;
 
 namespace YoutubeDLView.API.Auth
 {
-    public class JwtAuthHandler : AuthenticationHandler<JwtAuthOptions>
+    public class JwtAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
         private readonly IJwtTokenHandler _tokenHandler;
-        private TokenValidationParameters _validationParameters;
 
         public JwtAuthHandler(
-            IOptionsMonitor<JwtAuthOptions> options,
+            IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
@@ -29,20 +25,6 @@ namespace YoutubeDLView.API.Auth
             _tokenHandler = tokenHandler;
         }
 
-        // Sets up validation parameters
-        protected override Task InitializeHandlerAsync()
-        {
-            _validationParameters = new()
-            {
-                ValidateIssuer = true,
-                ValidIssuer = Options.Url,
-                ValidateAudience = false,
-                IssuerSigningKey = 
-                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Options.Secret))
-            };
-            return Task.CompletedTask;
-        }
-        
         // Authenticates access token in the request header
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
@@ -58,7 +40,7 @@ namespace YoutubeDLView.API.Auth
 
             // Validates the JWT token
             string token = header.Substring(7);
-            Result<ClaimsPrincipal> validateResult = _tokenHandler.ValidateToken(token, _validationParameters);
+            Result<ClaimsPrincipal> validateResult = _tokenHandler.ValidateAccessToken(token);
             if (!validateResult.Success) return Task.FromResult(AuthenticateResult.Fail("Invalid token"));
 
             AuthenticationTicket ticket = new(validateResult.Data, Scheme.Name);

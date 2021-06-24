@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using YoutubeDLView.API.Auth;
-using YoutubeDLView.Api.Models;
 using YoutubeDLView.API.Services;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Interfaces;
@@ -47,15 +47,9 @@ namespace YoutubeDLView.API
                 string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-
-            YoutubeDLViewConfig youtubeDlViewConfig =
-                Configuration.GetSection("YoutubeDLViewConfig").Get<YoutubeDLViewConfig>();
+            
             services.AddAuthentication("JwtAuthScheme")
-                .AddScheme<JwtAuthOptions, JwtAuthHandler>("JwtAuthScheme", options =>
-                {
-                    options.Url = youtubeDlViewConfig.Url;
-                    options.Secret = youtubeDlViewConfig.AccessTokenSecret;
-                });
+                .AddScheme<AuthenticationSchemeOptions, JwtAuthHandler>("JwtAuthScheme", _ => { });
             services.AddAuthorization();
             
             services.Configure<YoutubeDLViewConfig>(Configuration.GetSection("YoutubeDLViewConfig"));

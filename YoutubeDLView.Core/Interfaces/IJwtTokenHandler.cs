@@ -12,5 +12,9 @@ namespace YoutubeDLView.Core.Interfaces
         string CreateRefreshToken(User user);
         
         Result<ClaimsPrincipal> ValidateToken(string token, TokenValidationParameters validationParameters);
+
+        Result<ClaimsPrincipal> ValidateAccessToken(string token);
+
+        Result<ClaimsPrincipal> ValidateRefreshToken(string token);
     }
 }

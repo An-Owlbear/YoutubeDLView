@@ -13,6 +13,7 @@ namespace YoutubeDLView.API.Services
     public class JwtTokenHandler : IJwtTokenHandler
     {
         private readonly YoutubeDLViewConfig _config;
+        private readonly JwtSecurityTokenHandler _tokenHandler;
         
         public JwtTokenHandler(IOptionsSnapshot<YoutubeDLViewConfig> config)
         {
@@ -26,7 +27,6 @@ namespace YoutubeDLView.API.Services
         /// <returns>The created token</returns>
         public string CreateAccessToken(User user)
         {
-            Console.WriteLine(_config.AccessTokenSecret);
             SecurityTokenDescriptor tokenDescriptor =
                 createTokenDescriptor(user, TimeSpan.FromHours(1), _config.AccessTokenSecret);
             JwtSecurityTokenHandler handler = new();
@@ -67,6 +67,18 @@ namespace YoutubeDLView.API.Services
             }
         }
 
+        public Result<ClaimsPrincipal> ValidateAccessToken(string token)
+        {
+            JwtSecurityTokenHandler handler = new();
+            return ValidateToken(token, createTokenValidationParameters(_config.AccessTokenSecret));
+        }
+
+        public Result<ClaimsPrincipal> ValidateRefreshToken(string token)
+        {
+            JwtSecurityTokenHandler handler = new();
+            return ValidateToken(token, createTokenValidationParameters(_config.RefreshTokenSecret));
+        }
+
         // Creates a ClaimsIdentity from the given user
         private ClaimsIdentity createClaims(User user) => new(new[] 
         {
@@ -84,6 +96,15 @@ namespace YoutubeDLView.API.Services
             Subject = createClaims(user),
             SigningCredentials = new(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret)),
                 SecurityAlgorithms.HmacSha256Signature)
+        };
+        
+        // Creates TokenValidationParameters for the given key
+        private TokenValidationParameters createTokenValidationParameters(string key) => new()
+        {
+            ValidateIssuer = true,
+            ValidIssuer = _config.Url,
+            ValidateAudience = false,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key))
         };
     }
 }
