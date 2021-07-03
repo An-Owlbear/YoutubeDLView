@@ -1,8 +1,10 @@
 ﻿using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDLView.API.Models;
+using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
 
@@ -46,6 +48,29 @@ namespace YoutubeDLView.API.Controllers
                 Username = user.Username,
                 AccessToken = _tokenHandler.CreateAccessToken(user),
                 RefreshToken = _tokenHandler.CreateRefreshToken(user)
+            });
+        }
+
+        /// <summary>
+        /// Returns a new access token
+        /// </summary>
+        /// <param name="refreshToken">The refresh token to use</param>
+        /// <returns><see cref="RefreshInformation  "/></returns>
+        [HttpPost("Refresh")]
+        public IActionResult RefreshAccessToken([FromBody] string refreshToken)
+        {
+            Result<ClaimsPrincipal> validateResult = _tokenHandler.ValidateRefreshToken(refreshToken);
+            if (!validateResult.Success) return Unauthorized("Invalid refresh token");
+
+            User user = _userManager.Users.FirstOrDefault(x =>
+                x.Id == validateResult.Data.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (user == null) return BadRequest("Invalid JWT token");
+
+            return Ok(new RefreshInformation()
+            {
+                UserId = user.Id,
+                Username = user.Username,
+                AccessToken = _tokenHandler.CreateRefreshToken(user)
             });
         }
         
