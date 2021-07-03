@@ -41,14 +41,10 @@ namespace YoutubeDLView.API.Controllers
             User user = _userManager.Users.FirstOrDefault(x => x.Id == userId);
             if (user == null) return BadRequest("User not found");
             if (user.Password != password) return Unauthorized("Incorrect password");
-            
-            return Ok(new LoginInformation()
-            {
-                UserId = userId,
-                Username = user.Username,
-                AccessToken = _tokenHandler.CreateAccessToken(user),
-                RefreshToken = _tokenHandler.CreateRefreshToken(user)
-            });
+
+            string accessToken = _tokenHandler.CreateAccessToken(user);
+            string refreshToken = _tokenHandler.CreateRefreshToken(user);
+            return Ok(new LoginInformation(user.Id, user.Username, accessToken, refreshToken));
         }
 
         /// <summary>
@@ -66,12 +62,8 @@ namespace YoutubeDLView.API.Controllers
                 x.Id == validateResult.Data.FindFirstValue(ClaimTypes.NameIdentifier));
             if (user == null) return BadRequest("Invalid JWT token");
 
-            return Ok(new RefreshInformation()
-            {
-                UserId = user.Id,
-                Username = user.Username,
-                AccessToken = _tokenHandler.CreateRefreshToken(user)
-            });
+            string accessToken = _tokenHandler.CreateAccessToken(user);
+            return Ok(new RefreshInformation(user.Id, user.Username, accessToken));
         }
         
         /// <summary>
