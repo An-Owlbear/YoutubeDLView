@@ -19,7 +19,7 @@ namespace YoutubeDLView.Core.Entities
             Username = username;
             Password = password;
             Role = role;
-            RefreshKey = "";
+            RefreshKey = refreshKey;
         }
     }
 }
