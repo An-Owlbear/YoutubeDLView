@@ -50,12 +50,12 @@ namespace YoutubeDLView.API.Controllers
         /// <summary>
         /// Returns a new access token
         /// </summary>
-        /// <param name="refreshToken">The refresh token to use</param>
-        /// <returns><see cref="RefreshInformation  "/></returns>
+        /// <param name="request">The refresh token to use</param>
+        /// <returns><see cref="RefreshInformation"/></returns>
         [HttpPost("Refresh")]
-        public IActionResult RefreshAccessToken([FromBody] string refreshToken)
+        public IActionResult RefreshAccessToken([FromBody] RequestRefreshModel request)
         {
-            Result<ClaimsPrincipal> validateResult = _tokenHandler.ValidateRefreshToken(refreshToken);
+            Result<ClaimsPrincipal> validateResult = _tokenHandler.ValidateRefreshToken(request.RefreshToken);
             if (!validateResult.Success) return Unauthorized("Invalid refresh token");
 
             User user = _userManager.Users.FirstOrDefault(x =>
