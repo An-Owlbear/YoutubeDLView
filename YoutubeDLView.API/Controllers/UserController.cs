@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using YoutubeDLView.API.Models;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Enums;
 using YoutubeDLView.Core.Interfaces;
@@ -30,19 +31,18 @@ namespace YoutubeDLView.API.Controllers
         /// <summary>
         /// Creates the first administrator account whilst setting up the application
         /// </summary>
-        /// <param name="username">The username of the user to create</param>
-        /// <param name="password">The password of the user to create</param>
+        /// <param name="request">Contains the username and password of the signup</param>
         /// <response code="200">Successfully created setup account</response>
         /// <response code="400">Setup already completed</response>
         /// <returns></returns>
         [HttpPost("Setup")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateSetupUser(string username, string password)
+        public async Task<IActionResult> CreateSetupUser([FromBody] SignupRequest request)
         {
             if (_userManager.Users.Any()) return BadRequest("Setup already completed");
             
-            Result result = await _userManager.CreateUser(username, password, UserRole.Administrator);
+            Result result = await _userManager.CreateUser(request.Username, request.Password, UserRole.Administrator);
             return result.Success switch
             {
                 true => Ok(),

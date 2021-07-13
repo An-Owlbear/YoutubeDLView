@@ -22,12 +22,11 @@ namespace YoutubeDLView.API.Controllers
             _tokenHandler = tokenHandler;
             _userManager = userManager;
         }
-        
+
         /// <summary>
         /// Authenticates a user, returning access and refresh tokens
         /// </summary>
-        /// <param name="userId">The id of the user to login with</param>
-        /// <param name="password">The password to login with</param>
+        /// <param name="request">Contains the username and password of the request</param>
         /// <response code="200">Returns login information</response>
         /// <response code="400">If the entered user id is invalid</response>
         /// <response code="401">If the entered password is incorrect</response>
@@ -36,11 +35,11 @@ namespace YoutubeDLView.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult Login(string userId, string password)
+        public IActionResult Login([FromBody] LoginRequest request)
         {
-            User user = _userManager.Users.FirstOrDefault(x => x.Id == userId);
+            User user = _userManager.Users.FirstOrDefault(x => x.Id == request.Username);
             if (user == null) return BadRequest("User not found");
-            if (user.Password != password) return Unauthorized("Incorrect password");
+            if (user.Password != request.Password) return Unauthorized("Incorrect password");
 
             string accessToken = _tokenHandler.CreateAccessToken(user);
             string refreshToken = _tokenHandler.CreateRefreshToken(user);
