@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
@@ -12,6 +13,13 @@ namespace YoutubeDLView.Core.Interfaces
         /// All registered users
         /// </summary>
         IEnumerable<User> Users { get; }
+
+        /// <summary>
+        /// Retrieves a user from the given ClaimsPrincipal
+        /// </summary>
+        /// <param name="claimsPrincipal">The ClaimsPrincipal describing the user to retrieve</param>
+        /// <returns>A successful result if the user if found, or a failure if none are</returns>
+        Result<User> GetUser(ClaimsPrincipal claimsPrincipal);
 
         /// <summary>
         /// Creates a new user with the given information

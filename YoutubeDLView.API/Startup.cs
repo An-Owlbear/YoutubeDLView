@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +59,7 @@ namespace YoutubeDLView.API
             services.AddUserManager();
             services.AddSingleton<IRandomGenerator, RandomGenerator>();
             services.AddScoped<IJwtTokenHandler, JwtTokenHandler>();
+            services.AddScoped<IAuthorizationHandler, RoleAuthorizationHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IYoutubeDLViewDb dbContext)

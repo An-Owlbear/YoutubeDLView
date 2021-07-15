@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using YoutubeDLView.Core.Common;
@@ -24,6 +25,14 @@ namespace YoutubeDLView.Core.Services
             Users = dbContext.Users.ToList();
         }
 
+        /// <inheritdoc />
+        public Result<User> GetUser(ClaimsPrincipal claimsPrincipal)
+        {
+            string userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            User user = Users.FirstOrDefault(x => x.Id == userId);
+            return user != null ? Result.Ok(user) : Result.Fail<User>("User not found");
+        }
+        
         /// <inheritdoc />
         public async Task<Result<User>> CreateUser(string username, string password, UserRole role)
         {
