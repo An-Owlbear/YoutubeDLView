@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 

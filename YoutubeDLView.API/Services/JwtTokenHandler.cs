@@ -9,7 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
-using YoutubeDLView.Data;
 
 namespace YoutubeDLView.API.Services
 {
