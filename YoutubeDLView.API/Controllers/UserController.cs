@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDLView.API.Models;
@@ -45,6 +46,27 @@ namespace YoutubeDLView.API.Controllers
             if (_userManager.Users.Any()) return BadRequest("Setup already completed");
             
             Result result = await _userManager.CreateUser(request.Username, request.Password, UserRole.Administrator);
+            return result.Success switch
+            {
+                true => Ok(),
+                false => BadRequest(result.Error)
+            };
+        }
+
+        /// <summary>
+        /// Creates a new user account
+        /// </summary>
+        /// <param name="request">Specifies the information of the account to create</param>
+        /// <response code="200">Successfully created account</response>
+        /// <response code="400">Username already in use</response>
+        /// <returns></returns>
+        [HttpPost("Create")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateUser([FromBody] SignupRequest request)
+        {
+            Result result = await _userManager.CreateUser(request.Username, request.Password, UserRole.User);
             return result.Success switch
             {
                 true => Ok(),
