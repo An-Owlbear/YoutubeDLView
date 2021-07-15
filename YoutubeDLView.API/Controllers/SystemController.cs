@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Net.Mime;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDLView.API.Models;
 
@@ -8,6 +9,7 @@ namespace YoutubeDLView.API.Controllers
     /// Controller containing endpoints relating to the application
     /// </summary>
     [ApiController]
+    [Produces(MediaTypeNames.Application.Json)]
     public class SystemController : ControllerBase
     {
         /// <summary>

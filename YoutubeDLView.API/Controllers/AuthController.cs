@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net.Mime;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ namespace YoutubeDLView.API.Controllers
 {
     [ApiController]
     [Route("Auth")]
+    [Produces(MediaTypeNames.Application.Json)]
     public class AuthController : Controller
     {
         private readonly IUserManager _userManager;
