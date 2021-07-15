@@ -29,7 +29,15 @@ namespace YoutubeDLView.Core.Interfaces
         /// <param name="role">The role of the new user</param>
         /// <returns>The created <see cref="User"/></returns>
         Task<Result<User>> CreateUser(string username, string password, UserRole role);
-        
+
+        /// <summary>
+        /// Creates the initial administrator user
+        /// </summary>
+        /// <param name="username">The username of the new user</param>
+        /// <param name="password">The password of the new user</param>
+        /// <returns>The create <see cref="User"/></returns>
+        Task<Result<User>> CreateSetupUser(string username, string password);
+
         /// <summary>
         /// Updates the refresh key of the given user
         /// </summary>

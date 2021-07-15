@@ -43,9 +43,7 @@ namespace YoutubeDLView.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateSetupUser([FromBody] SignupRequest request)
         {
-            if (_userManager.Users.Any()) return BadRequest("Setup already completed");
-            
-            Result result = await _userManager.CreateUser(request.Username, request.Password, UserRole.Administrator);
+            Result result = await _userManager.CreateSetupUser(request.Username, request.Password);
             return result.Success switch
             {
                 true => Ok(),

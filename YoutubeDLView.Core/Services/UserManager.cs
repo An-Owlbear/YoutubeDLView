@@ -45,6 +45,13 @@ namespace YoutubeDLView.Core.Services
         }
 
         /// <inheritdoc />
+        public async Task<Result<User>> CreateSetupUser(string username, string password)
+        {
+            if (_dbContext.Users.Any()) return Result.Fail<User>("Setup already complete");
+            return await CreateUser(username, password, UserRole.Administrator);
+        }
+
+        /// <inheritdoc />
         public async Task<User> UpdateRefreshKey(User user)
         {
             user.RefreshKey = _randomGenerator.GenerateString(20);
