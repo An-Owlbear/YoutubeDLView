@@ -59,7 +59,7 @@ namespace YoutubeDLView.API.Controllers
         /// <response code="400">Username already in use</response>
         /// <returns></returns>
         [HttpPost("Create")]
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUser([FromBody] SignupRequest request)
