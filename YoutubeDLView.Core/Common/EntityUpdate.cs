@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿#nullable enable
+using System;
+using System.Reflection;
 
 namespace YoutubeDLView.Core.Common
 {
@@ -11,14 +13,23 @@ namespace YoutubeDLView.Core.Common
             _entityChanges = entityChanges;
         }
         
-        public void Apply(T targetEntity)
+        // Applies the changes to the given target entity
+        public void Apply(T targetEntity, bool updateWithNull = false)
         {
-            PropertyInfo[] properties = typeof(T).GetProperties();
-            foreach (PropertyInfo property in properties)
+            // Gets the list of properties to update
+            PropertyInfo[] propertyInfos = _entityChanges.GetType().GetProperties();
+            Type targetType = typeof(T);
+            foreach (PropertyInfo propertyInfo in propertyInfos)
             {
-                object? value = property.GetValue(_entityChanges);
-                if (value == null) continue;
-                property.SetValue(targetEntity, value);
+                // Gets the property of the target entity, change checks it exists
+                PropertyInfo? targetPropertyInfo = targetType.GetProperty(propertyInfo.Name);
+                if (targetPropertyInfo == null)
+                    throw new InvalidOperationException("Target entity does not have matching properties");
+                
+                // Updates the value
+                object? value = propertyInfo.GetValue(_entityChanges);
+                if (!updateWithNull && value == null) continue;
+                targetPropertyInfo.SetValue(targetEntity, value);
             }
         }
     }
