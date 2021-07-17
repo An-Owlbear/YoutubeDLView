@@ -1,10 +1,12 @@
-﻿using System.Net.Mime;
+﻿using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDLView.API.Models;
 using YoutubeDLView.Core.Common;
+using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Enums;
 using YoutubeDLView.Core.Interfaces;
 using YoutubeDLView.Core.Services;
@@ -68,6 +70,30 @@ namespace YoutubeDLView.API.Controllers
             {
                 true => Ok(),
                 false => BadRequest(result.Error)
+            };
+        }
+
+        /// <summary>
+        /// Updates a user's information
+        /// </summary>
+        /// <param name="request">
+        /// Contains the user's information to update, details that are to remain the same are to be null
+        /// </param>
+        /// <response code="200">Successfully updated information</response>
+        /// <response code="400">An invalid user id is provided</response>
+        /// <returns></returns>
+        [HttpPatch("Update")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
+        {
+            EntityUpdate<User> entityUpdate = new(new { request.Username, request.Password });
+            Result result = await _userManager.UpdateUser(request.UserId, entityUpdate);
+            return result.Success switch
+            {
+                true => Ok(),
+                false => BadRequest(result.Error),
             };
         }
     }

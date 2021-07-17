@@ -55,5 +55,13 @@ namespace YoutubeDLView.Core.Interfaces
         /// </remarks>
         /// <returns>The updated <see cref="User"/></returns>
         Task<Result<User>> UpdateRefreshKey(string userId);
+        
+        /// <summary>
+        /// Updates a user's information
+        /// </summary>
+        /// <param name="userId">The id of the user to update</param>
+        /// <param name="entityUpdate">The update information of the user</param>
+        /// <returns></returns>
+        Task<Result> UpdateUser(string userId, EntityUpdate<User> entityUpdate);
     }
 }

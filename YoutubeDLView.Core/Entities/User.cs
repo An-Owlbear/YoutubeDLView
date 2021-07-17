@@ -13,6 +13,8 @@ namespace YoutubeDLView.Core.Entities
         public UserRole Role { get; set; }
         public string RefreshKey { get; set; }
 
+        public User() { }
+        
         public User(string username, string password, UserRole role, string refreshKey)
         {
             Id = Guid.NewGuid().ToString();
