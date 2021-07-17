@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDLView.API.Models;
 using YoutubeDLView.Core.Common;
+using YoutubeDLView.Core.Constants;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Enums;
 using YoutubeDLView.Core.Interfaces;
@@ -59,7 +60,7 @@ namespace YoutubeDLView.API.Controllers
         /// <response code="400">Username already in use</response>
         /// <returns></returns>
         [HttpPost("Create")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = UserRoles.Administrator)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUser([FromBody] SignupRequest request)
