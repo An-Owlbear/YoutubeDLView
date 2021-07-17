@@ -10,7 +10,7 @@ using YoutubeDLView.Core.Interfaces;
 
 namespace YoutubeDLView.Core.Services
 {
-    public class UserManager: IUserManager
+    public class UserManager : IUserManager
     {
         private readonly IYoutubeDLViewDb _dbContext;
         private readonly IRandomGenerator _randomGenerator;
