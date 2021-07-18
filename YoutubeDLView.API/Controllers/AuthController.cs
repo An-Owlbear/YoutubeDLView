@@ -39,7 +39,7 @@ namespace YoutubeDLView.API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Login([FromBody] LoginRequest request)
         {
-            User user = _userManager.Users.FirstOrDefault(x => x.Id == request.Username);
+            User user = _userManager.Users.FirstOrDefault(x => x.Username == request.Username);
             if (user == null) return BadRequest("User not found");
             if (user.Password != request.Password) return Unauthorized("Incorrect password");
 
