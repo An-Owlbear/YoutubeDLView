@@ -9,6 +9,10 @@ namespace YoutubeDLView.Core.Interfaces
     public interface IYoutubeDLViewDb
     {
         DbSet<User> Users { get; set; }
+        
+        DbSet<Video> Videos { get; set; }
+        
+        DbSet<Channel> Channels { get; set; }
 
         DatabaseFacade Database { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
