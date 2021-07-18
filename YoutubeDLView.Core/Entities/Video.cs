@@ -13,6 +13,8 @@ namespace YoutubeDLView.Core.Entities
         
         public string Length { get; set; }
         
+        public string Path { get; set; }
+        
         public string ChannelId { get; set; }
         
         public Channel Channel { get; set; }
