@@ -17,6 +17,7 @@ using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Interfaces;
 using YoutubeDLView.Core.Services;
 using YoutubeDLView.Data.Extensions;
+using YoutubeDLView.Data.Services;
 
 namespace YoutubeDLView.API
 {
@@ -60,6 +61,7 @@ namespace YoutubeDLView.API
             services.AddSingleton<IRandomGenerator, RandomGenerator>();
             services.AddScoped<IJwtTokenHandler, JwtTokenHandler>();
             services.AddScoped<IAuthorizationHandler, RoleAuthorizationHandler>();
+            services.AddSingleton<IFileManager, FileManager>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IYoutubeDLViewDb dbContext)
