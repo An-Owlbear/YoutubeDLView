@@ -5,7 +5,7 @@ namespace YoutubeDLView.Core.Entities
     public class Video
     {
         [Key]
-        public string VideoId { get; set; }
+        public string Id { get; set; }
         
         public string Title { get; set; }
         
