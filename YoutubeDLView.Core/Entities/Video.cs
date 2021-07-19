@@ -11,7 +11,7 @@ namespace YoutubeDLView.Core.Entities
         
         public string Description { get; set; }
         
-        public string Length { get; set; }
+        public int Length { get; set; }
         
         public string Path { get; set; }
         
