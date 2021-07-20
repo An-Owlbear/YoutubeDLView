@@ -1,6 +1,7 @@
 ﻿using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Constants;
@@ -30,7 +31,10 @@ namespace YoutubeDLView.API.Controllers
         /// Scans metadata files from the configured directories
         /// </summary>
         /// <returns></returns>
+        /// <response code="200">Files successfully scanned</response>
         [HttpPost("Scan")]
+        [Authorize(Roles = UserRoles.Administrator)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ScanFiles()
         {
             await _fileManager.ScanFiles();
@@ -41,9 +45,13 @@ namespace YoutubeDLView.API.Controllers
         /// Gets metadata about the given video
         /// </summary>
         /// <param name="videoId">The id of the video get metadata for</param>
+        /// <response code="200">Video information retrieved</response>
+        /// <response code="404">Video not found</response>
         /// <returns></returns>
         [HttpGet("{videoId}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetVideoInfo(string videoId)
         {
             Result<Video> video = await _videoManager.GetVideo(videoId);
