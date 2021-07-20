@@ -62,6 +62,7 @@ namespace YoutubeDLView.API
             services.AddScoped<IJwtTokenHandler, JwtTokenHandler>();
             services.AddScoped<IAuthorizationHandler, RoleAuthorizationHandler>();
             services.AddSingleton<IFileManager, FileManager>();
+            services.AddScoped<IVideoManager, VideoManager>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IYoutubeDLViewDb dbContext)
