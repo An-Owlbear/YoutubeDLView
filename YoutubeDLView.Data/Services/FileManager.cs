@@ -28,7 +28,8 @@ namespace YoutubeDLView.Data.Services
             _serviceProvider = serviceProvider;
             _logger = logger;
         }
-        
+
+        /// <inheritdoc />
         public async Task ScanFiles()
         {
             // Gets list of video metadata and retrieves database service
@@ -71,6 +72,7 @@ namespace YoutubeDLView.Data.Services
             await youtubeDlViewDb.SaveChangesAsync();
         }
 
+        /// <inheritdoc />
         public Result<(Stream, string)> GetThumbnail(string path)
         {
             // Retrieves thumbnail from video metadata 
