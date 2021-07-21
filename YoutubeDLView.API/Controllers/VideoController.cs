@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.IO;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -58,6 +59,29 @@ namespace YoutubeDLView.API.Controllers
             return video.Success switch
             {
                 true => Ok(video.Data),
+                false => NotFound()
+            };
+        }
+
+        /// <summary>
+        /// Gets the thumbnail of a video
+        /// </summary>
+        /// <param name="videoId">The id of the video to get the thumbnail of</param>
+        /// <response code="200">Thumbnail successfully retrieved</response>
+        /// <response code="404">Id is invalid, or video file does not have a thumbnail</response>
+        /// <returns></returns>
+        [HttpGet("{videoId}/thumbnail")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetVideoThumbnail(string videoId)
+        {
+            Result<Video> video = await _videoManager.GetVideo(videoId);
+            if (!video.Success) return NotFound();
+            Result<(Stream, string)> coverResult = _fileManager.GetThumbnail(video.Data.Path);
+            return coverResult.Success switch
+            {
+                true => File(coverResult.Data.Item1, coverResult.Data.Item2),
                 false => NotFound()
             };
         }

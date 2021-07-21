@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TagLib;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
@@ -70,6 +71,16 @@ namespace YoutubeDLView.Data.Services
             await youtubeDlViewDb.SaveChangesAsync();
         }
 
+        public Result<(Stream, string)> GetThumbnail(string path)
+        {
+            // Retrieves thumbnail from video metadata 
+            TagLib.File tagFile = TagLib.File.Create(path);
+            IPicture picture = tagFile.Tag.Pictures.FirstOrDefault();
+            if (picture == null) return Result.Fail<(Stream, string)>("Thumbnail not found");
+            Stream coverStream = new MemoryStream(picture.Data.Data);
+            return Result.Ok((coverStream, picture.MimeType));
+        }
+
         private async Task<IEnumerable<VideoJson>> ScanDirectory(string path)
         {
             // Creates VideoJson list and adds files in current directory
@@ -102,7 +113,7 @@ namespace YoutubeDLView.Data.Services
         {
             // Reads metadata from file and returns result, with full path
             _logger.LogInformation("Reading {Path}", path);
-            Stream stream = File.OpenRead(path);
+            Stream stream = System.IO.File.OpenRead(path);
             VideoJson result = await JsonSerializer.DeserializeAsync<VideoJson>(stream);
             if (result == null) throw new NullReferenceException("Invalid Json file");
             return result with { _filename = Path.Join(Path.GetDirectoryName(path), result._filename) };
