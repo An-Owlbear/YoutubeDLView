@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace YoutubeDLView.Core.Entities
 {
@@ -10,6 +11,8 @@ namespace YoutubeDLView.Core.Entities
         public string Title { get; set; }
         
         public string Description { get; set; }
+        
+        public string UploadDate { get; set; }
         
         public int Length { get; set; }
         

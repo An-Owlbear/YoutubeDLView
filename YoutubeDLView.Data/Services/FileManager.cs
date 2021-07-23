@@ -62,6 +62,7 @@ namespace YoutubeDLView.Data.Services
                     Id = videoJson.id,
                     ChannelId = videoJson.uploader_id,
                     Description = videoJson.description,
+                    UploadDate = videoJson.upload_date,
                     Length = videoJson.duration,
                     Path = videoJson._filename,
                     Title = videoJson.title
