@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Constants;
 using YoutubeDLView.Core.Entities;
@@ -84,6 +85,29 @@ namespace YoutubeDLView.API.Controllers
                 true => File(coverResult.Data.Item1, coverResult.Data.Item2),
                 false => NotFound()
             };
+        }
+
+        /// <summary>
+        /// Gets the file of the video
+        /// </summary>
+        /// <param name="videoId">The id of the video to download</param>
+        /// <response code="200">Video successfully retrieved</response>
+        /// <response code="404">Video with the requested id not found</response>
+        /// <returns></returns>
+        [HttpGet("{videoId}/download")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetRawVideoFile(string videoId)
+        {
+            Result<Video> video = await _videoManager.GetVideo(videoId);
+            if (!video.Success) return NotFound();
+
+            FileExtensionContentTypeProvider provider = new();
+            if (!provider.TryGetContentType(Path.GetFileName(video.Data.Path), out string mimeType))
+                mimeType = "application/octet-stream";
+            Stream stream = System.IO.File.OpenRead(video.Data.Path);
+            return File(stream, mimeType);
         }
     }
 }
