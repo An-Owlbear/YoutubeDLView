@@ -73,17 +73,6 @@ namespace YoutubeDLView.Data.Services
             await youtubeDlViewDb.SaveChangesAsync();
         }
 
-        /// <inheritdoc />
-        public Result<(Stream, string)> GetThumbnail(string path)
-        {
-            // Retrieves thumbnail from video metadata 
-            TagLib.File tagFile = TagLib.File.Create(path);
-            IPicture picture = tagFile.Tag.Pictures.FirstOrDefault();
-            if (picture == null) return Result.Fail<(Stream, string)>("Thumbnail not found");
-            Stream coverStream = new MemoryStream(picture.Data.Data);
-            return Result.Ok((coverStream, picture.MimeType));
-        }
-
         private async Task<IEnumerable<VideoJson>> ScanDirectory(string path)
         {
             // Creates VideoJson list and adds files in current directory

@@ -11,12 +11,5 @@ namespace YoutubeDLView.Core.Interfaces
         /// </summary>
         /// <returns></returns>
         Task ScanFiles();
-
-        /// <summary>
-        /// Returns the thumbnail and mime type for the given video 
-        /// </summary>
-        /// <param name="path">The path of the target video</param>
-        /// <returns>The thumbnail <see cref="Stream"/> and mime type</returns>
-        Result<(Stream, string)> GetThumbnail(string path);
     }
 }

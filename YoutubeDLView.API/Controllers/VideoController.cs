@@ -21,11 +21,13 @@ namespace YoutubeDLView.API.Controllers
     public class VideoController : ControllerBase
     {
         private readonly IFileManager _fileManager;
+        private readonly IFileDataManager _fileDataManager;
         private readonly IVideoManager _videoManager;
 
-        public VideoController(IFileManager fileManager, IVideoManager videoManager)
+        public VideoController(IFileManager fileManager, IFileDataManager fileDataManager, IVideoManager videoManager)
         {
             _fileManager = fileManager;
+            _fileDataManager = fileDataManager;
             _videoManager = videoManager;
         }
 
@@ -77,9 +79,7 @@ namespace YoutubeDLView.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetVideoThumbnail(string videoId)
         {
-            Result<Video> video = await _videoManager.GetVideo(videoId);
-            if (!video.Success) return NotFound();
-            Result<(Stream, string)> coverResult = _fileManager.GetThumbnail(video.Data.Path);
+            Result<(Stream, string)> coverResult = await _fileDataManager.GetThumbnail(videoId);
             return coverResult.Success switch
             {
                 true => File(coverResult.Data.Item1, coverResult.Data.Item2),
