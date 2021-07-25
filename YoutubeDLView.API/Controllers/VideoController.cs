@@ -9,6 +9,7 @@ using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Constants;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
+using YoutubeDLView.Core.ValueObjects;
 
 namespace YoutubeDLView.API.Controllers
 {
@@ -100,14 +101,12 @@ namespace YoutubeDLView.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetRawVideoFile(string videoId)
         {
-            Result<Video> video = await _videoManager.GetVideo(videoId);
-            if (!video.Success) return NotFound();
-
-            FileExtensionContentTypeProvider provider = new();
-            if (!provider.TryGetContentType(Path.GetFileName(video.Data.Path), out string mimeType))
-                mimeType = "application/octet-stream";
-            Stream stream = System.IO.File.OpenRead(video.Data.Path);
-            return File(stream, mimeType);
+            Result<VideoStream> result = await _fileDataManager.GetVideoFile(videoId);
+            return result.Success switch
+            {
+                true => File(result.Data.Video, result.Data.MimeType, result.Data.Filename),
+                false => NotFound()
+            };
         }
     }
 }
