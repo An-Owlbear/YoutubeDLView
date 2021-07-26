@@ -2,5 +2,5 @@
 
 namespace YoutubeDLView.Core.ValueObjects
 {
-    public record VideoStream(Stream Video, string MimeType, string Filename);
+    public record VideoStream(string Path, string MimeType);
 }

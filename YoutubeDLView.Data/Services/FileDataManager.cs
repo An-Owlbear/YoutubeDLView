@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
@@ -15,7 +16,6 @@ namespace YoutubeDLView.Data.Services
     public class FileDataManager : IFileDataManager
     {
         private readonly IVideoManager _videoManager;
-        
         public FileDataManager(IVideoManager videoManager)
         {
             _videoManager = videoManager;
@@ -48,9 +48,28 @@ namespace YoutubeDLView.Data.Services
             if (!provider.TryGetContentType(Path.GetFileName(video.Data.Path), out string mimeType))
                 mimeType = MediaTypeNames.Application.Octet;
             
-            // Reads stream and returns data
+            // Returns file path and mime type
             Stream stream = File.OpenRead(video.Data.Path!);
-            return Result.Ok(new VideoStream(stream, mimeType, Path.GetFileName(video.Data.Path)));
+            return Result.Ok(new VideoStream(video.Data.Path, mimeType));
+        }
+
+
+        /// <inheritdoc />
+        /// <remarks>This implementation assumes any video files use a codec compatible with browsers</remarks>
+        public async Task<Result<VideoStream>> GetVideoStream(string videoId)
+        {
+            // Retrieves video, returning error if not found
+            Result<Video> video = await _videoManager.GetVideo(videoId);
+            if (!video.Success) return Result.Fail<VideoStream>("Video not found");
+
+            // Determines mime type
+            string mimetype = Path.GetExtension(video.Data.Path)?.ToLower() switch
+            {
+                "mp4" => "video/mp4",
+                "webm" or "mkv" => "video/webm",
+                _ => throw new InvalidOperationException("Video file must have an extension")
+            };
+            return Result.Ok(new VideoStream(video.Data.Path, mimetype));
         }
     }
 }

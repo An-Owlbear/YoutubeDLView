@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Constants;
 using YoutubeDLView.Core.Entities;
@@ -104,8 +103,28 @@ namespace YoutubeDLView.API.Controllers
             Result<VideoStream> result = await _fileDataManager.GetVideoFile(videoId);
             return result.Success switch
             {
-                true => File(result.Data.Video, result.Data.MimeType, result.Data.Filename),
+                true => PhysicalFile(result.Data.Path, result.Data.MimeType),
                 false => NotFound()
+            };
+        }
+
+        /// <summary>
+        /// Gets a video to be played in the browser
+        /// </summary>
+        /// <param name="videoId">The id of the video to retrieve</param>
+        /// <response code="200">Video successfully retrieved</response>
+        /// <response code="404">Video with the requested id not found</response>
+        /// <returns></returns>
+        [HttpGet("{videoId}/video")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetVideoStream(string videoId)
+        {
+            Result<VideoStream> result = await _fileDataManager.GetVideoStream(videoId);
+            return result.Success switch
+            {
+                true => PhysicalFile(result.Data.Path, result.Data.MimeType, true),
+                false => BadRequest(result.Error)
             };
         }
     }
