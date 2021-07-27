@@ -103,7 +103,7 @@ namespace YoutubeDLView.API.Controllers
             Result<VideoStream> result = await _fileDataManager.GetVideoFile(videoId);
             return result.Success switch
             {
-                true => PhysicalFile(result.Data.Path, result.Data.MimeType),
+                true => PhysicalFile(result.Data.Path, result.Data.MimeType, result.Data.Filename),
                 false => FromResult(result)
             };
         }
@@ -123,7 +123,7 @@ namespace YoutubeDLView.API.Controllers
             Result<VideoStream> result = await _fileDataManager.GetVideoStream(videoId);
             return result.Success switch
             {
-                true => PhysicalFile(result.Data.Path, result.Data.MimeType, true),
+                true => PhysicalFile(result.Data.Path, result.Data.MimeType, result.Data.Filename, true),
                 false => FromResult(result)
             };
         }

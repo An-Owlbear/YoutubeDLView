@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using HeyRed.Mime;
 using Microsoft.AspNetCore.StaticFiles;
 using TagLib;
 using YoutubeDLView.Core.Common;
@@ -42,13 +43,9 @@ namespace YoutubeDLView.Data.Services
             Result<Video> video = await _videoManager.GetVideo(videoId);
             if (!video.Success) return Result.Fail<VideoStream>(video);
             
-            // Determines mime type
-            FileExtensionContentTypeProvider provider = new();
-            if (!provider.TryGetContentType(Path.GetFileName(video.Data.Path), out string mimeType))
-                mimeType = MediaTypeNames.Application.Octet;
-            
-            // Returns file path and mime type
-            return Result.Ok(new VideoStream(video.Data.Path, mimeType));
+            // Determines mime type, and returns information
+            string mimeType = MimeTypesMap.GetMimeType(Path.GetExtension(video.Data.Path));
+            return Result.Ok(new VideoStream(video.Data.Path, mimeType, Path.GetFileName(video.Data.Path)));
         }
 
 
@@ -63,11 +60,13 @@ namespace YoutubeDLView.Data.Services
             // Determines mime type
             string mimetype = Path.GetExtension(video.Data.Path)?.ToLower() switch
             {
-                ".mp4" => "video/mp4",
                 ".webm" or ".mkv" => "video/webm",
-                _ => throw new InvalidOperationException("Video file must have an extension")
+                { } extension => MimeTypesMap.GetMimeType(extension),
+                _ => throw new InvalidOperationException("File must have valid extension")
             };
-            return Result.Ok(new VideoStream(video.Data.Path, mimetype));
+            string returnExtension = MimeTypesMap.GetExtension(mimetype);
+            string filename = $"{Path.GetFileNameWithoutExtension(video.Data.Path)}.{returnExtension}";
+            return Result.Ok(new VideoStream(video.Data.Path, mimetype, filename));
         }
     }
 }
