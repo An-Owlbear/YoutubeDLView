@@ -64,8 +64,8 @@ namespace YoutubeDLView.Data.Services
             // Determines mime type
             string mimetype = Path.GetExtension(video.Data.Path)?.ToLower() switch
             {
-                "mp4" => "video/mp4",
-                "webm" or "mkv" => "video/webm",
+                ".mp4" => "video/mp4",
+                ".webm" or ".mkv" => "video/webm",
                 _ => throw new InvalidOperationException("Video file must have an extension")
             };
             return Result.Ok(new VideoStream(video.Data.Path, mimetype));
