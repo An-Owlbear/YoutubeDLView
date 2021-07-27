@@ -5,7 +5,7 @@ namespace YoutubeDLView.API
 {
     public class ApiController : ControllerBase
     {
-        public IActionResult FromResult(Result result) =>
+        protected IActionResult FromResult(Result result) =>
             result.StatusCode switch
             {
                 >= 200 and <= 299 => Ok(),
