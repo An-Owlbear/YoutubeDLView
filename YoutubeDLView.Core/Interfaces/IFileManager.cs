@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using YoutubeDLView.Core.Common;
+﻿using System.Threading.Tasks;
 
 namespace YoutubeDLView.Core.Interfaces
 {

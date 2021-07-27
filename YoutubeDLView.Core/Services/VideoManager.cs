@@ -8,12 +8,10 @@ namespace YoutubeDLView.Core.Services
     public class VideoManager : IVideoManager
     {
         private readonly IYoutubeDLViewDb _youtubeDlViewDb;
-        private readonly IFileManager _fileManager;
-        
-        public VideoManager(IYoutubeDLViewDb youtubeDlViewDb, IFileManager fileManager)
+
+        public VideoManager(IYoutubeDLViewDb youtubeDlViewDb)
         {
             _youtubeDlViewDb = youtubeDlViewDb;
-            _fileManager = fileManager;
         }
 
         /// <inheritdoc />

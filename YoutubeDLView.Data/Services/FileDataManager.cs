@@ -9,7 +9,6 @@ using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
 using YoutubeDLView.Core.ValueObjects;
-using File = System.IO.File;
 
 namespace YoutubeDLView.Data.Services
 {

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TagLib;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
@@ -105,7 +104,7 @@ namespace YoutubeDLView.Data.Services
         {
             // Reads metadata from file and returns result, with full path
             _logger.LogInformation("Reading {Path}", path);
-            Stream stream = System.IO.File.OpenRead(path);
+            Stream stream = File.OpenRead(path);
             VideoJson result = await JsonSerializer.DeserializeAsync<VideoJson>(stream);
             if (result == null) throw new NullReferenceException("Invalid Json file");
             return result with { _filename = Path.Join(Path.GetDirectoryName(path), result._filename) };
