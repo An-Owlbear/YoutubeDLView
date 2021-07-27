@@ -26,12 +26,12 @@ namespace YoutubeDLView.Data.Services
         {
             // Retrieves video, returning error if none found
             Result<Video> video = await _videoManager.GetVideo(videoId);
-            if (!video.Success) return Result.Fail<(Stream, string)>("Video not found");
+            if (!video.Success) return Result.Fail<(Stream, string)>(video);
 
             // Retrieves thumbnail from video metadata 
             TagLib.File tagFile = TagLib.File.Create(video.Data.Path);
             IPicture picture = tagFile.Tag.Pictures.FirstOrDefault();
-            if (picture == null) return Result.Fail<(Stream, string)>("Thumbnail not found");
+            if (picture == null) return Result.Fail<(Stream, string)>("Thumbnail not found", 404);
             Stream coverStream = new MemoryStream(picture.Data.Data);
             return Result.Ok((coverStream, picture.MimeType));
         }
@@ -41,7 +41,7 @@ namespace YoutubeDLView.Data.Services
         {
             // Retrieves video, returning error if not found
             Result<Video> video = await _videoManager.GetVideo(videoId);
-            if (!video.Success) return Result.Fail<VideoStream>("Video not found");
+            if (!video.Success) return Result.Fail<VideoStream>(video);
             
             // Determines mime type
             FileExtensionContentTypeProvider provider = new();
@@ -49,7 +49,6 @@ namespace YoutubeDLView.Data.Services
                 mimeType = MediaTypeNames.Application.Octet;
             
             // Returns file path and mime type
-            Stream stream = File.OpenRead(video.Data.Path!);
             return Result.Ok(new VideoStream(video.Data.Path, mimeType));
         }
 
@@ -60,7 +59,7 @@ namespace YoutubeDLView.Data.Services
         {
             // Retrieves video, returning error if not found
             Result<Video> video = await _videoManager.GetVideo(videoId);
-            if (!video.Success) return Result.Fail<VideoStream>("Video not found");
+            if (!video.Success) return Result.Fail<VideoStream>(video);
 
             // Determines mime type
             string mimetype = Path.GetExtension(video.Data.Path)?.ToLower() switch

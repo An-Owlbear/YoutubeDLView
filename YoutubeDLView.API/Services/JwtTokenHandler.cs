@@ -74,12 +74,12 @@ namespace YoutubeDLView.API.Services
             // Ensures the specified user is valid
             User user = _userManager.Users.FirstOrDefault(x =>
                 x.Id == result.Data.FindFirstValue(ClaimTypes.NameIdentifier));
-            if (user == null) return Result.Fail<ClaimsPrincipal>("User not found");
+            if (user == null) return Result.Fail<ClaimsPrincipal>("User not found", 401);
             
             // Checks the refresh key of the token matches the user's
             return result.Data.FindFirstValue("RefreshKey") == user.RefreshKey
                 ? result
-                : Result.Fail<ClaimsPrincipal>("Invalid token");
+                : Result.Fail<ClaimsPrincipal>("Invalid token", 401);
         }
 
         // Validates the given JWT token using the given TokenValidationParameters

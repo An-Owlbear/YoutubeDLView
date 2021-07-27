@@ -19,7 +19,7 @@ namespace YoutubeDLView.API.Controllers
     [ApiController]
     [Route("Users")]
     [Produces(MediaTypeNames.Application.Json)]
-    public class UserController : ControllerBase
+    public class UserController : ApiController
     {
         private readonly IUserManager _userManager;
 
@@ -45,11 +45,7 @@ namespace YoutubeDLView.API.Controllers
         public async Task<IActionResult> CreateSetupUser([FromBody] SignupRequest request)
         {
             Result result = await _userManager.CreateSetupUser(request.Username, request.Password);
-            return result.Success switch
-            {
-                true => Ok(),
-                false => BadRequest(result.Error)
-            };
+            return FromResult(result);
         }
 
         /// <summary>
@@ -66,11 +62,7 @@ namespace YoutubeDLView.API.Controllers
         public async Task<IActionResult> CreateUser([FromBody] SignupRequest request)
         {
             Result result = await _userManager.CreateUser(request.Username, request.Password, UserRole.User);
-            return result.Success switch
-            {
-                true => Ok(),
-                false => BadRequest(result.Error)
-            };
+            return FromResult(result);
         }
 
         /// <summary>
@@ -90,11 +82,7 @@ namespace YoutubeDLView.API.Controllers
         {
             EntityUpdate<User> entityUpdate = new(new { request.Username, request.Password });
             Result result = await _userManager.UpdateUser(request.UserId, entityUpdate);
-            return result.Success switch
-            {
-                true => Ok(),
-                false => BadRequest(result.Error),
-            };
+            return FromResult(result);
         }
     }
 }

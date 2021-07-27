@@ -18,7 +18,7 @@ namespace YoutubeDLView.API.Controllers
     [ApiController]
     [Route("Videos")]
     [Produces(MediaTypeNames.Application.Json)]
-    public class VideoController : ControllerBase
+    public class VideoController : ApiController
     {
         private readonly IFileManager _fileManager;
         private readonly IFileDataManager _fileDataManager;
@@ -62,7 +62,7 @@ namespace YoutubeDLView.API.Controllers
             return video.Success switch
             {
                 true => Ok(video.Data),
-                false => NotFound()
+                false => FromResult(video)
             };
         }
 
@@ -83,7 +83,7 @@ namespace YoutubeDLView.API.Controllers
             return coverResult.Success switch
             {
                 true => File(coverResult.Data.Item1, coverResult.Data.Item2),
-                false => NotFound()
+                false => FromResult(coverResult)
             };
         }
 
@@ -104,7 +104,7 @@ namespace YoutubeDLView.API.Controllers
             return result.Success switch
             {
                 true => PhysicalFile(result.Data.Path, result.Data.MimeType),
-                false => NotFound()
+                false => FromResult(result)
             };
         }
 
@@ -124,7 +124,7 @@ namespace YoutubeDLView.API.Controllers
             return result.Success switch
             {
                 true => PhysicalFile(result.Data.Path, result.Data.MimeType, true),
-                false => BadRequest(result.Error)
+                false => FromResult(result)
             };
         }
     }

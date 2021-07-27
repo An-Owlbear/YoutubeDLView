@@ -20,7 +20,7 @@ namespace YoutubeDLView.Core.Services
         public async Task<Result<Video>> GetVideo(string id)
         {
             Video video = await _youtubeDlViewDb.Videos.FindAsync(id);
-            return video != null ? Result.Ok(video) : Result.Fail<Video>("Video not found");
+            return video != null ? Result.Ok(video) : Result.Fail<Video>("Video not found", 404);
         }
     }
 }
