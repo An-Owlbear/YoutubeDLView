@@ -59,12 +59,11 @@ namespace YoutubeDLView.API.Controllers
             Result<ClaimsPrincipal> validateResult = _tokenHandler.ValidateRefreshToken(request.RefreshToken);
             if (!validateResult.Success) return Unauthorized("Invalid refresh token");
 
-            User user = _userManager.Users.FirstOrDefault(x =>
-                x.Id == validateResult.Data.FindFirstValue(ClaimTypes.NameIdentifier));
-            if (user == null) return BadRequest("Invalid JWT token");
+            Result<User> user = _userManager.GetUser(validateResult.Data);
+            if (!user.Success) return BadRequest("Invalid JWT token");
 
-            string accessToken = _tokenHandler.CreateAccessToken(user);
-            return Ok(new RefreshInformation(user.Id, user.Username, accessToken));
+            string accessToken = _tokenHandler.CreateAccessToken(user.Data);
+            return Ok(new RefreshInformation(user.Data.Id, user.Data.Username, accessToken));
         }
         
         /// <summary>
