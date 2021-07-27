@@ -116,6 +116,7 @@ namespace YoutubeDLView.API.Controllers
         /// <response code="404">Video with the requested id not found</response>
         /// <returns></returns>
         [HttpGet("{videoId}/video")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetVideoStream(string videoId)
