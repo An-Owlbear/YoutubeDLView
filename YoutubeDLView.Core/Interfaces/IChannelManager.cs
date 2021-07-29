@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 
@@ -6,6 +7,11 @@ namespace YoutubeDLView.Core.Interfaces
 {
     public interface IChannelManager
     {
+        /// <summary>
+        /// Readonly access to the channels table
+        /// </summary>
+        IQueryable<YtChannel> Channels { get; } 
+
         /// <summary>
         /// Retrieves the channel of the given id
         /// </summary>

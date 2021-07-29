@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
@@ -13,6 +15,8 @@ namespace YoutubeDLView.Core.Services
         {
             _youtubeDlViewDb = youtubeDlViewDb;
         }
+
+        public IQueryable<YtChannel> Channels => _youtubeDlViewDb.Channels.AsNoTracking();
 
         /// <inheritdoc />
         public async Task<Result<YtChannel>> GetChannel(string channelId)

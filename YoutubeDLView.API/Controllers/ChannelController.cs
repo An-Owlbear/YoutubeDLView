@@ -1,8 +1,10 @@
-﻿using System.Threading.Channels;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
@@ -38,6 +40,26 @@ namespace YoutubeDLView.API.Controllers
                 true => Ok(channel.Data),
                 false => FromResult(channel)
             };
+        }
+
+        /// <summary>
+        /// Retrieves a list of channels, with an optional limit
+        /// </summary>
+        /// <param name="skip">The number of channels to skip</param>
+        /// <param name="take">The number of channels to select to return</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetChannels(int skip = 0, int take = 30)
+        {
+            IEnumerable<YtChannel> channels =
+                await _channelManager.Channels
+                    .OrderBy(x => x.Name)
+                    .Skip(skip)
+                    .Take(take)
+                    .ToListAsync();
+            return Ok(channels);
         }
     }
 }
