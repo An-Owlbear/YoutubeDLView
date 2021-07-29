@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading.Channels;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDLView.Core.Common;
+using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
-using Channel = YoutubeDLView.Core.Entities.Channel;
 
 namespace YoutubeDLView.API.Controllers
 {
@@ -31,7 +32,7 @@ namespace YoutubeDLView.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetChannel(string channelId)
         {
-            Result<Channel> channel = await _channelManager.GetChannel(channelId);
+            Result<YtChannel> channel = await _channelManager.GetChannel(channelId);
             return channel.Success switch
             {
                 true => Ok(channel.Data),

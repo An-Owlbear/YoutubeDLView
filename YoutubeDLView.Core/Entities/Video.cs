@@ -19,6 +19,6 @@ namespace YoutubeDLView.Core.Entities
         
         public string ChannelId { get; set; }
         
-        public Channel Channel { get; set; }
+        public YtChannel Channel { get; set; }
     }
 }

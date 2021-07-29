@@ -11,6 +11,6 @@ namespace YoutubeDLView.Core.Interfaces
         /// </summary>
         /// <param name="channelId">The id of the channel to retrieve</param>
         /// <returns>The <see cref="Result"/> of the search, containing the channel if successful</returns>
-        Task<Result<Channel>> GetChannel(string channelId);
+        Task<Result<YtChannel>> GetChannel(string channelId);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace YoutubeDLView.Core.Entities
 {
-    public class Channel
+    public class YtChannel
     {
         [Key]
         public string Id { get; set; }

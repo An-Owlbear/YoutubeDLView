@@ -15,10 +15,10 @@ namespace YoutubeDLView.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<Channel>> GetChannel(string channelId)
+        public async Task<Result<YtChannel>> GetChannel(string channelId)
         {
-            Channel channel = await _youtubeDlViewDb.Channels.FindAsync(channelId);
-            return channel != null ? Result.Ok(channel) : Result.Fail<Channel>("Channel not found", 404);
+            YtChannel ytChannel = await _youtubeDlViewDb.Channels.FindAsync(channelId);
+            return ytChannel != null ? Result.Ok(ytChannel) : Result.Fail<YtChannel>("Channel not found", 404);
         }
     }
 }

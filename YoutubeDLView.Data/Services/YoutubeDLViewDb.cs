@@ -10,7 +10,7 @@ namespace YoutubeDLView.Data
         
         public DbSet<Video> Videos { get; set; }
         
-        public DbSet<Channel> Channels { get; set; }
+        public DbSet<YtChannel> Channels { get; set; }
 
         public YoutubeDLViewDb(DbContextOptions<YoutubeDLViewDb> options) : base(options) { }
     }

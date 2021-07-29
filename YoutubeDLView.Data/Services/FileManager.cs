@@ -44,15 +44,15 @@ namespace YoutubeDLView.Data.Services
                 if (video != null) continue;
                 
                 // Checks if the channel exists, adds to database if it doesn't
-                Channel channel = await youtubeDlViewDb.Channels.FindAsync(videoJson.uploader_id);
-                if (channel == null)
+                YtChannel ytChannel = await youtubeDlViewDb.Channels.FindAsync(videoJson.uploader_id);
+                if (ytChannel == null)
                 {
-                    Channel newChannel = new()
+                    YtChannel newYtChannel = new()
                     {
                         Id = videoJson.uploader_id,
                         Name = videoJson.uploader
                     };
-                    await youtubeDlViewDb.Channels.AddAsync(newChannel);
+                    await youtubeDlViewDb.Channels.AddAsync(newYtChannel);
                 }
                 
                 // Adds video to database
