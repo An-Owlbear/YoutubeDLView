@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace YoutubeDLView.Core.Entities
 {
@@ -8,5 +9,7 @@ namespace YoutubeDLView.Core.Entities
         public string Id { get; set; }
         
         public string Name { get; set; }
+        
+        public virtual ICollection<Video> Videos { get; set; }
     }
 }
