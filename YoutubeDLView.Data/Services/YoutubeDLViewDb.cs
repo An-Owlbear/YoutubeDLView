@@ -13,5 +13,8 @@ namespace YoutubeDLView.Data
         public DbSet<YtChannel> Channels { get; set; }
 
         public YoutubeDLViewDb(DbContextOptions<YoutubeDLViewDb> options) : base(options) { }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.UseLazyLoadingProxies();
     }
 }
