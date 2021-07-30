@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -39,7 +38,7 @@ namespace YoutubeDLView.API.Controllers
             Result<YtChannel> channel = await _channelManager.GetChannel(channelId);
             return channel.Success switch
             {
-                true => Ok(channel.Data),
+                true => Ok(new ChannelResponse(channel.Data)),
                 false => FromResult(channel)
             };
         }
@@ -61,7 +60,7 @@ namespace YoutubeDLView.API.Controllers
                     .Skip(skip)
                     .Take(take)
                     .ToListAsync();
-            return Ok(channels);
+            return Ok(channels.Select(x => new ChannelResponse(x)));
         }
 
         /// <summary>

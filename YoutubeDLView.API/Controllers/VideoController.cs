@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using YoutubeDLView.API.Models;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Constants;
 using YoutubeDLView.Core.Entities;
@@ -61,7 +62,7 @@ namespace YoutubeDLView.API.Controllers
             Result<Video> video = await _videoManager.GetVideo(videoId);
             return video.Success switch
             {
-                true => Ok(video.Data),
+                true => Ok(new VideoResponse(video.Data)),
                 false => FromResult(video)
             };
         }
