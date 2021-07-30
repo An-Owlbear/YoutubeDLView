@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using YoutubeDLView.API.Models;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
@@ -60,6 +62,26 @@ namespace YoutubeDLView.API.Controllers
                     .Take(take)
                     .ToListAsync();
             return Ok(channels);
+        }
+
+        /// <summary>
+        /// Retrieves a list of videos from the specified channel
+        /// </summary>
+        /// <param name="channelId">The id of the channel to retrieve videos from</param>
+        /// <param name="skip">The number of videos to skip</param>
+        /// <param name="take">The number of videos to return</param>
+        /// <returns></returns>
+        [HttpGet("{channelId}/videos")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetVideos(string channelId, int skip = 0, int take = 30)
+        {
+            Result<IEnumerable<Video>> videos = await _channelManager.GetVideos(channelId, skip, take);
+            return videos.Success switch
+            {
+                true => Ok(videos.Data.Select(x => new VideoResponse(x))),
+                false => FromResult(videos)
+            };
         }
     }
 }

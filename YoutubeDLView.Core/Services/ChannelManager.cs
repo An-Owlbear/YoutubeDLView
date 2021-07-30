@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using YoutubeDLView.Core.Common;
@@ -23,6 +24,22 @@ namespace YoutubeDLView.Core.Services
         {
             YtChannel ytChannel = await _youtubeDlViewDb.Channels.FindAsync(channelId);
             return ytChannel != null ? Result.Ok(ytChannel) : Result.Fail<YtChannel>("Channel not found", 404);
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<IEnumerable<Video>>> GetVideos(string channelId, int skip, int take)
+        {
+            // Retrieves channel and returns failure result of not found
+            Result<YtChannel> result = await GetChannel(channelId);
+            if (!result.Success) return Result.Fail<IEnumerable<Video>>(result);
+            
+            // Retrieves and returns videos
+            IEnumerable<Video> videos = result.Data.Videos
+                .OrderByDescending(x => x.UploadDate)
+                .Skip(skip)
+                .Take(take)
+                .ToList();
+            return Result.Ok(videos);
         }
     }
 }
