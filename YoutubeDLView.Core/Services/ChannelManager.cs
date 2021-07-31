@@ -27,6 +27,14 @@ namespace YoutubeDLView.Core.Services
         }
 
         /// <inheritdoc />
+        public async Task<IEnumerable<YtChannel>> GetChannels(int skip, int take)
+            => await _youtubeDlViewDb.Channels
+                .OrderBy(x => x.Name)
+                .Skip(skip)
+                .Take(take)
+                .ToListAsync();
+
+        /// <inheritdoc />
         public async Task<Result<IEnumerable<Video>>> GetVideos(string channelId, int skip, int take)
         {
             // Retrieves channel and returns failure result of not found

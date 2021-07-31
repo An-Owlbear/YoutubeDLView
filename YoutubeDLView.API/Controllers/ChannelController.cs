@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using YoutubeDLView.API.Models;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
@@ -54,12 +53,7 @@ namespace YoutubeDLView.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetChannels(int skip = 0, int take = 30)
         {
-            IEnumerable<YtChannel> channels =
-                await _channelManager.Channels
-                    .OrderBy(x => x.Name)
-                    .Skip(skip)
-                    .Take(take)
-                    .ToListAsync();
+            IEnumerable<YtChannel> channels = await _channelManager.GetChannels(skip, take);
             return Ok(channels.Select(x => new ChannelResponse(x)));
         }
 

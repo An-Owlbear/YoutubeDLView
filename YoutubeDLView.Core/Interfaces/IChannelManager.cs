@@ -20,6 +20,8 @@ namespace YoutubeDLView.Core.Interfaces
         /// <returns>The <see cref="Result"/> of the search, containing the channel if successful</returns>
         Task<Result<YtChannel>> GetChannel(string channelId);
 
+        Task<IEnumerable<YtChannel>> GetChannels(int skip, int take);
+
         /// <summary>
         /// Retrieves a list of videos from the specified channel
         /// </summary>
