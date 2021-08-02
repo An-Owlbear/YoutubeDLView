@@ -107,6 +107,7 @@ namespace YoutubeDLView.Data.Services
             _logger.LogInformation("Reading {Path}", path);
             Stream stream = File.OpenRead(path);
             VideoJson result = await JsonSerializer.DeserializeAsync<VideoJson>(stream);
+            stream.Close();
             if (result == null) throw new NullReferenceException("Invalid Json file");
             return result with { _filename = Path.Join(Path.GetDirectoryName(path), result._filename) };
         }
