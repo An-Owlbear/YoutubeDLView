@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -38,11 +39,6 @@ namespace YoutubeDLView.Data.Services
 
             foreach (VideoJson videoJson in videos)
             {
-                // Checks if video is already added
-                // TODO - Add checks to see if the metadata has changed
-                Video video = await youtubeDlViewDb.Videos.FindAsync(videoJson.id);
-                if (video != null) continue;
-                
                 // Checks if the channel exists, adds to database if it doesn't
                 YtChannel ytChannel = await youtubeDlViewDb.Channels.FindAsync(videoJson.uploader_id);
                 if (ytChannel == null)
@@ -55,7 +51,7 @@ namespace YoutubeDLView.Data.Services
                     await youtubeDlViewDb.Channels.AddAsync(newYtChannel);
                 }
                 
-                // Adds video to database
+                // Adds video to database if not already present, otherwise updates it
                 Video newVideo = new()
                 {
                     Id = videoJson.id,
@@ -66,7 +62,12 @@ namespace YoutubeDLView.Data.Services
                     Path = videoJson._filename,
                     Title = videoJson.title
                 };
-                await youtubeDlViewDb.Videos.AddAsync(newVideo);
+
+                Video dbVideo = await youtubeDlViewDb.Videos.AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == newVideo.Id);
+
+                if (dbVideo == null) await youtubeDlViewDb.Videos.AddAsync(newVideo);
+                else youtubeDlViewDb.Videos.Update(newVideo);
             }
 
             await youtubeDlViewDb.SaveChangesAsync();
