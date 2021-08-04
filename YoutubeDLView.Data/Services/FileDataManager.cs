@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using System.Threading.Tasks;
 using HeyRed.Mime;
-using Microsoft.AspNetCore.StaticFiles;
 using TagLib;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
