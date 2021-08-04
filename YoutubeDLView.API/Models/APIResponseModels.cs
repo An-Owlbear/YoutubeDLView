@@ -17,4 +17,9 @@ namespace YoutubeDLView.API.Models
         public VideoResponse(Video video) : this(video.Id, video.Title, video.Description, video.UploadDate,
             video.Length, new ChannelResponse(video.Channel)) { }
     }
+
+    public record UserResponse(string Id, string Username, bool Password)
+    {
+        public UserResponse(User user) : this(user.Id, user.Username, string.IsNullOrEmpty(user.Password)) { }
+    }
 }

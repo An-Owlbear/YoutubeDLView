@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -84,5 +85,14 @@ namespace YoutubeDLView.API.Controllers
             Result result = await _userManager.UpdateUser(request.UserId, entityUpdate);
             return FromResult(result);
         }
+
+        /// <summary>
+        /// Retrieves a list of users
+        /// </summary>
+        /// <response code="200">Returns the list of users</response>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult GetUsers() => Ok(_userManager.Users.Select(x => new UserResponse(x)));
     }
 }
