@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
+      <PackageReference Include="MimeTypesMap" Version="1.0.8" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.11.1" />
       <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>

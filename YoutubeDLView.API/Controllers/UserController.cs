@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +20,7 @@ namespace YoutubeDLView.API.Controllers
     [ApiController]
     [Route("Users")]
     [Produces(MediaTypeNames.Application.Json)]
-    public class UserController : ControllerBase
+    public class UserController : ApiController
     {
         private readonly IUserManager _userManager;
 
@@ -45,11 +46,7 @@ namespace YoutubeDLView.API.Controllers
         public async Task<IActionResult> CreateSetupUser([FromBody] SignupRequest request)
         {
             Result result = await _userManager.CreateSetupUser(request.Username, request.Password);
-            return result.Success switch
-            {
-                true => Ok(),
-                false => BadRequest(result.Error)
-            };
+            return FromResult(result);
         }
 
         /// <summary>
@@ -66,11 +63,7 @@ namespace YoutubeDLView.API.Controllers
         public async Task<IActionResult> CreateUser([FromBody] SignupRequest request)
         {
             Result result = await _userManager.CreateUser(request.Username, request.Password, UserRole.User);
-            return result.Success switch
-            {
-                true => Ok(),
-                false => BadRequest(result.Error)
-            };
+            return FromResult(result);
         }
 
         /// <summary>
@@ -90,11 +83,16 @@ namespace YoutubeDLView.API.Controllers
         {
             EntityUpdate<User> entityUpdate = new(new { request.Username, request.Password });
             Result result = await _userManager.UpdateUser(request.UserId, entityUpdate);
-            return result.Success switch
-            {
-                true => Ok(),
-                false => BadRequest(result.Error),
-            };
+            return FromResult(result);
         }
+
+        /// <summary>
+        /// Retrieves a list of users
+        /// </summary>
+        /// <response code="200">Returns the list of users</response>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult GetUsers() => Ok(_userManager.Users.Select(x => new UserResponse(x)));
     }
 }

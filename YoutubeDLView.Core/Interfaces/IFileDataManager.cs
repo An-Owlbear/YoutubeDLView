@@ -20,5 +20,11 @@ namespace YoutubeDLView.Core.Interfaces
         /// <param name="videoId">The Id of the video to retrieve</param>
         /// <returns>The video <see cref="Stream" /> and its mime type</returns>
         Task<Result<VideoStream>> GetVideoFile(string videoId);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="videoId">The Id of the video to return</param>
+        /// <returns></returns>
+        Task<Result<VideoStream>> GetVideoStream(string videoId);
     }
 }

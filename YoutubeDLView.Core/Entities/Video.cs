@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace YoutubeDLView.Core.Entities
 {
@@ -20,6 +19,6 @@ namespace YoutubeDLView.Core.Entities
         
         public string ChannelId { get; set; }
         
-        public Channel Channel { get; set; }
+        public virtual YtChannel Channel { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
+using YoutubeDLView.API.Models;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Constants;
 using YoutubeDLView.Core.Entities;
@@ -19,7 +19,7 @@ namespace YoutubeDLView.API.Controllers
     [ApiController]
     [Route("Videos")]
     [Produces(MediaTypeNames.Application.Json)]
-    public class VideoController : ControllerBase
+    public class VideoController : ApiController
     {
         private readonly IFileManager _fileManager;
         private readonly IFileDataManager _fileDataManager;
@@ -62,8 +62,8 @@ namespace YoutubeDLView.API.Controllers
             Result<Video> video = await _videoManager.GetVideo(videoId);
             return video.Success switch
             {
-                true => Ok(video.Data),
-                false => NotFound()
+                true => Ok(new VideoResponse(video.Data)),
+                false => FromResult(video)
             };
         }
 
@@ -84,7 +84,7 @@ namespace YoutubeDLView.API.Controllers
             return coverResult.Success switch
             {
                 true => File(coverResult.Data.Item1, coverResult.Data.Item2),
-                false => NotFound()
+                false => FromResult(coverResult)
             };
         }
 
@@ -104,8 +104,29 @@ namespace YoutubeDLView.API.Controllers
             Result<VideoStream> result = await _fileDataManager.GetVideoFile(videoId);
             return result.Success switch
             {
-                true => File(result.Data.Video, result.Data.MimeType, result.Data.Filename),
-                false => NotFound()
+                true => PhysicalFile(result.Data.Path, result.Data.MimeType, result.Data.Filename),
+                false => FromResult(result)
+            };
+        }
+
+        /// <summary>
+        /// Gets a video to be played in the browser
+        /// </summary>
+        /// <param name="videoId">The id of the video to retrieve</param>
+        /// <response code="200">Video successfully retrieved</response>
+        /// <response code="404">Video with the requested id not found</response>
+        /// <returns></returns>
+        [HttpGet("{videoId}/video")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetVideoStream(string videoId)
+        {
+            Result<VideoStream> result = await _fileDataManager.GetVideoStream(videoId);
+            return result.Success switch
+            {
+                true => PhysicalFile(result.Data.Path, result.Data.MimeType, result.Data.Filename, true),
+                false => FromResult(result)
             };
         }
     }
