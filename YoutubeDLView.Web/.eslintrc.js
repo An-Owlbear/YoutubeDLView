@@ -31,6 +31,7 @@ module.exports = {
                     "order": "asc"
                 }
             }
-        ]
+        ],
+        "semi": ["error", "always"],
     }
 };
