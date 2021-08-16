@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -93,6 +95,7 @@ namespace YoutubeDLView.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetUsers() => Ok(_userManager.Users.Select(x => new UserResponse(x)));
+        public ActionResult<IEnumerable<UserResponse>> GetUsers() =>
+            Ok(_userManager.Users.Select(x => new UserResponse(x)));
     }
 }

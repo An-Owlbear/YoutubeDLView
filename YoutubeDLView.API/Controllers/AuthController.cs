@@ -37,7 +37,7 @@ namespace YoutubeDLView.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public ActionResult<LoginInformation> Login([FromBody] LoginRequest request)
         {
             User user = _userManager.Users.FirstOrDefault(x => x.Username == request.Username);
             if (user == null) return BadRequest("User not found");
@@ -45,7 +45,7 @@ namespace YoutubeDLView.API.Controllers
 
             string accessToken = _tokenHandler.CreateAccessToken(user);
             string refreshToken = _tokenHandler.CreateRefreshToken(user);
-            return Ok(new LoginInformation(user.Id, user.Username, accessToken, refreshToken));
+            return new LoginInformation(user.Id, user.Username, accessToken, refreshToken);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace YoutubeDLView.API.Controllers
         /// <param name="request">The refresh token to use</param>
         /// <returns><see cref="RefreshInformation"/></returns>
         [HttpPost("Refresh")]
-        public IActionResult RefreshAccessToken([FromBody] RequestRefreshModel request)
+        public ActionResult<RefreshInformation> RefreshAccessToken([FromBody] RequestRefreshModel request)
         {
             Result<ClaimsPrincipal> validateResult = _tokenHandler.ValidateRefreshToken(request.RefreshToken);
             if (!validateResult.Success) return Unauthorized("Invalid refresh token");
@@ -63,7 +63,7 @@ namespace YoutubeDLView.API.Controllers
             if (!user.Success) return BadRequest("Invalid JWT token");
 
             string accessToken = _tokenHandler.CreateAccessToken(user.Data);
-            return Ok(new RefreshInformation(user.Data.Id, user.Data.Username, accessToken));
+            return new RefreshInformation(user.Data.Id, user.Data.Username, accessToken);
         }
         
         /// <summary>

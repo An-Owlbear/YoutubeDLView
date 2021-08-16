@@ -32,12 +32,12 @@ namespace YoutubeDLView.API.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetChannel(string channelId)
+        public async Task<ActionResult<ChannelResponse>> GetChannel(string channelId)
         {
             Result<YtChannel> channel = await _channelManager.GetChannel(channelId);
             return channel.Success switch
             {
-                true => Ok(new ChannelResponse(channel.Data)),
+                true => new ChannelResponse(channel.Data),
                 false => FromResult(channel)
             };
         }
@@ -51,7 +51,7 @@ namespace YoutubeDLView.API.Controllers
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetChannels(int skip = 0, int take = 30)
+        public async Task<ActionResult<IEnumerable<ChannelResponse>>> GetChannels(int skip = 0, int take = 30)
         {
             IEnumerable<YtChannel> channels = await _channelManager.GetChannels(skip, take);
             return Ok(channels.Select(x => new ChannelResponse(x)));
@@ -67,7 +67,7 @@ namespace YoutubeDLView.API.Controllers
         [HttpGet("{channelId}/videos")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetVideos(string channelId, int skip = 0, int take = 30)
+        public async Task<ActionResult<IEnumerable<VideoResponse>>> GetVideos(string channelId, int skip = 0, int take = 30)
         {
             Result<IEnumerable<Video>> videos = await _channelManager.GetVideos(channelId, skip, take);
             return videos.Success switch

@@ -57,12 +57,12 @@ namespace YoutubeDLView.API.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetVideoInfo(string videoId)
+        public async Task<ActionResult<VideoResponse>> GetVideoInfo(string videoId)
         {
             Result<Video> video = await _videoManager.GetVideo(videoId);
             return video.Success switch
             {
-                true => Ok(new VideoResponse(video.Data)),
+                true => new VideoResponse(video.Data),
                 false => FromResult(video)
             };
         }
