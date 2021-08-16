@@ -1,6 +1,7 @@
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles, Toolbar } from '@material-ui/core';
 import { AccountCircle, Home as HomeIcon, VideoLibrary } from '@material-ui/icons';
 import React  from 'react';
+import { Link } from 'react-router-dom';
 
 interface AppDrawerProps {
   open: boolean;
@@ -33,15 +34,15 @@ const AppDrawer: React.FC<AppDrawerProps> = (props: AppDrawerProps) => {
     >
       <Toolbar />
       <List>
-        <ListItem button key="Home">
+        <ListItem button component={Link} to="/">
           <ListItemIcon><HomeIcon /></ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
-        <ListItem button key="Channels">
+        <ListItem button component={Link} to="/channels">
           <ListItemIcon><AccountCircle /></ListItemIcon>
           <ListItemText>Channels</ListItemText>
         </ListItem>
-        <ListItem button key="Videos">
+        <ListItem button component={Link} to="/videos">
           <ListItemIcon><VideoLibrary /></ListItemIcon>
           <ListItemText>Videos</ListItemText>
         </ListItem>
