@@ -10,4 +10,4 @@ export const authReducer = (state = '', action: Action): string => {
     default:
       return state;
   }
-}
+};
