@@ -14,13 +14,14 @@ const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
   content: {
+    margin: theme.spacing(5),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
   contentShift: {
-    marginLeft: drawerWidth,
+    marginLeft: theme.spacing(5) + drawerWidth,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,

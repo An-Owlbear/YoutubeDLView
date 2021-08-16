@@ -4,7 +4,6 @@ import React, { ChangeEvent, useState } from 'react';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '450px',
-    marginTop: theme.spacing(5),
     marginLeft: 'auto',
     marginRight: 'auto',
     padding: theme.spacing(5),
