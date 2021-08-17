@@ -2,13 +2,11 @@ import { CssBaseline, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import '@fontsource/roboto';
 import AppDrawer from './components/AppDrawer';
 import TopAppBar from "./components/TopAppBar";
 import LoginPage from './pages/LoginPage';
-import { store } from './reducers/combinedReducers';
 
 const drawerWidth = 250;
 
@@ -36,25 +34,19 @@ const App = () =>  {
 
   return (
     <React.StrictMode>
-      <Provider store={store}>
-        <BrowserRouter>
-          <CssBaseline />
-          <TopAppBar onMenuClick={() => setOpen(!open)} />
-          <AppDrawer open={open} width={drawerWidth} />
-          <div className={clsx(classes.content, {[classes.contentShift]: open})}>
-            <Switch>
-              <Route exact path="/" />
-              <Route exact path="/login" component={LoginPage} />
-            </Switch>
-          </div>
-        </BrowserRouter>
-      </Provider>
+      <BrowserRouter>
+        <CssBaseline />
+        <TopAppBar onMenuClick={() => setOpen(!open)} />
+        <AppDrawer open={open} width={drawerWidth} />
+        <div className={clsx(classes.content, {[classes.contentShift]: open})}>
+          <Switch>
+            <Route exact path="/" />
+            <Route exact path="/login" component={LoginPage} />
+          </Switch>
+        </div>
+      </BrowserRouter>
     </React.StrictMode>
   );
 };
 
-// eslint-disable-next-line react/no-render-return-value
-const renderApp = () => ReactDOM.render(<App />, document.getElementById('root'));
-renderApp();
-
-store.subscribe(renderApp);
+ReactDOM.render(<App />, document.getElementById('root'));
