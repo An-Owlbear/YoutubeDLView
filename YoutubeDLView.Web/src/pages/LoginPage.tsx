@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   errorBox: {
-    flexGrow: 1,
     color: theme.palette.error.light,
     marginRight: theme.spacing(2),
   },
@@ -37,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   hidden: {
     visibility: 'hidden'
+  },
+  flexGrow: {
+    flexGrow: 1
   }
 }));
 
@@ -48,6 +50,7 @@ const LoginPage: React.FC = () => {
     password: ''
   });
 
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState( '');
 
   const [, setSession] = useAtom(sessionAtom);
@@ -58,6 +61,8 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async (event: FormEvent<HTMLElement>) => {
     event.preventDefault();
+    setError('');
+    setLoading(true);
     try {
       const response = await axios.post('/Auth/Login', values);
       const data: LoginInformation = response.data;
@@ -70,6 +75,7 @@ const LoginPage: React.FC = () => {
         setError('An error occurred');
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -84,6 +90,7 @@ const LoginPage: React.FC = () => {
         onChange={handleChange}
         variant="outlined"
         fullWidth
+        disabled={loading}
       />
       <TextField
         id="password-input"
@@ -94,13 +101,15 @@ const LoginPage: React.FC = () => {
         onChange={handleChange}
         variant="outlined"
         fullWidth
+        disabled={loading}
       />
       <Box display="flex">
         <Box className={clsx(classes.errorBox, {[classes.hidden]: !error})} display="flex" alignItems="center">
           <Error className={classes.errorIcon} />
           <Typography>{error}</Typography>
         </Box>
-        <Button type="submit" variant="contained" color="primary" disableElevation>Login</Button>
+        <div className={classes.flexGrow} />
+        <Button type="submit" variant="contained" color="primary" disableElevation disabled={loading}>Login</Button>
       </Box>
     </form>
   );
