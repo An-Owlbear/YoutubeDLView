@@ -1,5 +1,11 @@
 import { Box, Button, makeStyles, TextField, Theme, Typography } from '@material-ui/core';
-import React, { ChangeEvent, useState } from 'react';
+import { Error } from '@material-ui/icons';
+import axios, { AxiosError } from 'axios';
+import clsx from 'clsx';
+import { useAtom } from 'jotai';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
+import { LoginInformation } from '../models/apiModels';
+import { sessionAtom } from '../services/globalStore';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -21,8 +27,16 @@ const useStyles = makeStyles((theme: Theme) => ({
       marginTop: 0
     }
   },
-  flexGrow: {
-    flexGrow: 1
+  errorBox: {
+    flexGrow: 1,
+    color: theme.palette.error.light,
+    marginRight: theme.spacing(2),
+  },
+  errorIcon: {
+    marginRight: theme.spacing(1)
+  },
+  hidden: {
+    visibility: 'hidden'
   }
 }));
 
@@ -34,12 +48,32 @@ const LoginPage: React.FC = () => {
     password: ''
   });
 
+  const [error, setError] = useState( '');
+
+  const [, setSession] = useAtom(sessionAtom);
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
 
+  const handleLogin = async (event: FormEvent<HTMLElement>) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post('/Auth/Login', values);
+      const data: LoginInformation = response.data;
+      setSession({username: data.username, accessToken: data.accessToken, refreshToken: data.refreshToken});
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage = (error as AxiosError).response?.data;
+        setError(errorMessage);
+      } else {
+        setError('An error occurred');
+      }
+    }
+  };
+
   return (
-    <form className={classes.root}>
+    <form className={classes.root} onSubmit={handleLogin}>
       <Typography variant="h3">Login</Typography>
       <TextField
         id="username-input"
@@ -62,7 +96,10 @@ const LoginPage: React.FC = () => {
         fullWidth
       />
       <Box display="flex">
-        <div className={classes.flexGrow} />
+        <Box className={clsx(classes.errorBox, {[classes.hidden]: !error})} display="flex" alignItems="center">
+          <Error className={classes.errorIcon} />
+          <Typography>{error}</Typography>
+        </Box>
         <Button type="submit" variant="contained" color="primary" disableElevation>Login</Button>
       </Box>
     </form>
