@@ -6,10 +6,10 @@ namespace YoutubeDLView.API
     public class ApiController : ControllerBase
     {
         protected ActionResult FromResult(Result result) =>
-            result.StatusCode switch
+            result switch
             {
-                >= 200 and <= 299 => Ok(),
-                null => BadRequest(result.Error),
+                { Success: true } => Ok(),
+                { Success: false, StatusCode: null } => BadRequest(result.Error),
                 _ => StatusCode((int)result.StatusCode, result.Error)
             };
     }
