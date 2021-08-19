@@ -53,7 +53,10 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState( '');
 
-  const [, setSession] = useAtom(sessionAtom);
+  const usernameError = () => error === 'User not found' || error === 'An error occurred';
+  const passwordError = () => error === 'Incorrect password' || error === 'An error occurred';
+
+  const [session, setSession] = useAtom(sessionAtom);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -91,6 +94,7 @@ const LoginPage: React.FC = () => {
         variant="outlined"
         fullWidth
         disabled={loading}
+        error={usernameError()}
       />
       <TextField
         id="password-input"
@@ -102,6 +106,7 @@ const LoginPage: React.FC = () => {
         variant="outlined"
         fullWidth
         disabled={loading}
+        error={passwordError()}
       />
       <Box display="flex">
         <Box className={clsx(classes.errorBox, {[classes.hidden]: !error})} display="flex" alignItems="center">
