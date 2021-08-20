@@ -4,6 +4,7 @@ import axios, { AxiosError } from 'axios';
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import { LoginInformation } from '../models/apiModels';
 import { sessionAtom } from '../services/globalStore';
 
@@ -81,6 +82,8 @@ const LoginPage: React.FC = () => {
     setLoading(false);
   };
 
+  // Redirects user to root if logged in, otherwise returns login form
+  if (session) return <Redirect to="/" />;
   return (
     <form className={classes.root} onSubmit={handleLogin}>
       <Typography variant="h3">Login</Typography>
