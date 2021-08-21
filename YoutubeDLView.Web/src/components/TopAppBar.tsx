@@ -1,7 +1,9 @@
 import { AppBar, Button, Toolbar, Typography, makeStyles, IconButton } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
+import { useAtom } from "jotai";
 import React from "react";
 import { Link } from 'react-router-dom';
+import { sessionAtom } from "../services/globalStore";
 
 interface TopAppBarProps {
   onMenuClick?: React.MouseEventHandler;
@@ -25,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TopAppBar: React.FC<TopAppBarProps> = (props: TopAppBarProps) => {
   const classes = useStyles();
+  const [session, setSession] = useAtom(sessionAtom);
 
   return (
     <AppBar className={classes.root} position="sticky">
@@ -40,7 +43,11 @@ const TopAppBar: React.FC<TopAppBarProps> = (props: TopAppBarProps) => {
           <Typography variant="h6">YoutubeDLView</Typography>
         </Link>
         <div className={classes.spacer} />
-        <Button color="inherit" component={Link} to="/login">Login</Button>
+        {
+          session ?
+            <Button color="inherit" onClick={() => setSession(null)}>Logout</Button> :
+            <Button color="inherit" component={Link} to="/login">Login</Button>
+        }
       </Toolbar>
     </AppBar>
   );
