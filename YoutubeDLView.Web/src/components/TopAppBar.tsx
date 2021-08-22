@@ -3,11 +3,7 @@ import { Menu as MenuIcon } from '@material-ui/icons';
 import { useAtom } from "jotai";
 import React from "react";
 import { Link } from 'react-router-dom';
-import { sessionAtom } from "../services/globalStore";
-
-interface TopAppBarProps {
-  onMenuClick?: React.MouseEventHandler;
-}
+import { drawerOpenAtom, sessionAtom } from '../services/globalStore';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,17 +21,18 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const TopAppBar: React.FC<TopAppBarProps> = (props: TopAppBarProps) => {
+const TopAppBar: React.FC = () => {
   const classes = useStyles();
   const [session, setSession] = useAtom(sessionAtom);
+  const [, setDrawerOpen] = useAtom(drawerOpenAtom);
 
   return (
-    <AppBar className={classes.root} position="sticky">
+    <AppBar className={classes.root} position="fixed">
       <Toolbar>
         <IconButton
           className={classes.menuIcon}
           color="inherit"
-          onClick={props.onMenuClick}
+          onClick={() => setDrawerOpen(true)}
         >
           <MenuIcon />
         </IconButton>

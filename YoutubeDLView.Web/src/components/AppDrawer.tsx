@@ -1,10 +1,11 @@
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles, Toolbar } from '@material-ui/core';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
 import { AccountCircle, Home as HomeIcon, VideoLibrary } from '@material-ui/icons';
+import { useAtom } from 'jotai';
 import React  from 'react';
 import { Link } from 'react-router-dom';
+import { drawerOpenAtom } from '../services/globalStore';
 
 interface AppDrawerProps {
-  open: boolean;
   width: number;
 }
 
@@ -24,15 +25,17 @@ const useStyles = makeStyles(() => ({
 const AppDrawer: React.FC<AppDrawerProps> = (props: AppDrawerProps) => {
   const classes = useStyles(props);
 
+  const [open, setOpen] = useAtom(drawerOpenAtom);
+
   return (
     <Drawer
       className={classes.root}
-      variant="persistent"
+      variant="temporary"
       anchor="left"
-      open={props.open}
+      open={open}
       classes={{paper: classes.drawerPaper}}
+      onClose={() => setOpen(false)}
     >
-      <Toolbar />
       <List>
         <ListItem button component={Link} to="/">
           <ListItemIcon><HomeIcon /></ListItemIcon>

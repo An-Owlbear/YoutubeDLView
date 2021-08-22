@@ -1,6 +1,6 @@
 import { CssBaseline, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import '@fontsource/roboto';
@@ -11,43 +11,40 @@ import LoginPage from './pages/LoginPage';
 const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex'
+  },
+  contentHeader: {
+    ...theme.mixins.toolbar
+  },
   content: {
+    flexGrow: 1,
     margin: theme.spacing(5),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
     [theme.breakpoints.down('xs')]: {
       margin: theme.spacing(2)
     }
-  },
-  contentShift: {
-    marginLeft: theme.spacing(5) + drawerWidth,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   }
 }));
 
 const App = () =>  {
   const classes = useStyles();
 
-  const [open, setOpen] = useState(true);
-
   return (
     <React.StrictMode>
-      <BrowserRouter>
-        <CssBaseline />
-        <TopAppBar onMenuClick={() => setOpen(!open)} />
-        <AppDrawer open={open} width={drawerWidth} />
-        <div className={clsx(classes.content, {[classes.contentShift]: open})}>
-          <Switch>
-            <Route exact path="/" />
-            <Route exact path="/login" component={LoginPage} />
-          </Switch>
-        </div>
-      </BrowserRouter>
+      <div className={classes.root}>
+        <BrowserRouter>
+          <CssBaseline />
+          <TopAppBar />
+          <AppDrawer width={drawerWidth} />
+          <div className={clsx(classes.content)}>
+            <div className={classes.contentHeader} />
+            <Switch>
+              <Route exact path="/" />
+              <Route exact path="/login" component={LoginPage} />
+            </Switch>
+          </div>
+        </BrowserRouter>
+      </div>
     </React.StrictMode>
   );
 };
