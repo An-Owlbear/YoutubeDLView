@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderColor: theme.palette.divider,
     borderRadius: '8px',
     [theme.breakpoints.down('xs')]: {
-      width: '90%'
+      width: '100%'
     },
     '& > *': {
       marginTop: theme.spacing(3)

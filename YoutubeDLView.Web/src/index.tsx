@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    [theme.breakpoints.down('xs')]: {
+      margin: theme.spacing(2)
+    }
   },
   contentShift: {
     marginLeft: theme.spacing(5) + drawerWidth,
