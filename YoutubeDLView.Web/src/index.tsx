@@ -7,6 +7,7 @@ import '@fontsource/roboto';
 import AppDrawer from './components/AppDrawer';
 import TopAppBar from "./components/TopAppBar";
 import LoginPage from './pages/LoginPage';
+import MainPage from './pages/MainPage';
 
 const drawerWidth = 250;
 
@@ -39,7 +40,7 @@ const App = () =>  {
           <div className={clsx(classes.content)}>
             <div className={classes.contentHeader} />
             <Switch>
-              <Route exact path="/" />
+              <Route exact path="/" component={MainPage} />
               <Route exact path="/login" component={LoginPage} />
             </Switch>
           </div>
