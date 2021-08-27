@@ -35,7 +35,7 @@ const AccountMenu: React.FC = () => {
           horizontal: 'right'
         }}
       >
-        <UserPopup />
+        <UserPopup handleClose={handleAccountClose} />
       </Popover>
     </div>
   );

@@ -27,6 +27,10 @@ const AppDrawer: React.FC<AppDrawerProps> = (props: AppDrawerProps) => {
 
   const [open, setOpen] = useAtom(drawerOpenAtom);
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Drawer
       className={classes.root}
@@ -37,15 +41,15 @@ const AppDrawer: React.FC<AppDrawerProps> = (props: AppDrawerProps) => {
       onClose={() => setOpen(false)}
     >
       <List>
-        <ListItem button component={Link} to="/">
+        <ListItem button component={Link} to="/" onClick={handleClose}>
           <ListItemIcon><HomeIcon /></ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
-        <ListItem button component={Link} to="/channels">
+        <ListItem button component={Link} to="/channels" onClick={handleClose}>
           <ListItemIcon><AccountCircle /></ListItemIcon>
           <ListItemText>Channels</ListItemText>
         </ListItem>
-        <ListItem button component={Link} to="/videos">
+        <ListItem button component={Link} to="/videos" onClick={handleClose}>
           <ListItemIcon><VideoLibrary /></ListItemIcon>
           <ListItemText>Videos</ListItemText>
         </ListItem>

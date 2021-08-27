@@ -7,6 +7,7 @@ import { sessionAtom } from '../services/globalStore';
 
 interface UserPopupProps {
   className?: string;
+  handleClose: () => void;
 }
 
 const useStyles = makeStyles(() => ({
@@ -20,14 +21,19 @@ const UserPopup: React.FC<UserPopupProps> = (props: UserPopupProps) => {
 
   const [, setSession] = useAtom(sessionAtom);
 
+  const handleLogout = () => {
+    setSession(null);
+    props.handleClose();
+  };
+
   return (
     <Paper className={clsx([classes.root], props.className)} elevation={3}>
       <List>
-        <ListItem button>
+        <ListItem button onClick={props.handleClose}>
           <ListItemIcon><AccountCircle /></ListItemIcon>
           <ListItemText>Account</ListItemText>
         </ListItem>
-        <ListItem button onClick={() => setSession(null)}>
+        <ListItem button onClick={handleLogout}>
           <ListItemIcon><ExitToApp /></ListItemIcon>
           <ListItemText>Logout</ListItemText>
         </ListItem>
