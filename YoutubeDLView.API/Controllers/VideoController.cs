@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +34,18 @@ namespace YoutubeDLView.API.Controllers
             _videoManager = videoManager;
         }
 
+        /// <summary>
+        /// Returns the requested amount of the most recent videos
+        /// </summary>
+        /// <param name="skip">The amount of videos to skip</param>
+        /// <param name="take">The amount of videos to take</param>
+        /// <returns></returns>
+        public IActionResult GetVideos(int skip = 0, int take = 30)
+        {
+            IEnumerable<Video> videos = _videoManager.GetVideos(skip, take);
+            return Ok(videos.Select(x => new VideoResponse(x)));
+        }
+        
         /// <summary>
         /// Scans metadata files from the configured directories
         /// </summary>
