@@ -1,5 +1,6 @@
 import { Avatar, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface VideoCardProps {
   width: number;
@@ -24,12 +25,18 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     '& :first-child': {
       marginRight: theme.spacing(2)
+    },
+    '& > *': {
+      textDecoration: 'none'
     }
   },
   videoTextInfo: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    '& > *': {
+      textDecoration: 'none'
+    }
   }
 }));
 
@@ -38,12 +45,14 @@ const VideoCard: React.FC<VideoCardProps> = (props: VideoCardProps) => {
 
   return (
     <div className={classes.root}>
-      <img src={`/videos/${props.id}/thumbnail`} className={classes.thumbnail}  alt="" />
+      <Link to={`/videos/${props.id}`}>
+        <img src={`/videos/${props.id}/thumbnail`} className={classes.thumbnail}  alt="" />
+      </Link>
       <div className={classes.videoInfo}>
-        <Avatar>{props.channel.charAt(0)}</Avatar>
+        <Avatar component={Link} to={`/channels/${props.channelId}`}>{props.channel.charAt(0)}</Avatar>
         <div className={classes.videoTextInfo}>
-          <Typography variant="body1">{props.title}</Typography>
-          <Typography variant="body2" color="textSecondary">{props.channel}</Typography>
+          <Typography variant="body1" color="textPrimary" component={Link} to={`/videos/${props.id}`}>{props.title}</Typography>
+          <Typography variant="body2" color="textSecondary" component={Link} to={`/channels/${props.channelId}`}>{props.channel}</Typography>
         </div>
       </div>
     </div>
