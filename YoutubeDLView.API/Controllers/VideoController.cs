@@ -39,7 +39,10 @@ namespace YoutubeDLView.API.Controllers
         /// </summary>
         /// <param name="skip">The amount of videos to skip</param>
         /// <param name="take">The amount of videos to take</param>
+        /// <response code="200">Returns list of recent videos</response>
         /// <returns></returns>
+        [HttpGet("/Videos")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetVideos(int skip = 0, int take = 30)
         {
             IEnumerable<Video> videos = _videoManager.GetVideos(skip, take);
