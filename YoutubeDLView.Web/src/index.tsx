@@ -8,19 +8,16 @@ import AppDrawer from './components/AppDrawer';
 import TopAppBar from "./components/TopAppBar";
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
+import VideoPage from './pages/VideoPage';
 
 const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex'
-  },
-  contentHeader: {
-    ...theme.mixins.toolbar
-  },
+  contentHeader: theme.mixins.toolbar,
   content: {
-    flexGrow: 1,
     margin: theme.spacing(5),
+    display: 'flex',
+    justifyContent: 'center',
     [theme.breakpoints.down('xs')]: {
       margin: theme.spacing(2)
     }
@@ -32,16 +29,17 @@ const App = () =>  {
 
   return (
     <React.StrictMode>
-      <div className={classes.root}>
+      <div>
         <BrowserRouter>
           <CssBaseline />
           <TopAppBar />
           <AppDrawer width={drawerWidth} />
+          <div className={classes.contentHeader} />
           <div className={clsx(classes.content)}>
-            <div className={classes.contentHeader} />
             <Switch>
               <Route exact path="/" component={MainPage} />
               <Route exact path="/login" component={LoginPage} />
+              <Route exact path="/videos/:id" component={VideoPage} />
             </Switch>
           </div>
         </BrowserRouter>
