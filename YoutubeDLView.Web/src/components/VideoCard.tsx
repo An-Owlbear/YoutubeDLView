@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
   },
   thumbnail: {
     width: '100%',
-    height: (props: VideoCardProps) => props.width * (9/16),
     marginBottom: theme.spacing(1)
   },
   videoInfo: {
@@ -37,6 +36,14 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       textDecoration: 'none'
     }
+  },
+  videoTitle: {
+    display: '-webkit-box',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    lineClamp: 2,
+    '-webkit-line-clamp': 2,
+    '-webkit-box-orient': 'vertical'
   }
 }));
 
@@ -51,7 +58,7 @@ const VideoCard: React.FC<VideoCardProps> = (props: VideoCardProps) => {
       <div className={classes.videoInfo}>
         <Avatar component={Link} to={`/channels/${props.channelId}`}>{props.channel.charAt(0)}</Avatar>
         <div className={classes.videoTextInfo}>
-          <Typography variant="body1" color="textPrimary" component={Link} to={`/videos/${props.id}`}>{props.title}</Typography>
+          <Typography variant="body1" color="textPrimary" component={Link} to={`/videos/${props.id}`} className={classes.videoTitle}>{props.title}</Typography>
           <Typography variant="body2" color="textSecondary" component={Link} to={`/channels/${props.channelId}`}>{props.channel}</Typography>
         </div>
       </div>
