@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
 import axios, { AxiosError } from 'axios';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
@@ -17,6 +17,8 @@ const useStyles = makeStyles(() => ({
 
 const MainPage: React.FC = () => {
   const classes = useStyles();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
   const [session,] = useAtom(sessionAtom);
   const [videos, setVideos] = useState<VideoInformation[]>([]);
@@ -43,7 +45,7 @@ const MainPage: React.FC = () => {
       {videos.map(x =>
         <VideoCard
           key={x.id}
-          width={300}
+          width={isSmallScreen ? '100%' : 300}
           id={x.id}
           title={x.title}
           channel={x.channelResponse.name}

@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface VideoCardProps {
-  width: number;
+  width: number | string;
   id: string;
   title: string;
   channel: string;
@@ -15,9 +15,19 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     width: (props: VideoCardProps) => props.width
   },
-  thumbnail: {
-    width: '100%',
+  thumbnailContainer: {
+    display: 'block',
+    paddingBottom: '56.25%',
+    height: 0,
+    position: 'relative',
     marginBottom: theme.spacing(1)
+  },
+  thumbnail: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0
   },
   videoInfo: {
     display: 'flex',
@@ -52,7 +62,7 @@ const VideoCard: React.FC<VideoCardProps> = (props: VideoCardProps) => {
 
   return (
     <div className={classes.root}>
-      <Link to={`/videos/${props.id}`}>
+      <Link className={classes.thumbnailContainer} to={`/videos/${props.id}`}>
         <img src={`/videos/${props.id}/thumbnail`} className={classes.thumbnail}  alt="" />
       </Link>
       <div className={classes.videoInfo}>
