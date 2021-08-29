@@ -63,7 +63,7 @@ const VideoCard: React.FC<VideoCardProps> = (props: VideoCardProps) => {
   return (
     <div className={classes.root}>
       <Link className={classes.thumbnailContainer} to={`/videos/${props.id}`}>
-        <img src={`/videos/${props.id}/thumbnail`} className={classes.thumbnail}  alt="" />
+        <img src={`/api/videos/${props.id}/thumbnail`} className={classes.thumbnail}  alt="" />
       </Link>
       <div className={classes.videoInfo}>
         <Avatar component={Link} to={`/channels/${props.channelId}`}>{props.channel.charAt(0)}</Avatar>

@@ -41,7 +41,7 @@ const VideoPage: React.FC<VideoPageProps> = (props: VideoPageProps) => {
   useEffect(() => {
     const getVideo = async () => {
       try {
-        const response = await axios.get(`/videos/${props.match.params.id}`, { headers: { 'Authorization': `Bearer ${session?.accessToken}` } });
+        const response = await axios.get(`/api/videos/${props.match.params.id}`, { headers: { 'Authorization': `Bearer ${session?.accessToken}` } });
         const data: VideoInformation = response.data;
         setVideo(data);
       } catch (error) {
@@ -59,7 +59,7 @@ const VideoPage: React.FC<VideoPageProps> = (props: VideoPageProps) => {
         <>
           <div className={classes.videoContainer}>
             <video className={classes.video} controls autoPlay>
-              <source src={`/videos/${video.id}/video`} type="video/webm" />
+              <source src={`/api/videos/${video.id}/video`} type="video/webm" />
             </video>
           </div>
           <Typography variant="h5">{video.title}</Typography>

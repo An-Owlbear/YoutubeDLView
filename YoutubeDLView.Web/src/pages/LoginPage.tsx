@@ -68,7 +68,7 @@ const LoginPage: React.FC = () => {
     setError('');
     setLoading(true);
     try {
-      const response = await axios.post('/Auth/Login', values);
+      const response = await axios.post('/api/Auth/Login', values);
       const data: LoginInformation = response.data;
       setSession({username: data.username, accessToken: data.accessToken, refreshToken: data.refreshToken});
     } catch (error) {

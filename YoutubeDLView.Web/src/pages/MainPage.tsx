@@ -27,7 +27,7 @@ const MainPage: React.FC = () => {
   useEffect(() => {
     const loadVideos = async () => {
       try {
-        const response = await axios.get('/Videos');
+        const response = await axios.get('/api/Videos');
         const data: VideoInformation[] = response.data;
         setVideos(data);
       } catch (error) {
