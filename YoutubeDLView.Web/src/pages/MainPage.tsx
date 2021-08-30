@@ -1,11 +1,11 @@
 import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
-import axios, { AxiosError } from 'axios';
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import { VideoInformation } from '../models/apiModels';
 import { sessionAtom } from '../services/globalStore';
+import useApiRequest from '../services/useApiRequest';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -21,28 +21,17 @@ const MainPage: React.FC = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
   const [session,] = useAtom(sessionAtom);
-  const [videos, setVideos] = useState<VideoInformation[]>([]);
+  const [videos, error, loading, sendRequest] = useApiRequest<VideoInformation[]>('/api/videos', 'get', null, true);
 
-  // Loads the videos for the frontpage
   useEffect(() => {
-    const loadVideos = async () => {
-      try {
-        const response = await axios.get('/api/Videos');
-        const data: VideoInformation[] = response.data;
-        setVideos(data);
-      } catch (error) {
-        const errorMessage = (error as AxiosError).response?.data;
-        console.log(errorMessage);
-      }
-    };
-    loadVideos();
+    sendRequest();
   }, []);
 
   // Redirects user to login if not logged in, otherwise returns main page content
-  if (!session) return <Redirect to="/login"/>;
+  if (!session) return <Redirect to="/login" />;
   return (
     <div className={classes.root}>
-      {videos.map(x =>
+      {videos?.map(x =>
         <VideoCard
           key={x.id}
           width={isSmallScreen ? '100%' : 300}

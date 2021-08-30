@@ -1,12 +1,12 @@
 import { Box, Button, makeStyles, TextField, Theme, Typography } from '@material-ui/core';
 import { Error } from '@material-ui/icons';
-import axios, { AxiosError } from 'axios';
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { LoginInformation } from '../models/apiModels';
 import { sessionAtom } from '../services/globalStore';
+import useApiRequest from '../services/useApiRequest';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -51,13 +51,11 @@ const LoginPage: React.FC = () => {
     password: ''
   });
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState( '');
+  const [, error, loading, sendRequest] = useApiRequest<LoginInformation>('/api/auth/login', 'post', values, false);
+  const [session, setSession] = useAtom(sessionAtom);
 
   const usernameError = () => error === 'User not found' || error === 'An error occurred';
   const passwordError = () => error === 'Incorrect password' || error === 'An error occurred';
-
-  const [session, setSession] = useAtom(sessionAtom);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -65,21 +63,9 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async (event: FormEvent<HTMLElement>) => {
     event.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const response = await axios.post('/api/Auth/Login', values);
-      const data: LoginInformation = response.data;
-      setSession({username: data.username, accessToken: data.accessToken, refreshToken: data.refreshToken});
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage = (error as AxiosError).response?.data;
-        setError(errorMessage);
-      } else {
-        setError('An error occurred');
-      }
-    }
-    setLoading(false);
+    const { response, error: requestError } = await sendRequest();
+    if (requestError || !response) return;
+    setSession({ username: response.data.username, accessToken: response.data.accessToken, refreshToken: response.data.refreshToken });
   };
 
   // Redirects user to root if logged in, otherwise returns login form

@@ -6,7 +6,9 @@ export interface LoginInformation {
 }
 
 export interface RefreshInformation {
-  refreshToken: string;
+  userId: string;
+  username: string;
+  accessToken: string;
 }
 
 export interface ChannelInformation {

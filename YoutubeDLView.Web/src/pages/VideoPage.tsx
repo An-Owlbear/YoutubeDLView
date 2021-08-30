@@ -1,10 +1,10 @@
 import { makeStyles, Typography } from '@material-ui/core';
-import axios, { AxiosError } from 'axios';
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { VideoInformation } from '../models/apiModels';
 import { sessionAtom } from '../services/globalStore';
+import useApiRequest from '../services/useApiRequest';
 
 interface VideoPageParams {
   id: string;
@@ -35,23 +35,14 @@ const useStyles = makeStyles((theme) => ({
 const VideoPage: React.FC<VideoPageProps> = (props: VideoPageProps) => {
   const classes = useStyles();
 
-  const [video, setVideo] = useState<VideoInformation | null>(null);
   const [session,] = useAtom(sessionAtom);
+  const [video, error, loading, sendRequest] = useApiRequest<VideoInformation>(`/api/videos/${props.match.params.id}`, 'get', null, true);
 
   useEffect(() => {
-    const getVideo = async () => {
-      try {
-        const response = await axios.get(`/api/videos/${props.match.params.id}`, { headers: { 'Authorization': `Bearer ${session?.accessToken}` } });
-        const data: VideoInformation = response.data;
-        setVideo(data);
-      } catch (error) {
-        const errorMessage = (error as AxiosError).response?.data;
-        console.log(errorMessage);
-      }
-    };
-    getVideo();
+    sendRequest();
   }, []);
-
+  
+  if (!session) return <Redirect to="/login" />;
   return (
     <div className={classes.root}>
       {
