@@ -28,23 +28,21 @@ const App = () =>  {
   const classes = useStyles();
 
   return (
-    <React.StrictMode>
-      <div>
-        <BrowserRouter>
-          <CssBaseline />
-          <TopAppBar />
-          <AppDrawer width={drawerWidth} />
-          <div className={classes.contentHeader} />
-          <div className={clsx(classes.content)}>
-            <Switch>
-              <Route exact path="/" component={MainPage} />
-              <Route exact path="/login" component={LoginPage} />
-              <Route exact path="/videos/:id" component={VideoPage} />
-            </Switch>
-          </div>
-        </BrowserRouter>
-      </div>
-    </React.StrictMode>
+    <div>
+      <BrowserRouter>
+        <CssBaseline />
+        <TopAppBar />
+        <AppDrawer width={drawerWidth} />
+        <div className={classes.contentHeader} />
+        <div className={clsx(classes.content)}>
+          <Switch>
+            <Route exact path="/" component={MainPage} />
+            <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/videos/:id" component={VideoPage} />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    </div>
   );
 };
 
