@@ -44,7 +44,7 @@ namespace YoutubeDLView.API.Controllers
             if (user.Password != request.Password) return Unauthorized("Incorrect password");
 
             string accessToken = _tokenHandler.CreateAccessToken(user);
-            string refreshToken = _tokenHandler.CreateRefreshToken(user);
+            string refreshToken = user.RefreshKey;
             return new LoginInformation(user.Id, user.Username, accessToken, refreshToken);
         }
 
@@ -56,14 +56,11 @@ namespace YoutubeDLView.API.Controllers
         [HttpPost("Refresh")]
         public ActionResult<RefreshInformation> RefreshAccessToken([FromBody] RequestRefreshModel request)
         {
-            Result<ClaimsPrincipal> validateResult = _tokenHandler.ValidateRefreshToken(request.RefreshToken);
-            if (!validateResult.Success) return Unauthorized("Invalid refresh token");
-
-            Result<User> user = _userManager.GetUser(validateResult.Data);
-            if (!user.Success) return BadRequest("Invalid JWT token");
-
-            string accessToken = _tokenHandler.CreateAccessToken(user.Data);
-            return new RefreshInformation(user.Data.Id, user.Data.Username, accessToken);
+            User user = _userManager.Users.FirstOrDefault(x => x.RefreshKey == request.RefreshToken);
+            if (user == null) return Unauthorized("Invalid refresh token");
+            
+            string accessToken = _tokenHandler.CreateAccessToken(user);
+            return new RefreshInformation(user.Id, user.Username, accessToken);
         }
         
         /// <summary>

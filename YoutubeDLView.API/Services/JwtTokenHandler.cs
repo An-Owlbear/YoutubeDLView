@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
@@ -37,20 +36,7 @@ namespace YoutubeDLView.API.Services
             SecurityToken token = _tokenHandler.CreateToken(tokenDescriptor);
             return _tokenHandler.WriteToken(token);
         }
-
-        /// <summary>
-        /// Creates a JWT refresh token for the given user
-        /// </summary>
-        /// <param name="user">The user to create a refresh token for</param>
-        /// <returns>The created refresh token</returns>
-        public string CreateRefreshToken(User user)
-        {
-            SecurityTokenDescriptor tokenDescriptor =
-                createTokenDescriptor(user, _config.RefreshTokenSecret, null, true);
-            SecurityToken token = _tokenHandler.CreateToken(tokenDescriptor);
-            return _tokenHandler.WriteToken(token);
-        }
-
+        
         /// <summary>
         /// Validates the given access token
         /// </summary>
@@ -58,29 +44,6 @@ namespace YoutubeDLView.API.Services
         /// <returns>The result of the validation, if successful containing the resulting <see cref="ClaimsPrincipal"/></returns>
         public Result<ClaimsPrincipal> ValidateAccessToken(string token) =>
             validateToken(token, createTokenValidationParameters(_config.AccessTokenSecret));
-
-        /// <summary>
-        /// Validates the given refresh token
-        /// </summary>
-        /// <param name="token">The token to validate</param>
-        /// <returns>The result of the validation, if successful containing the resulting <see cref="ClaimsPrincipal"/></returns>
-        public Result<ClaimsPrincipal> ValidateRefreshToken(string token)
-        {
-            // Ensures token is a valid JWT token
-            Result<ClaimsPrincipal> result =
-                validateToken(token, createTokenValidationParameters(_config.RefreshTokenSecret));
-            if (!result.Success) return result;
-
-            // Ensures the specified user is valid
-            User user = _userManager.Users.FirstOrDefault(x =>
-                x.Id == result.Data.FindFirstValue(ClaimTypes.NameIdentifier));
-            if (user == null) return Result.Fail<ClaimsPrincipal>("User not found", 401);
-            
-            // Checks the refresh key of the token matches the user's
-            return result.Data.FindFirstValue("RefreshKey") == user.RefreshKey
-                ? result
-                : Result.Fail<ClaimsPrincipal>("Invalid token", 401);
-        }
 
         // Validates the given JWT token using the given TokenValidationParameters
         private Result<ClaimsPrincipal> validateToken(string token, TokenValidationParameters validationParameters)
@@ -97,26 +60,24 @@ namespace YoutubeDLView.API.Services
         }
         
         // Creates a ClaimsIdentity from the given user
-        private ClaimsIdentity createClaims(User user, bool useRefreshKey)
+        private ClaimsIdentity createClaims(User user)
         {
             List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.Username),
             };
-            if (useRefreshKey) claims.Add(new Claim("RefreshKey", user.RefreshKey));
             return new(claims);
         }
 
 
         // Creates a SecurityTokenDescriptor from which to create a token
-        private SecurityTokenDescriptor createTokenDescriptor(User user, string secret, TimeSpan? length = null,
-            bool useRefreshKey = false) => new()
+        private SecurityTokenDescriptor createTokenDescriptor(User user, string secret, TimeSpan length) => new()
         {
             Issuer = _config.Url,
             IssuedAt = DateTime.UtcNow,
-            Expires = length == null ? null : DateTime.UtcNow.Add((TimeSpan)length),
-            Subject = createClaims(user, useRefreshKey),
+            Expires = DateTime.UtcNow.Add(length),
+            Subject = createClaims(user),
             SigningCredentials = new(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret)),
                 SecurityAlgorithms.HmacSha256Signature)
         };
