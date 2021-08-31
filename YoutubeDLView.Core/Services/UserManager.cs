@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
@@ -15,15 +15,13 @@ namespace YoutubeDLView.Core.Services
         private readonly IYoutubeDLViewDb _dbContext;
         private readonly IRandomGenerator _randomGenerator;
         
-        /// <inheritdoc />
-        public IEnumerable<User> Users { get; }
-        
         public UserManager(IYoutubeDLViewDb dbContext, IRandomGenerator randomGenerator)
         {
             _dbContext = dbContext;
             _randomGenerator = randomGenerator;
-            Users = dbContext.Users.ToList();
         }
+
+        public IQueryable<User> Users => _dbContext.Users.AsNoTracking();
 
         /// <inheritdoc />
         public Result<User> GetUser(ClaimsPrincipal claimsPrincipal)

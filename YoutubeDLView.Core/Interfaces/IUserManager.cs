@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using YoutubeDLView.Core.Common;
@@ -10,10 +11,10 @@ namespace YoutubeDLView.Core.Interfaces
     public interface IUserManager
     {
         /// <summary>
-        /// All registered users
+        /// A queryable list of all users
         /// </summary>
-        IEnumerable<User> Users { get; }
-
+        IQueryable<User> Users { get; }
+        
         /// <summary>
         /// Retrieves a user from the given ClaimsPrincipal
         /// </summary>
