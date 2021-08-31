@@ -30,13 +30,15 @@ const useApiRequest = <T>(url: string, method: Method, body: unknown, useAuth: b
     // Decodes token and checks expiration
     if (!session) throw 'Access token is null';
     const decodedAccessToken = jwtDecode<DecodedAccessToken>(session.accessToken);
-    if (Date.now() <= decodedAccessToken.exp * 1000) return;
+    if (Date.now() <= decodedAccessToken.exp * 1000) return session;
 
     // Requests new token if expired
     try {
       const response = await axios.post('/api/auth/refresh', { refreshToken: session.refreshToken });
       const data: RefreshInformation = response.data;
-      setSession({ refreshToken: session.refreshToken, ...data });
+      const newSession = { refreshToken: session.refreshToken, ...data };
+      setSession(newSession);
+      return newSession;
     } catch (error) {
       console.log(error);
     }
@@ -47,14 +49,18 @@ const useApiRequest = <T>(url: string, method: Method, body: unknown, useAuth: b
     // Checks tokens if needed and prepares request
     setError('');
     setLoading(true);
-    if (useAuth) await checkTokens();
+    let accessToken = session?.accessToken;
+    if (useAuth) {
+      const currentSession = await checkTokens();
+      accessToken = currentSession?.accessToken;
+    }
     const axiosRequest: AxiosRequestConfig = {
       url: url,
       method: method,
       data: body,
       ...(useAuth && {
         headers: {
-          'Authorization': `Bearer ${session?.accessToken}`
+          'Authorization': `Bearer ${accessToken}`
         }
       })
     };
