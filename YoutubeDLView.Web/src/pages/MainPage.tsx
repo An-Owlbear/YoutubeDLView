@@ -1,6 +1,6 @@
 import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
 import { useAtom } from 'jotai';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import { VideoInformation } from '../models/apiModels';
@@ -21,10 +21,16 @@ const MainPage: React.FC = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
   const [session,] = useAtom(sessionAtom);
-  const [videos, error, loading, sendRequest] = useApiRequest<VideoInformation[]>('/api/videos', 'get', null, true);
+  const [videos, setVideos] = useState<VideoInformation[]>([]);
+  const [error, loading, sendRequest] = useApiRequest<VideoInformation[]>('/api/videos', 'get', null, true);
 
   useEffect(() => {
-    sendRequest();
+    const loadVideos = async () => {
+      const response = await sendRequest();
+      if (!response) return;
+      setVideos(response);
+    };
+    loadVideos();
   }, []);
 
   // Redirects user to login if not logged in, otherwise returns main page content

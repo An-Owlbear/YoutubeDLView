@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, Method } from 'axios';
 import { useAtom } from 'jotai';
 import jwtDecode from 'jwt-decode';
 import { useCallback, useState } from 'react';
@@ -14,13 +14,7 @@ interface DecodedAccessToken {
   iss: string;
 }
 
-interface RequestResponse<T> {
-  response: AxiosResponse<T> | null;
-  error: AxiosError | null;
-}
-
-const useApiRequest = <T>(url: string, method: Method, body: unknown, useAuth: boolean): [T | null, string, boolean, () => Promise<RequestResponse<T>>] => {
-  const [response, setResponse] = useState<T | null>(null);
+const useApiRequest = <T>(url: string, method: Method, body: unknown, useAuth: boolean): [string, boolean, () => Promise<T | null>] => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [session, setSession] = useAtom(sessionAtom);
@@ -68,18 +62,17 @@ const useApiRequest = <T>(url: string, method: Method, body: unknown, useAuth: b
     // Sends request and returns response and error
     try {
       const axiosResponse = await axios.request<T>(axiosRequest);
-      setResponse(axiosResponse.data);
-      return { response: axiosResponse, error: null };
+      return axiosResponse.data;
     } catch (error) {
       const message = (error as AxiosError).response?.data;
       setError(message);
-      return { response: null, error: error as AxiosError };
+      return null;
     } finally {
       setLoading(false);
     }
   }, [url, method, body, useAuth, session]);
 
-  return [response, error, loading, sendRequest];
+  return [error, loading, sendRequest];
 };
 
 export default useApiRequest;

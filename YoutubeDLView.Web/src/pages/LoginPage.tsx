@@ -51,7 +51,7 @@ const LoginPage: React.FC = () => {
     password: ''
   });
 
-  const [, error, loading, sendRequest] = useApiRequest<LoginInformation>('/api/auth/login', 'post', values, false);
+  const [error, loading, sendRequest] = useApiRequest<LoginInformation>('/api/auth/login', 'post', values, false);
   const [session, setSession] = useAtom(sessionAtom);
 
   const usernameError = () => error === 'User not found' || error === 'An error occurred';
@@ -63,9 +63,9 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async (event: FormEvent<HTMLElement>) => {
     event.preventDefault();
-    const { response, error: requestError } = await sendRequest();
-    if (requestError || !response) return;
-    setSession({ username: response.data.username, accessToken: response.data.accessToken, refreshToken: response.data.refreshToken });
+    const response = await sendRequest();
+    if (!response) return;
+    setSession({ username: response.username, accessToken: response.accessToken, refreshToken: response.refreshToken });
   };
 
   // Redirects user to root if logged in, otherwise returns login form

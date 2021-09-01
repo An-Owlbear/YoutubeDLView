@@ -1,6 +1,6 @@
 import { makeStyles, Typography } from '@material-ui/core';
 import { useAtom } from 'jotai';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { VideoInformation } from '../models/apiModels';
 import { sessionAtom } from '../services/globalStore';
@@ -36,10 +36,16 @@ const VideoPage: React.FC<VideoPageProps> = (props: VideoPageProps) => {
   const classes = useStyles();
 
   const [session,] = useAtom(sessionAtom);
-  const [video, error, loading, sendRequest] = useApiRequest<VideoInformation>(`/api/videos/${props.match.params.id}`, 'get', null, true);
+  const [video, setVideo] = useState<VideoInformation | null>(null);
+  const [error, loading, sendRequest] = useApiRequest<VideoInformation>(`/api/videos/${props.match.params.id}`, 'get', null, true);
 
   useEffect(() => {
-    sendRequest();
+    const loadVideo = async () => {
+      const response = await sendRequest();
+      if (!response) return;
+      setVideo(response);
+    };
+    loadVideo();
   }, []);
   
   if (!session) return <Redirect to="/login" />;
