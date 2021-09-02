@@ -1,4 +1,4 @@
-import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
+import { CircularProgress, makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
@@ -37,16 +37,19 @@ const MainPage: React.FC = () => {
   if (!session) return <Redirect to="/login" />;
   return (
     <div className={classes.root}>
-      {videos?.map(x =>
-        <VideoCard
-          key={x.id}
-          width={isSmallScreen ? '100%' : 300}
-          id={x.id}
-          title={x.title}
-          channel={x.channelResponse.name}
-          channelId={x.channelResponse.id}
-        />
-      )}
+      {loading && <CircularProgress />}
+      {!loading &&
+        videos?.map(x =>
+          <VideoCard
+            key={x.id}
+            width={isSmallScreen ? '100%' : 300}
+            id={x.id}
+            title={x.title}
+            channel={x.channelResponse.name}
+            channelId={x.channelResponse.id}
+          />
+        )
+      }
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { makeStyles, Typography } from '@material-ui/core';
+import { CircularProgress, makeStyles, Typography } from '@material-ui/core';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
@@ -50,19 +50,23 @@ const VideoPage: React.FC<VideoPageProps> = (props: VideoPageProps) => {
   
   if (!session) return <Redirect to="/login" />;
   return (
-    <div className={classes.root}>
-      {
-        !!video &&
-        <>
-          <div className={classes.videoContainer}>
-            <video className={classes.video} controls autoPlay>
-              <source src={`/api/videos/${video.id}/video`} type="video/webm" />
-            </video>
-          </div>
-          <Typography variant="h5">{video.title}</Typography>
-        </>
+    <>
+      {loading ?
+        <CircularProgress/> :
+        <div className={classes.root}>
+          {video &&
+          <>
+            <div className={classes.videoContainer}>
+              <video className={classes.video} controls autoPlay>
+                <source src={`/api/videos/${video.id}/video`} type="video/webm"/>
+              </video>
+            </div>
+            <Typography variant="h5">{video.title}</Typography>
+          </>
+          }
+        </div>
       }
-    </div>
+    </>
   );
 
 };
