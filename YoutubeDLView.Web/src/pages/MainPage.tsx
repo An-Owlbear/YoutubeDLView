@@ -1,4 +1,4 @@
-import { Button, CircularProgress, makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
+import { Button, CircularProgress, makeStyles } from '@material-ui/core';
 import { useAtom } from 'jotai';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Redirect } from 'react-router-dom';
@@ -18,8 +18,6 @@ const useStyles = makeStyles((theme) => ({
 
 const MainPage: React.FC = () => {
   const classes = useStyles();
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
   const [session,] = useAtom(sessionAtom);
   const [videos, setVideos] = useState<VideoInformation[]>([]);
@@ -51,7 +49,6 @@ const MainPage: React.FC = () => {
           videos?.map(x =>
             <VideoCard
               key={x.id}
-              width={isSmallScreen ? '100%' : 300}
               id={x.id}
               title={x.title}
               channel={x.channelResponse.name}

@@ -3,7 +3,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface VideoCardProps {
-  width: number | string;
   id: string;
   title: string;
   channel: string;
@@ -13,7 +12,10 @@ interface VideoCardProps {
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(1),
-    width: (props: VideoCardProps) => props.width
+    width: 300,
+    [theme.breakpoints.down('xs')]: {
+      width: '100%'
+    }
   },
   thumbnailContainer: {
     display: 'block',
