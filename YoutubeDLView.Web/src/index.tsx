@@ -17,7 +17,11 @@ const useStyles = makeStyles((theme) => ({
   content: {
     margin: theme.spacing(5),
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    alignContent: 'center',
+    '& > *': {
+      alignSelf: 'center'
+    },
     [theme.breakpoints.down('xs')]: {
       margin: theme.spacing(2)
     }
