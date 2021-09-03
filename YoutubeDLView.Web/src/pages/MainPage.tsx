@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import { VideoInformation } from '../models/apiModels';
 import { sessionAtom } from '../services/globalStore';
-import useApiRequest from '../services/useApiRequest';
+import { useApiRequest } from '../services/useApiRequest';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -22,13 +22,13 @@ const MainPage: React.FC = () => {
 
   const [session,] = useAtom(sessionAtom);
   const [videos, setVideos] = useState<VideoInformation[]>([]);
-  const [error, loading, sendRequest] = useApiRequest<VideoInformation[]>('/api/videos', 'get', null, true);
+  const [error, loading, sendRequest] = useApiRequest<VideoInformation[]>('/api/videos', 'get', true);
 
   useEffect(() => {
     const loadVideos = async () => {
       const response = await sendRequest();
       if (!response) return;
-      setVideos(response);
+      setVideos([...videos, ...response]);
     };
     loadVideos();
   }, []);

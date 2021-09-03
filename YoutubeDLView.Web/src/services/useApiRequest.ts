@@ -14,7 +14,12 @@ interface DecodedAccessToken {
   iss: string;
 }
 
-const useApiRequest = <T>(url: string, method: Method, body: unknown, useAuth: boolean): [string, boolean, () => Promise<T | null>] => {
+export interface RequestData {
+  params?: unknown;
+  body?: unknown;
+}
+
+export const useApiRequest = <T>(url: string, method: Method, useAuth: boolean, data?: RequestData): [string, boolean, () => Promise<T | null>] => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [session, setSession] = useAtom(sessionAtom);
@@ -36,7 +41,7 @@ const useApiRequest = <T>(url: string, method: Method, body: unknown, useAuth: b
     } catch (error) {
       console.log(error);
     }
-  }, [body, session]);
+  }, [data, session]);
 
   // Sends the request
   const sendRequest = useCallback(async () => {
@@ -51,7 +56,8 @@ const useApiRequest = <T>(url: string, method: Method, body: unknown, useAuth: b
     const axiosRequest: AxiosRequestConfig = {
       url: url,
       method: method,
-      data: body,
+      params: data?.params,
+      data: data?.body,
       ...(useAuth && {
         headers: {
           'Authorization': `Bearer ${accessToken}`
@@ -70,9 +76,7 @@ const useApiRequest = <T>(url: string, method: Method, body: unknown, useAuth: b
     } finally {
       setLoading(false);
     }
-  }, [url, method, body, useAuth, session]);
+  }, [url, method, data, useAuth, session]);
 
   return [error, loading, sendRequest];
 };
-
-export default useApiRequest;

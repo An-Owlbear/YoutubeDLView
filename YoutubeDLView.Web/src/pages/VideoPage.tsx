@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { VideoInformation } from '../models/apiModels';
 import { sessionAtom } from '../services/globalStore';
-import useApiRequest from '../services/useApiRequest';
+import { useApiRequest } from '../services/useApiRequest';
 
 interface VideoPageParams {
   id: string;
@@ -37,7 +37,7 @@ const VideoPage: React.FC<VideoPageProps> = (props: VideoPageProps) => {
 
   const [session,] = useAtom(sessionAtom);
   const [video, setVideo] = useState<VideoInformation | null>(null);
-  const [error, loading, sendRequest] = useApiRequest<VideoInformation>(`/api/videos/${props.match.params.id}`, 'get', null, true);
+  const [error, loading, sendRequest] = useApiRequest<VideoInformation>(`/api/videos/${props.match.params.id}`, 'get', true);
 
   useEffect(() => {
     const loadVideo = async () => {
@@ -47,7 +47,7 @@ const VideoPage: React.FC<VideoPageProps> = (props: VideoPageProps) => {
     };
     loadVideo();
   }, []);
-  
+
   if (!session) return <Redirect to="/login" />;
   return (
     <>

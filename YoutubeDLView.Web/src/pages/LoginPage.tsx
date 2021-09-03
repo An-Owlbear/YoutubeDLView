@@ -6,7 +6,7 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { LoginInformation } from '../models/apiModels';
 import { sessionAtom } from '../services/globalStore';
-import useApiRequest from '../services/useApiRequest';
+import { useApiRequest } from '../services/useApiRequest';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -51,7 +51,7 @@ const LoginPage: React.FC = () => {
     password: ''
   });
 
-  const [error, loading, sendRequest] = useApiRequest<LoginInformation>('/api/auth/login', 'post', values, false);
+  const [error, loading, sendRequest] = useApiRequest<LoginInformation>('/api/auth/login', 'post', false, { body: values });
   const [session, setSession] = useAtom(sessionAtom);
 
   const usernameError = () => error === 'User not found' || error === 'An error occurred';
