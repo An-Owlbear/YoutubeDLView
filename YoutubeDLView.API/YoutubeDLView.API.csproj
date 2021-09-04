@@ -4,6 +4,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);1591</NoWarn>
+        <SpaRoot>../YoutubeDLView.Web/</SpaRoot>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,6 +18,16 @@
     </ItemGroup>
     
     <ItemGroup>
-        <None Include="client/**" CopyToOutputDirectory="PreserveNewest" />
+        <BuildFiles Include="../YoutubeDLView.Web/build/**/*.*" />
     </ItemGroup>
+    
+    <Target Name="BuildReactApp" Condition="'$(Configuration)' == 'Release'" BeforeTargets="BeforeBuild">
+        <Exec WorkingDirectory="$(SpaRoot)" Command="yarn install" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="yarn run build" />
+        <Copy 
+            SourceFiles="@(BuildFiles)" 
+            DestinationFiles="@(BuildFiles -> '$(OutDir)client/%(RecursiveDir)%(Filename)%(Extension)')" 
+            SkipUnchangedFiles="true" 
+        />
+    </Target>
 </Project>
