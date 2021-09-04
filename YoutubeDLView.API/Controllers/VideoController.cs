@@ -41,7 +41,7 @@ namespace YoutubeDLView.API.Controllers
         /// <param name="take">The amount of videos to take</param>
         /// <response code="200">Returns list of recent videos</response>
         /// <returns></returns>
-        [HttpGet("/Videos")]
+        [HttpGet("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetVideos(int skip = 0, int take = 30)
         {

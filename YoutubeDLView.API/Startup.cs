@@ -78,11 +78,13 @@ namespace YoutubeDLView.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "YoutubeDLView.API v1"));
             }
 
-            app.UsePathBase("/api");
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.Map("/api", api =>
+            {
+                api.UseRouting();
+                api.UseAuthentication();
+                api.UseAuthorization();
+                api.UseEndpoints(endpoints => endpoints.MapControllers());
+            });
         }
     }
 }

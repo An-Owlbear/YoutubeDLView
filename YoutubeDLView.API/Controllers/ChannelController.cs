@@ -11,7 +11,7 @@ using YoutubeDLView.Core.Interfaces;
 
 namespace YoutubeDLView.API.Controllers
 {
-    [Route("/Channels")]
+    [Route("Channels")]
     public class ChannelController : ApiController
     {
         private readonly IChannelManager _channelManager;
