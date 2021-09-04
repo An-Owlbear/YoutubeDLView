@@ -14,13 +14,11 @@ namespace YoutubeDLView.API.Services
     public class JwtTokenHandler : IJwtTokenHandler
     {
         private readonly YoutubeDLViewConfig _config;
-        private readonly IUserManager _userManager;
         private readonly JwtSecurityTokenHandler _tokenHandler;
         
-        public JwtTokenHandler(IOptionsSnapshot<YoutubeDLViewConfig> config, IUserManager userManager)
+        public JwtTokenHandler(IOptionsSnapshot<YoutubeDLViewConfig> config)
         {
             _config = config.Value;
-            _userManager = userManager;
             _tokenHandler = new JwtSecurityTokenHandler();
         }
 
