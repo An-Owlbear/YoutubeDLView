@@ -49,10 +49,10 @@ namespace YoutubeDLView.API
                 string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-            
             services.AddAuthentication("JwtAuthScheme")
                 .AddScheme<AuthenticationSchemeOptions, JwtAuthHandler>("JwtAuthScheme", _ => { });
             services.AddAuthorization();
+            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "client"; });
             
             services.Configure<YoutubeDLViewConfig>(Configuration.GetSection("YoutubeDLViewConfig"));
 
@@ -78,6 +78,9 @@ namespace YoutubeDLView.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "YoutubeDLView.API v1"));
             }
 
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
+
             app.Map("/api", api =>
             {
                 api.UseRouting();
@@ -85,6 +88,7 @@ namespace YoutubeDLView.API
                 api.UseAuthorization();
                 api.UseEndpoints(endpoints => endpoints.MapControllers());
             });
+            app.UseSpa(_ => { });
         }
     }
 }

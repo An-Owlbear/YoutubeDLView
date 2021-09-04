@@ -3,3 +3,4 @@ obj/
 .idea/
 
 YoutubeDLView.db*
+YoutubeDLView.API/client
