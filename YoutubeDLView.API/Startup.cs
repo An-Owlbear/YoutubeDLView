@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -88,7 +89,14 @@ namespace YoutubeDLView.API
                 api.UseAuthorization();
                 api.UseEndpoints(endpoints => endpoints.MapControllers());
             });
-            app.UseSpa(_ => { });
+            app.UseSpa(spa =>
+            {
+                if (env.IsDevelopment())
+                {
+                    spa.Options.SourcePath = "../YoutubeDLView.Web";
+                    spa.UseReactDevelopmentServer("start");
+                }
+            });
         }
     }
 }
