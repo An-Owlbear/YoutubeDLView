@@ -74,7 +74,7 @@ const VideoPage: React.FC<VideoPageProps> = (props: VideoPageProps) => {
       {!loading && video &&
         <div className={classes.root}>
           <div className={classes.videoContainer}>
-            <video className={classes.video} controls autoPlay preload="none">
+            <video className={classes.video} controls autoPlay preload="none" playsInline>
               <source src={`/api/videos/${video.id}/video`} type="video/webm"/>
             </video>
           </div>

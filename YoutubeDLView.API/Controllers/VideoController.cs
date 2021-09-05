@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using YoutubeDLView.API.Models;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Constants;
@@ -135,14 +136,18 @@ namespace YoutubeDLView.API.Controllers
         [HttpGet("{videoId}/video")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None)]
         public async Task<IActionResult> GetVideoStream(string videoId)
         {
             Result<VideoStream> result = await _fileDataManager.GetVideoStream(videoId);
-            return result.Success switch
+            if (!result.Success) return FromResult(result);
+
+            ContentDispositionHeaderValue contentDisposition = new("inline")
             {
-                true => PhysicalFile(result.Data.Path, result.Data.MimeType, result.Data.Filename, true),
-                false => FromResult(result)
+                FileName = result.Data.Filename
             };
+            Response.Headers[HeaderNames.ContentDisposition] = contentDisposition.ToString();
+            return PhysicalFile(result.Data.Path, result.Data.MimeType, true);
         }
     }
 }
