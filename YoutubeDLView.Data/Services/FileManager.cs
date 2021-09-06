@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -81,7 +82,7 @@ namespace YoutubeDLView.Data.Services
             videos.AddRange(currentDirectoryVideos);
             
             // Get lists of files in child directories
-            string[] directories = Directory.GetDirectories(path);
+            IEnumerable<string> directories = Directory.GetDirectories(path).Where(x => !IsHidden(x));
             IEnumerable<Task<IEnumerable<VideoJson>>> scanDirectoryTasks =
                 directories.Select(async x => await ScanDirectory(x));
             IEnumerable<IEnumerable<VideoJson>> scanDirectoryResults = await Task.WhenAll(scanDirectoryTasks);
@@ -96,20 +97,42 @@ namespace YoutubeDLView.Data.Services
         {
             // Gets json files in current directory and reads data, returning the result
             IEnumerable<string> jsonFiles = Directory.GetFiles(path).Where(x => x.EndsWith(".info.json"));
-            IEnumerable<Task<VideoJson>>
-                jsonTasks = jsonFiles.Select(async x => await ReadMetadata(x));
-            return await Task.WhenAll(jsonTasks);
+            IEnumerable<Task<Result<VideoJson>>> jsonTasks = jsonFiles.Select(async x => await ReadMetadata(x));
+            return await TaskUtils.WhenAllSuccess(jsonTasks);
         }
 
-        private async Task<VideoJson> ReadMetadata(string path)
+        private async Task<Result<VideoJson>> ReadMetadata(string path)
         {
-            // Reads metadata from file and returns result, with full path
+            // Reads and converts json file
             _logger.LogInformation("Reading {Path}", path);
             Stream stream = File.OpenRead(path);
             VideoJson result = await JsonSerializer.DeserializeAsync<VideoJson>(stream);
             stream.Close();
-            if (result == null) throw new NullReferenceException("Invalid Json file");
-            return result with { _filename = Path.Join(Path.GetDirectoryName(path), result._filename) };
+            
+            // Returns failure if invalid
+            if (result is not { _type: null }) return Result.Fail<VideoJson>("Invalid json file");
+            
+            // Checks filepath of video, returning invalid if unable to find
+            string videoPath = GetVideoFilepath(result, path);
+            if (videoPath == null) return Result.Fail<VideoJson>("Video file could not be found");
+            
+            // Returns video json
+            VideoJson videoJson = result with { _filename = videoPath };
+            return Result.Ok(videoJson);
+        }
+
+        private bool IsHidden(string name)
+        {
+            string shortName = Path.GetFileName(name);
+            if (shortName == null) return true;
+            return shortName.StartsWith('.');
+        }
+
+        private string GetVideoFilepath(VideoJson json, string jsonPath)
+        {
+            if (json._filename != null) return Path.Join(Path.GetDirectoryName(jsonPath), json._filename);
+            string possibleFilename = Regex.Replace(jsonPath, @".info.json$", ".mkv");
+            return File.Exists(possibleFilename) ? possibleFilename : null;
         }
     }
 }

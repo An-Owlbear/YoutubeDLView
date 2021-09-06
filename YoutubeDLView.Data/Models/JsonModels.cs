@@ -11,6 +11,7 @@ namespace YoutubeDLView.Data.Models
         string description,
         IEnumerable<string> categories,
         int duration,
-        string _filename
+        string _filename,
+        string _type
     );
 }
