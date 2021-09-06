@@ -7,6 +7,7 @@ import '@fontsource/roboto';
 import AppDrawer from './components/AppDrawer';
 import TopAppBar from "./components/TopAppBar";
 import ChannelListPage from './pages/ChannelListPage';
+import ChannelPage from './pages/ChannelPage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import VideoPage from './pages/VideoPage';
@@ -45,6 +46,7 @@ const App = () =>  {
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/videos/:id" component={VideoPage} />
             <Route exact path="/channels" component={ChannelListPage} />
+            <Route exact path="/channels/:id" component={ChannelPage} />
           </Switch>
         </div>
       </BrowserRouter>
