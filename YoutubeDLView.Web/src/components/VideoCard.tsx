@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    overflowX: 'hidden',
     '& > *': {
       textDecoration: 'none'
     }
