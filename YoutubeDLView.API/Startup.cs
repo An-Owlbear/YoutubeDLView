@@ -67,6 +67,7 @@ namespace YoutubeDLView.API
             services.AddScoped<IVideoManager, VideoManager>();
             services.AddScoped<IFileDataManager, FileDataManager>();
             services.AddScoped<IChannelManager, ChannelManager>();
+            services.AddScoped<ISearchManager, SearchManager>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IYoutubeDLViewDb dbContext)
