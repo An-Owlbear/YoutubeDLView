@@ -15,7 +15,7 @@ namespace YoutubeDLView.API.Controllers
     [Route("Search")]
     public class SearchController : ApiController
     {
-        private ISearchManager _searchManager;
+        private readonly ISearchManager _searchManager;
 
         public SearchController(ISearchManager searchManager)
         {

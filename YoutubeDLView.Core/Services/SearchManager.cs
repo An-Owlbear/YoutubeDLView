@@ -8,7 +8,7 @@ namespace YoutubeDLView.Core.Services
 {
     public class SearchManager : ISearchManager
     {
-        private IYoutubeDLViewDb _youtubeDlViewDb;
+        private readonly IYoutubeDLViewDb _youtubeDlViewDb;
 
         public SearchManager(IYoutubeDLViewDb youtubeDlViewDb)
         {
