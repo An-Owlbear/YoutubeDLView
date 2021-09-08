@@ -30,7 +30,7 @@ namespace YoutubeDLView.API.Controllers
         /// <param name="take">The amount of results to take</param>
         /// <response code="200">Returns results</response>
         /// <returns></returns>
-        [HttpGet("/{input}")]
+        [HttpGet("{input}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetResults(string input, int skip = 0, int take = 30)
         {
