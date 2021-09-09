@@ -22,8 +22,8 @@ namespace YoutubeDLView.Core.Services
             string regexQuery = $"(^|[^a-z0-9]+){preparedSearchTerm}([^a-z0-9]|$)";
             return _youtubeDlViewDb.Videos.ToList()
                 .OrderByDescending(x => x.UploadDate)
-                .Skip(skip)
                 .Where(x => Regex.IsMatch(x.Title.ToLower(), regexQuery))
+                .Skip(skip)
                 .Take(take);
         }
     }

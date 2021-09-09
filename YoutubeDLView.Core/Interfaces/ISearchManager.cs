@@ -13,6 +13,6 @@ namespace YoutubeDLView.Core.Interfaces
         /// <param name="skip">The amount of videos to skip</param>
         /// <param name="take">The amount of videos to </param>
         /// <returns></returns>
-        IEnumerable<Video> SearchVideo(string searchTerm, int skip = 0, int take = 0);
+        IEnumerable<Video> SearchVideo(string searchTerm, int skip, int take);
     }
 }
