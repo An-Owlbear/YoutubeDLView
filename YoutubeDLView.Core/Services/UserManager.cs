@@ -67,17 +67,17 @@ namespace YoutubeDLView.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result> UpdateUser(string userId, EntityUpdate<User> entityUpdate)
+        public async Task<Result> UpdateUser(string userId, UserUpdate userUpdate)
         {
             // Checks userId, and whether given username is already taken
             User user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             if (user == null) return Result.Fail("User not found", 404);
-            if (_dbContext.Users.Any(x => x.Username == entityUpdate.EntityChanges.Username &&
-                                          user.Username != entityUpdate.EntityChanges.Username))
+            if (_dbContext.Users.Any(x => x.Username == userUpdate.Username && user.Username != userUpdate.Username))
                 return Result.Fail("Username already taken", 400);
             
             // Applies the update to the user
-            entityUpdate.Apply(user);
+            if (userUpdate.Username != null) user.Username = userUpdate.Username;
+            if (userUpdate.Password != null) user.Password = userUpdate.Password;
             await _dbContext.SaveChangesAsync();
             return Result.Ok();
         }

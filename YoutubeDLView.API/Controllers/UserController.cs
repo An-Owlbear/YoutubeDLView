@@ -82,8 +82,8 @@ namespace YoutubeDLView.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
         {
-            EntityUpdate<User> entityUpdate = new(new { request.Username, request.Password });
-            Result result = await _userManager.UpdateUser(request.UserId, entityUpdate);
+            UserUpdate update = new(request.Username, request.Password);
+            Result result = await _userManager.UpdateUser(request.UserId, update);
             return FromResult(result);
         }
 
