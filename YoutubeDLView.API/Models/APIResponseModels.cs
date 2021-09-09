@@ -12,7 +12,7 @@ namespace YoutubeDLView.API.Models
     }
 
     public record VideoResponse(string Id, string Title, string Description, string UploadDate, int Length,
-        ChannelResponse ChannelResponse)
+        ChannelResponse Channel)
     {
         public VideoResponse(Video video) : this(video.Id, video.Title, video.Description, video.UploadDate,
             video.Length, new ChannelResponse(video.Channel)) { }

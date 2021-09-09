@@ -22,7 +22,7 @@ export interface VideoInformation {
   description: string;
   uploadDate: string;
   length: number;
-  channelResponse: ChannelInformation
+  channel: ChannelInformation
 }
 
 export interface UserAccount {

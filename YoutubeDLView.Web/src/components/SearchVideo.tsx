@@ -58,9 +58,9 @@ const SearchVideo: React.FC<SearchVideoProps> = (props: SearchVideoProps) => {
       </Link>
       <div className={classes.videoInfo}>
         <Typography variant="h6" color="textPrimary" component={Link} to={`/videos/${props.video.id}`}>{props.video.title}</Typography>
-        <Link className={classes.channelInfo} to={`/channels/${props.video.channelResponse.id}`}>
-          <Avatar className={classes.avatar}>{props.video.channelResponse.name.charAt(0)}</Avatar>
-          <Typography variant="body1" color="textSecondary">{props.video.channelResponse.name}</Typography>
+        <Link className={classes.channelInfo} to={`/channels/${props.video.channel.id}`}>
+          <Avatar className={classes.avatar}>{props.video.channel.name.charAt(0)}</Avatar>
+          <Typography variant="body1" color="textSecondary">{props.video.channel.name}</Typography>
         </Link>
         <Typography className={classes.description} variant="body2" color="textSecondary">{props.video.description}</Typography>
       </div>

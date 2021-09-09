@@ -87,8 +87,8 @@ const ChannelPage: React.FC<ChannelPageProps> = (props: ChannelPageProps) => {
                 key={x.id}
                 id={x.id}
                 title={x.title}
-                channelId={x.channelResponse.id}
-                channel={x.channelResponse.name}
+                channelId={x.channel.id}
+                channel={x.channel.name}
               />
             )
           }

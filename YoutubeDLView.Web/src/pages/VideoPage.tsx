@@ -75,8 +75,8 @@ const VideoPage: React.FC = () => {
           <Typography className={classes.title} variant="h5">{video.title}</Typography>
           <Typography variant="body1" color="textSecondary">Uploaded {convertShortYTDate(video.uploadDate)}</Typography>
           <div className={classes.channelContainer}>
-            <Avatar component={Link} to={`/channels/${video.channelResponse.id}`}>{video.channelResponse.name.charAt(0)}</Avatar>
-            <Typography variant="h6" color="textPrimary" component={Link} to={`/channels/${video.channelResponse.id}`}>{video.channelResponse.name}</Typography>
+            <Avatar component={Link} to={`/channels/${video.channel.id}`}>{video.channel.name.charAt(0)}</Avatar>
+            <Typography variant="h6" color="textPrimary" component={Link} to={`/channels/${video.channel.id}`}>{video.channel.name}</Typography>
           </div>
           <Typography className={classes.description} variant="body1">{video.description}</Typography>
         </div>

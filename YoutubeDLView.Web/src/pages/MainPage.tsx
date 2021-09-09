@@ -51,8 +51,8 @@ const MainPage: React.FC = () => {
               key={x.id}
               id={x.id}
               title={x.title}
-              channel={x.channelResponse.name}
-              channelId={x.channelResponse.id}
+              channel={x.channel.name}
+              channelId={x.channel.id}
             />
           )
         }
