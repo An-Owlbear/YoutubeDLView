@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YoutubeDLView.API.Models;
@@ -12,6 +13,7 @@ namespace YoutubeDLView.API.Controllers
     /// Controller containing endpoints relating to searching
     /// </summary>
     [ApiController]
+    [Authorize]
     [Route("Search")]
     public class SearchController : ApiController
     {

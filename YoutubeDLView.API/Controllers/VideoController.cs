@@ -43,6 +43,7 @@ namespace YoutubeDLView.API.Controllers
         /// <response code="200">Returns list of recent videos</response>
         /// <returns></returns>
         [HttpGet("")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetVideos(int skip = 0, int take = 30)
         {
