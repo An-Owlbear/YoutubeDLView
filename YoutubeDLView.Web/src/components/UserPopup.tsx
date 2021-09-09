@@ -3,6 +3,7 @@ import { AccountCircle, ExitToApp } from '@material-ui/icons';
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { sessionAtom } from '../services/globalStore';
 
 interface UserPopupProps {
@@ -29,7 +30,7 @@ const UserPopup: React.FC<UserPopupProps> = (props: UserPopupProps) => {
   return (
     <Paper className={clsx([classes.root], props.className)} elevation={3}>
       <List>
-        <ListItem button onClick={props.handleClose}>
+        <ListItem button onClick={props.handleClose} component={Link} to="/account">
           <ListItemIcon><AccountCircle /></ListItemIcon>
           <ListItemText>Account</ListItemText>
         </ListItem>

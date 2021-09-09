@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import '@fontsource/roboto';
 import AppDrawer from './components/AppDrawer';
 import TopAppBar from "./components/TopAppBar";
+import AccountPage from './pages/AccountPage';
 import ChannelListPage from './pages/ChannelListPage';
 import ChannelPage from './pages/ChannelPage';
 import LoginPage from './pages/LoginPage';
@@ -49,6 +50,7 @@ const App = () =>  {
             <Route exact path="/channels" component={ChannelListPage} />
             <Route exact path="/channels/:id" component={ChannelPage} />
             <Route exact path="/search/:search" component={SearchPage}  />
+            <Route exact path="/account" component={AccountPage} />
           </Switch>
         </div>
       </BrowserRouter>

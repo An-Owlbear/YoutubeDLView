@@ -65,7 +65,7 @@ const LoginPage: React.FC = () => {
     event.preventDefault();
     const response = await sendRequest();
     if (!response) return;
-    setSession({ username: response.username, accessToken: response.accessToken, refreshToken: response.refreshToken });
+    setSession({ userId: response.userId, username: response.username, accessToken: response.accessToken, refreshToken: response.refreshToken });
   };
 
   // Redirects user to root if logged in, otherwise returns login form
