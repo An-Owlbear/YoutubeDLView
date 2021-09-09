@@ -1,18 +1,11 @@
 import { Avatar, CircularProgress, makeStyles, Typography } from '@material-ui/core';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
-import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 import { VideoInformation } from '../models/apiModels';
 import { convertShortYTDate } from '../services/dateUtils';
 import { sessionAtom } from '../services/globalStore';
 import { useApiRequest } from '../services/useApiRequest';
-
-interface VideoPageParams {
-  id: string;
-}
-
-type VideoPageProps = RouteComponentProps<VideoPageParams>;
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,12 +44,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const VideoPage: React.FC<VideoPageProps> = (props: VideoPageProps) => {
+const VideoPage: React.FC = () => {
   const classes = useStyles();
 
+  const { id } = useParams<{ id: string }>();
   const [session,] = useAtom(sessionAtom);
   const [video, setVideo] = useState<VideoInformation | null>(null);
-  const [error, loading, sendRequest] = useApiRequest<VideoInformation>(`/api/videos/${props.match.params.id}`, 'get', true);
+  const [error, loading, sendRequest] = useApiRequest<VideoInformation>(`/api/videos/${id}`, 'get', true);
 
   useEffect(() => {
     const loadVideo = async () => {
@@ -65,7 +59,7 @@ const VideoPage: React.FC<VideoPageProps> = (props: VideoPageProps) => {
       setVideo(response);
     };
     loadVideo();
-  }, []);
+  }, [id]);
 
   if (!session) return <Redirect to="/login" />;
   return (
