@@ -34,6 +34,7 @@ const AccountMenu: React.FC = () => {
           vertical: 'top',
           horizontal: 'right'
         }}
+        disableScrollLock={true}
       >
         <UserPopup handleClose={handleAccountClose} />
       </Popover>
