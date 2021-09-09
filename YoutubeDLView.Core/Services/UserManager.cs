@@ -27,7 +27,7 @@ namespace YoutubeDLView.Core.Services
         public Result<User> GetUser(ClaimsPrincipal claimsPrincipal)
         {
             string userId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
-            User user = Users.FirstOrDefault(x => x.Id == userId);
+            User user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             return user != null ? Result.Ok(user) : Result.Fail<User>("User not found", 404);
         }
         
@@ -70,7 +70,7 @@ namespace YoutubeDLView.Core.Services
         public async Task<Result> UpdateUser(string userId, EntityUpdate<User> entityUpdate)
         {
             // Checks userId, and whether given username is already taken
-            User user = Users.FirstOrDefault(x => x.Id == userId);
+            User user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             if (user == null) return Result.Fail("User not found", 404);
             if (_dbContext.Users.Any(x => x.Username == entityUpdate.EntityChanges.Username &&
                                           user.Username != entityUpdate.EntityChanges.Username))
