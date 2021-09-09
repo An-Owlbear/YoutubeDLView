@@ -20,14 +20,18 @@
     <ItemGroup>
         <BuildFiles Include="../YoutubeDLView.Web/build/**/*.*" />
     </ItemGroup>
-    
-    <Target Name="BuildReactApp" Condition="'$(Configuration)' == 'Release'" BeforeTargets="BeforeBuild">
+
+    <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
         <Exec WorkingDirectory="$(SpaRoot)" Command="yarn install" />
         <Exec WorkingDirectory="$(SpaRoot)" Command="yarn run build" />
-        <Copy 
-            SourceFiles="@(BuildFiles)" 
-            DestinationFiles="@(BuildFiles -> '$(OutDir)client/%(RecursiveDir)%(Filename)%(Extension)')" 
-            SkipUnchangedFiles="true" 
-        />
+
+        <ItemGroup>
+            <BuildFiles Include="$(SpaRoot)build/**" />
+            <ResolvedFileToPublish Include="@(BuildFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+                <RelativePath>client/%(RecursiveDir)%(Filename)%(Extension)</RelativePath>
+                <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+                <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            </ResolvedFileToPublish>
+        </ItemGroup>
     </Target>
 </Project>
