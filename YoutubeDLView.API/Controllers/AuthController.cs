@@ -43,7 +43,7 @@ namespace YoutubeDLView.API.Controllers
 
             string accessToken = _tokenHandler.CreateAccessToken(user);
             string refreshToken = user.RefreshKey;
-            return new LoginInformation(user.Id, user.Username, accessToken, refreshToken);
+            return new LoginInformation(user.Id, user.Username, user.Role.ToString(), accessToken, refreshToken);
         }
 
         /// <summary>
