@@ -13,6 +13,8 @@ namespace YoutubeDLView.Core.Interfaces
         DbSet<Video> Videos { get; set; }
         
         DbSet<YtChannel> Channels { get; set; }
+        
+        DbSet<VideoSource> VideoSources { get; set; }
 
         DatabaseFacade Database { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
