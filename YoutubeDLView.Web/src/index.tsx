@@ -12,6 +12,7 @@ import ChannelPage from './pages/ChannelPage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import SearchPage from './pages/SearchPage';
+import SignupPage from './pages/SignupPage';
 import VideoPage from './pages/VideoPage';
 
 const drawerWidth = 250;
@@ -51,6 +52,7 @@ const App = () =>  {
             <Route exact path="/channels/:id" component={ChannelPage} />
             <Route exact path="/search/:search" component={SearchPage}  />
             <Route exact path="/account" component={AccountPage} />
+            <Route exact path="/signup" component={SignupPage} />
           </Switch>
         </div>
       </BrowserRouter>

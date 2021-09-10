@@ -2,9 +2,9 @@ import { Box, Button, makeStyles, TextField, Theme, Typography } from '@material
 import { Error } from '@material-ui/icons';
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { Redirect } from 'react-router-dom';
-import { LoginInformation } from '../models/apiModels';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
+import { LoginInformation, UserAccount } from '../models/apiModels';
 import { sessionAtom } from '../services/globalStore';
 import { useApiRequest } from '../services/useApiRequest';
 
@@ -45,6 +45,18 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const LoginPage: React.FC = () => {
   const classes = useStyles();
+  const history = useHistory();
+
+  // Checks if any users exist, and redirects the user to first time signup page if none do
+  const [usersError, usersLoading, sendUsersRequest] = useApiRequest<UserAccount[]>('/api/users', 'get', false);
+  useEffect(() => {
+    const loadUsers = async () => {
+      const response = await sendUsersRequest();
+      if (!response) return;
+      if (response.length === 0) history.push('/signup');
+    };
+    loadUsers();
+  }, []);
 
   const [values, setValues] = useState({
     username: '',
