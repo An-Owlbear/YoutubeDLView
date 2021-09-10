@@ -13,5 +13,8 @@ namespace YoutubeDLView.Core.Common
                 .Where(x => x.Success)
                 .Select(x => x.Data);
         }
+
+        public static async Task<IEnumerable<TResult>> WhenAll<TResult>(this IEnumerable<Task<TResult>> tasks) =>
+            await Task.WhenAll(tasks);
     }
 }

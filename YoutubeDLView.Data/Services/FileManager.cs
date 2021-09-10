@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
@@ -18,14 +17,11 @@ namespace YoutubeDLView.Data.Services
 {
     public class FileManager : IFileManager
     {
-        private readonly IOptionsMonitor<YoutubeDLViewConfig> _config;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<FileManager> _logger;
 
-        public FileManager(IOptionsMonitor<YoutubeDLViewConfig> config, IServiceProvider serviceProvider, 
-            ILogger<FileManager> logger)
+        public FileManager(IServiceProvider serviceProvider, ILogger<FileManager> logger)
         {
-            _config = config;
             _serviceProvider = serviceProvider;
             _logger = logger;
         }
@@ -33,10 +29,16 @@ namespace YoutubeDLView.Data.Services
         /// <inheritdoc />
         public async Task ScanFiles()
         {
-            // Gets list of video metadata and retrieves database service
-            IEnumerable<VideoJson> videos = await ScanDirectory(_config.CurrentValue.VideoPath);
+            // Retrieves database service
             using IServiceScope scope = _serviceProvider.CreateScope();
             IYoutubeDLViewDb youtubeDlViewDb = scope.ServiceProvider.GetRequiredService<IYoutubeDLViewDb>();
+            
+            // Retrieves lists of videos and joins them
+            IEnumerable<VideoSource> sources = youtubeDlViewDb.VideoSources.ToList();
+            IEnumerable<IEnumerable<VideoJson>> videoLists = await sources
+                .Select(async x => await ScanDirectory(x.Path))
+                .WhenAll();
+            IEnumerable<VideoJson> videos = videoLists.SelectMany(x => x);
 
             foreach (VideoJson videoJson in videos)
             {
