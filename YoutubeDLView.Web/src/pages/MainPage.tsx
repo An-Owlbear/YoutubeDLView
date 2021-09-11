@@ -26,6 +26,7 @@ const MainPage: React.FC = () => {
   const queryParams = useMemo(() => ({skip, take: 30}), [skip]);
   const [error, loading, sendRequest] = useApiRequest<VideoInformation[]>('/api/videos', 'get', true, { params: queryParams } );
 
+  // Loads frontpage video
   useEffect(() => {
     const loadVideos = async () => {
       const response = await sendRequest();

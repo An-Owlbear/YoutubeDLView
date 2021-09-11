@@ -31,12 +31,14 @@ const SearchPage: React.FC = () => {
     { params: { skip: searchData.skip } }
   );
 
+  // Changes search data when the search parameter changes
   useEffect(() => {
     setVideos([]);
     setMaxLoaded(false);
     setSearchData({ search: search, skip: 0 });
   }, [search]);
 
+  // Loads search result
   useEffect(() => {
     const loadVideos = async () => {
       const response = await sendRequest();

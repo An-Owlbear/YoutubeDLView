@@ -52,6 +52,7 @@ const VideoPage: React.FC = () => {
   const [video, setVideo] = useState<VideoInformation | null>(null);
   const [error, loading, sendRequest] = useApiRequest<VideoInformation>(`/api/videos/${id}`, 'get', true);
 
+  // Loads video data
   useEffect(() => {
     const loadVideo = async () => {
       const response = await sendRequest();

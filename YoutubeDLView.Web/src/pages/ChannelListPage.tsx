@@ -21,6 +21,7 @@ const ChannelListPage: React.FC = () => {
   const [maxLoaded, setMaxLoaded] = useState(false);
   const [error, loading, sendRequest] = useApiRequest<ChannelInformation[]>('/api/channels', 'get', true, { params: { skip } });
 
+  // Loads channels
   useEffect(() => {
     const loadChannels = async () => {
       const response = await sendRequest();
