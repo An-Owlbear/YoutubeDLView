@@ -19,7 +19,7 @@ export interface RequestData {
   body?: unknown;
 }
 
-export const useApiRequest = <T>(url: string, method: Method, useAuth: boolean, data?: RequestData): [string, boolean, () => Promise<T | null>] => {
+export const useApiRequest = <T>(url: string, method: Method, useAuth: boolean, data?: RequestData): [string, boolean, (requestData?: RequestData) => Promise<T | null>] => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [session, setSession] = useAtom(sessionAtom);
@@ -44,7 +44,7 @@ export const useApiRequest = <T>(url: string, method: Method, useAuth: boolean, 
   }, [data, session]);
 
   // Sends the request
-  const sendRequest = useCallback(async () => {
+  const sendRequest = useCallback(async (requestData?: RequestData) => {
     // Checks tokens if needed and prepares request
     setError('');
     setLoading(true);
@@ -56,8 +56,8 @@ export const useApiRequest = <T>(url: string, method: Method, useAuth: boolean, 
     const axiosRequest: AxiosRequestConfig = {
       url: url,
       method: method,
-      params: data?.params,
-      data: data?.body,
+      params: requestData?.params ?? data?.params,
+      data: requestData?.body ?? data?.body,
       ...(useAuth && {
         headers: {
           'Authorization': `Bearer ${accessToken}`

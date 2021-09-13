@@ -30,3 +30,7 @@ export interface UserAccount {
   username: string;
   password: boolean;
 }
+
+export interface SourceInformation {
+  path: string;
+}
