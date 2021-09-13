@@ -12,6 +12,7 @@ import ChannelPage from './pages/ChannelPage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import SearchPage from './pages/SearchPage';
+import SetupPage from './pages/SetupPage';
 import SignupPage from './pages/SignupPage';
 import VideoPage from './pages/VideoPage';
 
@@ -53,6 +54,7 @@ const App = () =>  {
             <Route exact path="/search/:search" component={SearchPage}  />
             <Route exact path="/account" component={AccountPage} />
             <Route exact path="/signup" component={SignupPage} />
+            <Route exact path="/setup" component={SetupPage} />
           </Switch>
         </div>
       </BrowserRouter>
