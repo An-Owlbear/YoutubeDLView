@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/core';
+import { useAtom } from 'jotai';
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import SourceManager from '../components/SourceManager';
+import { sessionAtom } from '../services/globalStore';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,7 +22,9 @@ const useStyles = makeStyles(theme => ({
 
 const SetupPage: React.FC = () => {
   const classes = useStyles();
+  const [session,] = useAtom(sessionAtom);
 
+  if (!session) return <Redirect to="/" />;
   return (
     <div className={classes.root}>
       <SourceManager />

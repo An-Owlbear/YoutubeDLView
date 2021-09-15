@@ -1,8 +1,10 @@
 import { Button, CircularProgress, makeStyles } from '@material-ui/core';
+import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import SearchVideo from '../components/SearchVideo';
 import { VideoInformation } from '../models/apiModels';
+import { sessionAtom } from '../services/globalStore';
 import { useApiRequest } from '../services/useApiRequest';
 
 const useStyles = makeStyles((theme) => ({
@@ -21,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const SearchPage: React.FC = () => {
   const classes = useStyles();
   const { search } = useParams<{ search: string }>();
+  const [session,] = useAtom(sessionAtom);
   const [searchData, setSearchData] = useState({ search: search, skip: 0 });
   const [videos, setVideos] = useState<VideoInformation[]>([]);
   const [maxLoaded, setMaxLoaded] = useState(false);
@@ -53,6 +56,7 @@ const SearchPage: React.FC = () => {
     setSearchData(prevState => ({ ...prevState, skip: prevState.skip + 30 }));
   };
 
+  if (!session) return <Redirect to="/" />;
   return (
     <>
       <div className={classes.root}>

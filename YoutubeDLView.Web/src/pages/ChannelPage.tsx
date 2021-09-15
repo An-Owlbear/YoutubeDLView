@@ -1,8 +1,10 @@
 import { Avatar, Button, CircularProgress, makeStyles, Typography } from '@material-ui/core';
+import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import { ChannelInformation, VideoInformation } from '../models/apiModels';
+import { sessionAtom } from '../services/globalStore';
 import { useApiRequest } from '../services/useApiRequest';
 
 interface ChannelPageParams {
@@ -34,6 +36,8 @@ const useStyles = makeStyles(theme => ({
 
 const ChannelPage: React.FC<ChannelPageProps> = (props: ChannelPageProps) => {
   const classes = useStyles();
+
+  const [session,] = useAtom(sessionAtom);
 
   const [channel, setChannel] = useState<ChannelInformation | null>(null);
   const [channelError, channelLoading, sendChannelRequest] = useApiRequest<ChannelInformation>(`/api/channels/${props.match.params.id}`, 'get', true);
@@ -70,6 +74,7 @@ const ChannelPage: React.FC<ChannelPageProps> = (props: ChannelPageProps) => {
     setSkip(prevState => prevState + 30);
   };
 
+  if (!session) return <Redirect to="/" />;
   return (
     <>
       {channelLoading && <CircularProgress />}
