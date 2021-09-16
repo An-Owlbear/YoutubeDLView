@@ -3,7 +3,7 @@ class Result<T> {
   constructor(errorValue: string, dataValue?: T) {
     this.data = dataValue;
     this.error = errorValue;
-    this.success = !!this.error;
+    this.success = !this.error;
   }
 
   data?: T;
