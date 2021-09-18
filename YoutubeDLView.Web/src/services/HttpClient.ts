@@ -31,7 +31,14 @@ const preRequest = async () => {
 
   // Attempts to update access token, returning error if unsuccessful
   if (!localStorage.refreshToken) return Result.failure('Refresh token not set');
-  const requestInfo = { body: JSON.stringify({ refreshToken: localStorage.refreshToken }) };
+  const requestInfo = {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ refreshToken: localStorage.refreshToken })
+  };
   const response = await fetch('/api/auth/refresh', requestInfo);
   if (!response.ok) return Result.failure(await response.text());
   const refreshInformation: RefreshInformation = await response.json();
