@@ -1,11 +1,11 @@
 import { Avatar, CircularProgress, makeStyles, Typography } from '@material-ui/core';
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, Redirect, useParams } from 'react-router-dom';
-import { VideoInformation } from '../models/apiModels';
+import HttpClient from '../services/HttpClient';
 import { convertShortYTDate } from '../services/dateUtils';
 import { sessionAtom } from '../services/globalStore';
-import { useApiRequest } from '../services/useApiRequest';
+import { useRequest } from '../services/useRequest';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,37 +49,26 @@ const VideoPage: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const [session,] = useAtom(sessionAtom);
-  const [video, setVideo] = useState<VideoInformation | null>(null);
-  const [error, loading, sendRequest] = useApiRequest<VideoInformation>(`/api/videos/${id}`, 'get', true);
-
-  // Loads video data
-  useEffect(() => {
-    const loadVideo = async () => {
-      const response = await sendRequest();
-      if (!response) return;
-      setVideo(response);
-    };
-    loadVideo();
-  }, [id]);
+  const { error, isLoading, data } = useRequest(() => HttpClient.GetVideo(id), [id]);
 
   if (!session) return <Redirect to="/login" />;
   return (
     <>
-      {loading && <CircularProgress/>}
-      {!loading && video &&
+      {isLoading && <CircularProgress/>}
+      {!isLoading && data &&
         <div className={classes.root}>
           <div className={classes.videoContainer}>
             <video className={classes.video} controls autoPlay preload="none" playsInline>
-              <source src={`/api/videos/${video.id}/video`} type="video/webm"/>
+              <source src={`/api/videos/${data.id}/video`} type="video/webm"/>
             </video>
           </div>
-          <Typography className={classes.title} variant="h5">{video.title}</Typography>
-          <Typography variant="body1" color="textSecondary">Uploaded {convertShortYTDate(video.uploadDate)}</Typography>
+          <Typography className={classes.title} variant="h5">{data.title}</Typography>
+          <Typography variant="body1" color="textSecondary">Uploaded {convertShortYTDate(data.uploadDate)}</Typography>
           <div className={classes.channelContainer}>
-            <Avatar component={Link} to={`/channels/${video.channel.id}`}>{video.channel.name.charAt(0)}</Avatar>
-            <Typography variant="h6" color="textPrimary" component={Link} to={`/channels/${video.channel.id}`}>{video.channel.name}</Typography>
+            <Avatar component={Link} to={`/channels/${data.channel.id}`}>{data.channel.name.charAt(0)}</Avatar>
+            <Typography variant="h6" color="textPrimary" component={Link} to={`/channels/${data.channel.id}`}>{data.channel.name}</Typography>
           </div>
-          <Typography className={classes.description} variant="body1">{video.description}</Typography>
+          <Typography className={classes.description} variant="body1">{data.description}</Typography>
         </div>
       }
     </>
