@@ -58,6 +58,9 @@ const sendRequest = async <T>(url: string, requestInit: RequestInit) => {
 abstract class HttpClient {
   public static GetVideo = (id: string): Promise<Result<VideoInformation>> =>
     sendRequest<VideoInformation>(`/api/videos/${id}`, { });
+
+  public static GetVideos = (skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
+    sendRequest<VideoInformation[]>(`/api/videos?skip=${skip}&take=${take}`, { });
 }
 
 export default HttpClient;
