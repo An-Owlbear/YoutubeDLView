@@ -28,7 +28,8 @@ namespace YoutubeDLView.Data.Services
 
             // Retrieves thumbnail from video metadata 
             TagLib.File tagFile = TagLib.File.Create(video.Data.Path);
-            IPicture picture = tagFile.Tag.Pictures.FirstOrDefault(x => x.Filename == "cover.jpg");
+            string[] filetypes = { "jpeg", "jpg", "png" };
+            IPicture picture = tagFile.Tag.Pictures.FirstOrDefault(x => filetypes.Any(y => x.Filename.EndsWith(y)));
             if (picture == null) return Result.Fail<(Stream, string)>("Thumbnail not found", 404);
             Stream coverStream = new MemoryStream(picture.Data.Data);
             return Result.Ok((coverStream, picture.MimeType));
