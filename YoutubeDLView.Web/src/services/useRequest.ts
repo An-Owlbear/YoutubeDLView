@@ -10,8 +10,8 @@ interface Request<T> {
 }
 
 interface RequestOptions {
-  enabled: boolean;
-  keepPrevious: boolean;
+  enabled?: boolean;
+  keepPrevious?: boolean;
 }
 
 const defaultOptions: RequestOptions = {
@@ -33,7 +33,12 @@ export const useRequest = <T>(requestFn: () => Promise<Result<T>>, requestDeps: 
 
     const response = await requestFn();
     if (!response.success) setError(response.error);
-    else setData(response.data);
+    else {
+        if (options.keepPrevious && Array.isArray(response.data) && Array.isArray(data)) {
+          const newData = [...data, ...response.data];
+          setData(newData as unknown as T );
+        } else setData(response.data);
+    }
 
     setIsLoading(false);
     return response;
