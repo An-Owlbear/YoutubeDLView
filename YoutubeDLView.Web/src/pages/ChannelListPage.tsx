@@ -1,11 +1,11 @@
 import { CircularProgress, makeStyles } from '@material-ui/core';
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import ChannelListItem from '../components/ChannelListItem';
-import { ChannelInformation } from '../models/apiModels';
+import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
-import { useApiRequest } from '../services/useApiRequest';
+import { useRequest } from '../services/useRequest';
 
 const useStyles = makeStyles(theme => ({
   channels: {
@@ -20,28 +20,23 @@ const ChannelListPage: React.FC = () => {
   const classes = useStyles();
 
   const [session,] = useAtom(sessionAtom);
-  const [channels, setChannels] = useState<ChannelInformation[]>([]);
   const [skip, setSkip] = useState(0);
   const [maxLoaded, setMaxLoaded] = useState(false);
-  const [error, loading, sendRequest] = useApiRequest<ChannelInformation[]>('/api/channels', 'get', true, { params: { skip } });
+  const { error, isLoading, data } = useRequest(() => HttpClient.GetChannels(skip), [skip]);
+  const previousDataLength = useRef(0);
 
-  // Loads channels
   useEffect(() => {
-    const loadChannels = async () => {
-      const response = await sendRequest();
-      if (!response) return;
-      if (response.length < 30) setMaxLoaded(true);
-      setChannels([...channels, ...response]);
-    };
-    loadChannels();
-  }, [skip]);
+    if (!data) return;
+    if (data.length - previousDataLength.current < 30) setMaxLoaded(true);
+    previousDataLength.current = data.length;
+  }, [data]);
 
   if (!session) return <Redirect to="/login" />;
   return (
     <>
       <div className={classes.channels}>
-        {
-          channels.map(x =>
+        {data &&
+          data.map(x =>
             <ChannelListItem
               key={x.id}
               id={x.id}
@@ -50,7 +45,7 @@ const ChannelListPage: React.FC = () => {
           )
         }
       </div>
-      {loading && <CircularProgress />}
+      {isLoading && <CircularProgress />}
     </>
   );
 };

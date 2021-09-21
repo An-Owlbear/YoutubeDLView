@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import Result from '../models/Result';
-import { RefreshInformation, VideoInformation } from '../models/apiModels';
+import { ChannelInformation, RefreshInformation, VideoInformation } from '../models/apiModels';
 
 interface DecodedAccessToken {
   nameid: string;
@@ -61,6 +61,9 @@ abstract class HttpClient {
 
   public static GetVideos = (skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
     sendRequest<VideoInformation[]>(`/api/videos?skip=${skip}&take=${take}`, { });
+
+  public static GetChannels = (skip = 0, take = 30): Promise<Result<ChannelInformation[]>> =>
+    sendRequest<ChannelInformation[]>(`/api/channels?skip=${skip}&take=${take}`, { });
 }
 
 export default HttpClient;
