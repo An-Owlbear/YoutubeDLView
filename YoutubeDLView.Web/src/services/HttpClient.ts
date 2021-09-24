@@ -15,6 +15,10 @@ const withDefaultHeaders = (options: RequestInit) => {
   return {
     ...options,
     headers: {
+      'Accept': 'application/json',
+      ...(options.body && {
+        'Content-Type': 'application/json'
+      }),
       ...options.headers,
       ...(localStorage.accessToken && {
         'Authorization': `Bearer ${localStorage.accessToken}`
