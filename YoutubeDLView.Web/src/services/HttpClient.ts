@@ -1,6 +1,12 @@
 import jwtDecode from 'jwt-decode';
 import Result from '../models/Result';
-import { ChannelInformation, RefreshInformation, VideoInformation } from '../models/apiModels';
+import {
+  ChannelInformation,
+  LoginInformation,
+  RefreshInformation,
+  UserAccount,
+  VideoInformation
+} from '../models/apiModels';
 
 interface DecodedAccessToken {
   nameid: string;
@@ -68,6 +74,19 @@ abstract class HttpClient {
 
   public static GetChannels = (skip = 0, take = 30): Promise<Result<ChannelInformation[]>> =>
     sendRequest<ChannelInformation[]>(`/api/channels?skip=${skip}&take=${take}`, { });
+
+  // Sends login request and sets tokens in localStorage
+  public static Login = async (username: string, password: string): Promise<Result<LoginInformation>> => {
+    const body = JSON.stringify({ username, password });
+    const response = await sendRequest<LoginInformation>('/api/auth/login', { method: 'POST', body });
+    if (response.success && response.data) {
+      localStorage.setItem('accessToken', response.data.accessToken);
+      localStorage.setItem('refreshToken', response.data.refreshToken);
+    }
+    return response;
+  }
+
+  public static GetUsers = (): Promise<Result<UserAccount[]>> => sendRequest<UserAccount[]>('/api/users', { });
 }
 
 export default HttpClient;

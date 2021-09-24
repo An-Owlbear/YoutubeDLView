@@ -4,9 +4,9 @@ import clsx from 'clsx';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { LoginInformation, UserAccount } from '../models/apiModels';
+import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
-import { useApiRequest } from '../services/useApiRequest';
+import { useRequest } from '../services/useRequest';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -48,26 +48,21 @@ const LoginPage: React.FC = () => {
   const history = useHistory();
 
   // Checks if any users exist, and redirects the user to first time signup page if none do
-  const [usersError, usersLoading, sendUsersRequest] = useApiRequest<UserAccount[]>('/api/users', 'get', false);
+  const usersRequest = useRequest(HttpClient.GetUsers, []);
   useEffect(() => {
-    const loadUsers = async () => {
-      const response = await sendUsersRequest();
-      if (!response) return;
-      if (response.length === 0) history.push('/signup');
-    };
-    loadUsers();
-  }, []);
+    if (usersRequest.data && usersRequest.data.length === 0) history.push('/signup');
+  }, [usersRequest.data]);
 
   const [values, setValues] = useState({
     username: '',
     password: ''
   });
 
-  const [error, loading, sendRequest] = useApiRequest<LoginInformation>('/api/auth/login', 'post', false, { body: values });
+  const loginRequest = useRequest(() => HttpClient.Login(values.username, values.password), [values], { enabled: false });
   const [session, setSession] = useAtom(sessionAtom);
 
-  const usernameError = () => error === 'User not found' || error === 'An error occurred';
-  const passwordError = () => error === 'Incorrect password' || error === 'An error occurred';
+  const usernameError = () => loginRequest.error === 'User not found' || loginRequest.error === 'An error occurred';
+  const passwordError = () => loginRequest.error === 'Incorrect password' || loginRequest.error === 'An error occurred';
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -76,9 +71,9 @@ const LoginPage: React.FC = () => {
   // Logins in user and sets session
   const handleLogin = async (event: FormEvent<HTMLElement>) => {
     event.preventDefault();
-    const response = await sendRequest();
-    if (!response) return;
-    setSession(response);
+    const response = await loginRequest.refetch();
+    if (!response.data) return;
+    setSession(response.data);
   };
 
   // Redirects user to root if logged in, otherwise returns login form
@@ -95,7 +90,7 @@ const LoginPage: React.FC = () => {
         onChange={handleChange}
         variant="outlined"
         fullWidth
-        disabled={loading}
+        disabled={loginRequest.isLoading}
         error={usernameError()}
       />
       <TextField
@@ -107,16 +102,16 @@ const LoginPage: React.FC = () => {
         onChange={handleChange}
         variant="outlined"
         fullWidth
-        disabled={loading}
+        disabled={loginRequest.isLoading}
         error={passwordError()}
       />
       <Box display="flex">
-        <Box className={clsx(classes.errorBox, {[classes.hidden]: !error})} display="flex" alignItems="center">
+        <Box className={clsx(classes.errorBox, {[classes.hidden]: !loginRequest.error})} display="flex" alignItems="center">
           <Error className={classes.errorIcon} />
-          <Typography>{error}</Typography>
+          <Typography>{loginRequest.error}</Typography>
         </Box>
         <div className={classes.flexGrow} />
-        <Button type="submit" variant="contained" color="primary" disableElevation disabled={loading}>Login</Button>
+        <Button type="submit" variant="contained" color="primary" disableElevation disabled={loginRequest.isLoading}>Login</Button>
       </Box>
     </form>
   );
