@@ -1,9 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, Method } from 'axios';
-import { useAtom } from 'jotai';
 import jwtDecode from 'jwt-decode';
 import { useCallback, useState } from 'react';
 import { RefreshInformation } from '../models/apiModels';
-import { sessionAtom } from './globalStore';
 
 interface DecodedAccessToken {
   nameid: string;
@@ -22,37 +20,30 @@ export interface RequestData {
 export const useApiRequest = <T>(url: string, method: Method, useAuth: boolean, data?: RequestData): [string, boolean, (requestData?: RequestData) => Promise<T | null>] => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [session, setSession] = useAtom(sessionAtom);
 
   // Checks the access token and requests a new one if expired
   const checkTokens = useCallback(async () => {
     // Decodes token and checks expiration
-    if (!session) throw 'Access token is null';
-    const decodedAccessToken = jwtDecode<DecodedAccessToken>(session.accessToken);
-    if (Date.now() <= decodedAccessToken.exp * 1000) return session;
+    if (!localStorage.accessToken || !localStorage.refreshToken) throw 'Access token is null';
+    const decodedAccessToken = jwtDecode<DecodedAccessToken>(localStorage.accessToken);
+    if (Date.now() <= decodedAccessToken.exp * 1000) return;
 
     // Requests new token if expired
     try {
-      const response = await axios.post('/api/auth/refresh', { refreshToken: session.refreshToken });
+      const response = await axios.post('/api/auth/refresh', { refreshToken: localStorage.refreshToken });
       const data: RefreshInformation = response.data;
-      const newSession = { refreshToken: session.refreshToken, ...data };
-      setSession(newSession);
-      return newSession;
+      localStorage.setItem('accessToken', data.accessToken);
     } catch (error) {
       console.log(error);
     }
-  }, [data, session]);
+  }, []);
 
   // Sends the request
   const sendRequest = useCallback(async (requestData?: RequestData) => {
     // Checks tokens if needed and prepares request
     setError('');
     setLoading(true);
-    let accessToken = session?.accessToken;
-    if (useAuth) {
-      const currentSession = await checkTokens();
-      accessToken = currentSession?.accessToken;
-    }
+    if (useAuth) await checkTokens();
     const axiosRequest: AxiosRequestConfig = {
       url: url,
       method: method,
@@ -60,7 +51,7 @@ export const useApiRequest = <T>(url: string, method: Method, useAuth: boolean, 
       data: requestData?.body ?? data?.body,
       ...(useAuth && {
         headers: {
-          'Authorization': `Bearer ${accessToken}`
+          'Authorization': `Bearer ${localStorage}`
         }
       })
     };
@@ -76,7 +67,7 @@ export const useApiRequest = <T>(url: string, method: Method, useAuth: boolean, 
     } finally {
       setLoading(false);
     }
-  }, [url, method, data, useAuth, session]);
+  }, [url, method, data, useAuth, checkTokens]);
 
   return [error, loading, sendRequest];
 };
