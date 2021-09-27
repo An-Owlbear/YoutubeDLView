@@ -61,7 +61,11 @@ const sendRequest = async <T>(url: string, requestInit: RequestInit) => {
   const preRequestResult = await preRequest();
   if (!preRequestResult.success) return Result.failure<T>(preRequestResult.error);
   const response = await fetch(url, withDefaultHeaders(requestInit));
-  if (response.ok) return response.json().then((x: T) => Result.ok(x));
+
+  // Returns request result
+  if (response.ok) return response.headers.get('Content-Length') !== '0' ?
+    response.json().then((x: T) => Result.ok(x)) :
+    Result.ok<T>();
   return response.text().then(x => Result.failure<T>(x));
 };
 
