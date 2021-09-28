@@ -1,10 +1,11 @@
 import { Button, makeStyles, TextField, Typography } from '@material-ui/core';
 import { Error } from '@material-ui/icons';
 import { useAtom } from 'jotai';
-import React, { ChangeEvent, FormEvent, useMemo, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Redirect } from 'react-router-dom';
+import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
-import { useApiRequest } from '../services/useApiRequest';
+import { useRequest } from '../services/useRequest';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,14 +52,13 @@ const AccountPage: React.FC = () => {
     password: '',
     confirmPassword: ''
   });
-  const requestData = useMemo(() => ({
-    userId: session?.userId,
-    username: values.username ? values.username : null,
-    password: values.password ? values.password : null
-  }), [session?.userId, values.username, values.password]);
 
   const [validationError, setValidationError] = useState('');
-  const [error, loading, sendRequest] = useApiRequest('/api/users/update', 'patch', true, { body: requestData });
+  const { error, isLoading, refetch } = useRequest(
+    () => HttpClient.UpdateAccount(session?.userId ?? '', values.username ?? '', values.password),
+    [session?.userId, values.username, values.password],
+    { enabled: false }
+  );
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValues({...values, [event.target.name]: event.target.value});
@@ -76,7 +76,7 @@ const AccountPage: React.FC = () => {
     }
 
     // Sends request and updates username
-    await sendRequest();
+    await refetch();
     if (!error && values.username && session) setSession({...session, username: values.username});
   };
 
@@ -93,7 +93,7 @@ const AccountPage: React.FC = () => {
         onChange={handleChange}
         variant="outlined"
         fullWidth
-        disabled={loading}
+        disabled={isLoading}
       />
       <TextField
         name="password"
@@ -103,7 +103,7 @@ const AccountPage: React.FC = () => {
         onChange={handleChange}
         variant="outlined"
         fullWidth
-        disabled={loading}
+        disabled={isLoading}
       />
       <TextField
         name="confirmPassword"
@@ -113,7 +113,7 @@ const AccountPage: React.FC = () => {
         onChange={handleChange}
         variant="outlined"
         fullWidth
-        disabled={loading}
+        disabled={isLoading}
       />
       <div className={classes.bottomContainer}>
         {(validationError || error) &&
@@ -123,7 +123,7 @@ const AccountPage: React.FC = () => {
           </div>
         }
         <div className={classes.flexGrow} />
-        <Button type="submit" variant="contained" color="primary" disableElevation disabled={loading}>Update</Button>
+        <Button type="submit" variant="contained" color="primary" disableElevation disabled={isLoading}>Update</Button>
       </div>
     </form>
   );

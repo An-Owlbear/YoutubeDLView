@@ -91,6 +91,11 @@ abstract class HttpClient {
   }
 
   public static GetUsers = (): Promise<Result<UserAccount[]>> => sendRequest<UserAccount[]>('/api/users', { });
+
+  public static UpdateAccount = (userId: string, username: string, password: string): Promise<Result<undefined>> => {
+    const body = JSON.stringify({ userId, username: username ? username : null, password: password ? password : null });
+    return sendRequest<undefined>('/api/users/update', { method: 'PATCH', body: body });
+  }
 }
 
 export default HttpClient;
