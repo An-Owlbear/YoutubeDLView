@@ -1,5 +1,5 @@
 // Represents the result of an operation, indicating whether or not it was successful
-class Result<T> {
+class Result<T = undefined> {
   constructor(errorValue: string, dataValue?: T) {
     this.data = dataValue;
     this.error = errorValue;
