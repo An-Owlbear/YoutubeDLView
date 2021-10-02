@@ -1,17 +1,11 @@
 import { Avatar, Button, CircularProgress, makeStyles, Typography } from '@material-ui/core';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
-import { ChannelInformation, VideoInformation } from '../models/apiModels';
+import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
-import { useApiRequest } from '../services/useApiRequest';
-
-interface ChannelPageParams {
-  id: string;
-}
-
-type ChannelPageProps = RouteComponentProps<ChannelPageParams>;
+import { useRequest } from '../services/useRequest';
 
 const useStyles = makeStyles(theme => ({
   channelHeader: {
@@ -34,40 +28,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ChannelPage: React.FC<ChannelPageProps> = (props: ChannelPageProps) => {
+const ChannelPage: React.FC = () => {
   const classes = useStyles();
 
+  const { id } = useParams<{ id: string }>();
   const [session,] = useAtom(sessionAtom);
 
-  const [channel, setChannel] = useState<ChannelInformation | null>(null);
-  const [channelError, channelLoading, sendChannelRequest] = useApiRequest<ChannelInformation>(`/api/channels/${props.match.params.id}`, 'get', true);
+  const channelRequest = useRequest(() => HttpClient.GetChannel(id), [id]);
 
-  const [videos, setVideos] = useState<VideoInformation[]>([]);
   const [skip, setSkip] = useState(0);
   const [maxLoaded, setMaxLoaded] = useState(false);
-  const [videosError, videosLoading, sendVideoRequest] = useApiRequest<VideoInformation[]>(`/api/channels/${props.match.params.id}/videos`, 'get', true, { params: { skip } });
-
-  // Loads channel information
-  useEffect(() => {
-    const loadChannelInfo = async () => {
-      const response = await sendChannelRequest();
-      setChannel(response);
-    };
-    loadChannelInfo();
-  }, []);
+  const videosRequest = useRequest(() => HttpClient.GetChannelVideos(id, skip), [id, skip], { keepPrevious: true, enabled: false });
 
   // Loads channel videos
   useEffect(() => {
     // Doesn't run if channel is not loaded
-    if (!channel) return;
+    if (!channelRequest.data) return;
     const loadVideos = async () => {
-      const response = await sendVideoRequest();
-      if (!response) return;
-      if (response.length < 30) setMaxLoaded(true);
-      setVideos([...videos, ...response]);
+      const response = await videosRequest.refetch();
+      if (!response.success || !response.data) return;
+      if (response.data.length < 30) setMaxLoaded(true);
     };
     loadVideos();
-  }, [channel, skip]);
+  }, [channelRequest.data, skip]);
 
   // Loads the next page of videos
   const handleLoadButton = () => {
@@ -77,17 +60,17 @@ const ChannelPage: React.FC<ChannelPageProps> = (props: ChannelPageProps) => {
   if (!session) return <Redirect to="/" />;
   return (
     <>
-      {channelLoading && <CircularProgress />}
-      {!channelLoading && channel &&
+      {channelRequest.isLoading && <CircularProgress />}
+      {!channelRequest.isLoading && channelRequest.data &&
         <div className={classes.channelHeader}>
-          <Avatar className={classes.avatar}>{channel.name.charAt(0)}</Avatar>
-          <Typography variant="h4">{channel.name}</Typography>
+          <Avatar className={classes.avatar}>{channelRequest.data.name.charAt(0)}</Avatar>
+          <Typography variant="h4">{channelRequest.data.name}</Typography>
         </div>
       }
-      {
+      {videosRequest.data &&
         <div className={classes.videos}>
           {
-            videos.map(x =>
+            videosRequest.data.map(x =>
               <VideoCard
                 key={x.id}
                 id={x.id}
@@ -99,8 +82,8 @@ const ChannelPage: React.FC<ChannelPageProps> = (props: ChannelPageProps) => {
           }
         </div>
       }
-      {videosLoading && <CircularProgress />}
-      {!videosLoading && !maxLoaded && <Button variant="contained" color="primary" onClick={handleLoadButton}>Load more</Button>}
+      {videosRequest.isLoading && <CircularProgress />}
+      {!videosRequest.isLoading && !maxLoaded && <Button variant="contained" color="primary" onClick={handleLoadButton}>Load more</Button>}
     </>
   );
 };

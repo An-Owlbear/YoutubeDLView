@@ -76,8 +76,14 @@ abstract class HttpClient {
   public static GetVideos = (skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
     sendRequest<VideoInformation[]>(`/api/videos?skip=${skip}&take=${take}`, { });
 
+  public static GetChannel = (id: string): Promise<Result<ChannelInformation>> =>
+    sendRequest<ChannelInformation>(`/api/channels/${id}`, { });
+
   public static GetChannels = (skip = 0, take = 30): Promise<Result<ChannelInformation[]>> =>
     sendRequest<ChannelInformation[]>(`/api/channels?skip=${skip}&take=${take}`, { });
+
+  public static GetChannelVideos = (id: string, skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
+    sendRequest<VideoInformation[]>(`/api/channels/${id}/videos?skip=${skip}&take=${take}`, { });
 
   // Sends login request and sets tokens in localStorage
   public static Login = async (username: string, password: string): Promise<Result<LoginInformation>> => {
