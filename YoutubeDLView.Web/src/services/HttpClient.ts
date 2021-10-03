@@ -96,6 +96,12 @@ abstract class HttpClient {
     return response;
   }
 
+  // Sends a signup request
+  public static Signup = (username: string, password: string): Promise<Result> => {
+    const body = JSON.stringify({ username, password });
+    return sendRequest('/api/users/setup', { method: 'POST', body });
+  }
+
   public static GetUsers = (): Promise<Result<UserAccount[]>> => sendRequest<UserAccount[]>('/api/users', { });
 
   public static UpdateAccount = (userId: string, username: string, password: string): Promise<Result> => {

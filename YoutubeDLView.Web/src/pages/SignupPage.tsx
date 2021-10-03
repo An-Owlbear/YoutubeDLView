@@ -1,11 +1,11 @@
 import { Button, makeStyles, TextField, Typography } from '@material-ui/core';
 import { Error } from '@material-ui/icons';
 import { useAtom } from 'jotai';
-import React, { ChangeEvent, FormEvent, useMemo, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { LoginInformation } from '../models/apiModels';
+import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
-import { useApiRequest } from '../services/useApiRequest';
+import { useRequest } from '../services/useRequest';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,20 +58,15 @@ const SignupPage: React.FC = () => {
     confirmPassword: ''
   });
   const [validationError, setValidationError] = useState('');
-  const requestBody = useMemo(() => ({ username: values.username, password: values.password }), [values.username, values.password]);
-
-  const [signupError, signupLoading, sendSignupRequest] = useApiRequest(
-    '/api/users/setup',
-    'post',
-    false,
-    { body: requestBody }
+  const signupRequest = useRequest(
+    () => HttpClient.Signup(values.username, values.password),
+    [values.username, values.password],
+    { enabled: false }
   );
-
-  const [loginError, loginLoading, sendLoginRequest] = useApiRequest<LoginInformation>(
-    '/api/auth/login',
-    'post',
-    false,
-    { body: requestBody }
+  const loginRequest = useRequest(
+    () => HttpClient.Login(values.username, values.password),
+    [values.username, values.password],
+    { enabled: false }
   );
 
   // Updates the form values
@@ -90,11 +85,11 @@ const SignupPage: React.FC = () => {
     }
 
     // Sends signup request, and if successful sends login request
-    await sendSignupRequest();
-    if (signupError) return;
-    const response = await sendLoginRequest();
-    if (loginError) return;
-    setSession(response);
+    await signupRequest.refetch();
+    if (signupRequest.error) return;
+    const response = await loginRequest.refetch();
+    if (loginRequest.error || !response.data) return;
+    setSession(response.data);
     history.push('/setup');
   };
 
@@ -110,7 +105,7 @@ const SignupPage: React.FC = () => {
         onChange={handleChange}
         variant="outlined"
         fullWidth
-        disabled={signupLoading || loginLoading}
+        disabled={signupRequest.isLoading || loginRequest.isLoading}
       />
       <TextField
         name="password"
@@ -120,7 +115,7 @@ const SignupPage: React.FC = () => {
         onChange={handleChange}
         variant="outlined"
         fullWidth
-        disabled={signupLoading || loginLoading}
+        disabled={signupRequest.isLoading || loginRequest.isLoading}
       />
       <TextField
         name="confirmPassword"
@@ -130,17 +125,17 @@ const SignupPage: React.FC = () => {
         onChange={handleChange}
         variant="outlined"
         fullWidth
-        disabled={signupLoading || loginLoading}
+        disabled={signupRequest.isLoading || loginRequest.isLoading}
       />
       <div className={classes.bottomContainer}>
-        {(validationError || signupError || loginError) &&
+        {(validationError || signupRequest.error || loginRequest.error) &&
         <div className={classes.errorContainer}>
           <Error className={classes.errorIcon} color="error" />
-          <Typography color="error">{`${validationError}${signupError}${loginError}`}</Typography>
+          <Typography color="error">{`${validationError}${signupRequest.error}${loginRequest.error}`}</Typography>
         </div>
         }
         <div className={classes.flexGrow} />
-        <Button type="submit" variant="contained" color="primary" disableElevation disabled={signupLoading || loginLoading}>Signup</Button>
+        <Button type="submit" variant="contained" color="primary" disableElevation disabled={signupRequest.isLoading || loginRequest.isLoading}>Signup</Button>
       </div>
     </form>
   );
