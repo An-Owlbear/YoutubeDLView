@@ -56,7 +56,7 @@ const preRequest = async () => {
   return Result.ok();
 };
 
-const sendRequest = async <T>(url: string, requestInit: RequestInit) => {
+const sendRequest = async <T = undefined>(url: string, requestInit: RequestInit = { }) => {
   // Handles pre-request checks and sends request
   const preRequestResult = await preRequest();
   if (!preRequestResult.success) return Result.failure<T>(preRequestResult.error);
@@ -71,19 +71,19 @@ const sendRequest = async <T>(url: string, requestInit: RequestInit) => {
 
 abstract class HttpClient {
   public static GetVideo = (id: string): Promise<Result<VideoInformation>> =>
-    sendRequest<VideoInformation>(`/api/videos/${id}`, { });
+    sendRequest<VideoInformation>(`/api/videos/${id}`);
 
   public static GetVideos = (skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
-    sendRequest<VideoInformation[]>(`/api/videos?skip=${skip}&take=${take}`, { });
+    sendRequest<VideoInformation[]>(`/api/videos?skip=${skip}&take=${take}`);
 
   public static GetChannel = (id: string): Promise<Result<ChannelInformation>> =>
-    sendRequest<ChannelInformation>(`/api/channels/${id}`, { });
+    sendRequest<ChannelInformation>(`/api/channels/${id}`);
 
   public static GetChannels = (skip = 0, take = 30): Promise<Result<ChannelInformation[]>> =>
-    sendRequest<ChannelInformation[]>(`/api/channels?skip=${skip}&take=${take}`, { });
+    sendRequest<ChannelInformation[]>(`/api/channels?skip=${skip}&take=${take}`);
 
   public static GetChannelVideos = (id: string, skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
-    sendRequest<VideoInformation[]>(`/api/channels/${id}/videos?skip=${skip}&take=${take}`, { });
+    sendRequest<VideoInformation[]>(`/api/channels/${id}/videos?skip=${skip}&take=${take}`);
 
   // Sends login request and sets tokens in localStorage
   public static Login = async (username: string, password: string): Promise<Result<LoginInformation>> => {
@@ -102,11 +102,11 @@ abstract class HttpClient {
     return sendRequest('/api/users/setup', { method: 'POST', body });
   }
 
-  public static GetUsers = (): Promise<Result<UserAccount[]>> => sendRequest<UserAccount[]>('/api/users', { });
+  public static GetUsers = (): Promise<Result<UserAccount[]>> => sendRequest<UserAccount[]>('/api/users');
 
   public static UpdateAccount = (userId: string, username: string, password: string): Promise<Result> => {
     const body = JSON.stringify({ userId, username: username ? username : null, password: password ? password : null });
-    return sendRequest<undefined>('/api/users/update', { method: 'PATCH', body: body });
+    return sendRequest('/api/users/update', { method: 'PATCH', body: body });
   }
 }
 
