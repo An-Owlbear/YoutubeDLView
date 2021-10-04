@@ -10,9 +10,9 @@ import {
   Typography
 } from '@material-ui/core';
 import { Add as AddIcon, Close as CloseIcon } from '@material-ui/icons';
-import React, { useEffect, useState } from 'react';
-import { SourceInformation } from '../models/apiModels';
-import { useApiRequest } from '../services/useApiRequest';
+import React, { useRef, useState } from 'react';
+import HttpClient from '../services/HttpClient';
+import { useRequest } from '../services/useRequest';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,54 +41,44 @@ const useStyles = makeStyles((theme) => ({
 const SourceManager: React.FC = () => {
   const classes = useStyles();
 
-  const [sources, setSources] = useState<SourceInformation[]>([]);
   const [addMenuOpen, setAddMenuOpen] = useState(false);
   const [addPath, setAddPath] = useState('');
-  const [sourcesError, sourcesLoading, sendSourcesRequest] = useApiRequest<SourceInformation[]>('/api/config/sources', 'get', true);
-  const [addError, addLoading, sendAddRequest] = useApiRequest('/api/config/sources', 'put', true, { body: { path: addPath } });
-  const [deleteError, deleteLoading, sendDeleteRequest] = useApiRequest('/api/config/sources', 'delete', true);
-
-  // Loads current video sources
-  useEffect(() => {
-    const loadVideos = async () => {
-      const response = await sendSourcesRequest();
-      if (!response) return;
-      setSources(response);
-    };
-    loadVideos();
-  }, []);
+  const removePath = useRef('');
+  const sources = useRequest(HttpClient.getSources, []);
+  const addSource = useRequest(() => HttpClient.addSource(addPath), [addPath], { enabled: false });
+  const removeSource = useRequest(() => HttpClient.removeSource(removePath.current), [removePath.current], { enabled: false });
 
   // Adds an item to the sources list
-  const addSource = async () => {
-    await sendAddRequest();
-    console.log(addError);
-    if (addError) return;
-    setSources([...sources, { path: addPath }]);
+  const addSourceFn = async () => {
+    await addSource.refetch();
+    if (addSource.error) return;
+    await sources.refetch();
     setAddMenuOpen(false);
   };
 
   // Removes an item from the sources list
-  const removeSource = async (removePath: string) => {
-    await sendDeleteRequest({ body: { path: removePath } });
-    if (deleteError) return;
-    setSources(sources.filter(x => x.path !== removePath));
+  const removeSourceFn = async (pathToRemove: string) => {
+    removePath.current = pathToRemove;
+    await removeSource.refetch();
+    if (removeSource.error) return;
+    await sources.refetch();
   };
 
   // Handles closing the add menu
   const handleAddMenuClose = () => {
-    if (addLoading) return;
+    if (addSource.isLoading) return;
     setAddMenuOpen(false);
   };
 
   return (
     <div className={classes.root}>
-      {!sourcesLoading &&
+      {!sources.isLoading && sources.data &&
         <div className={classes.list}>
-          {sources.map(x =>
+          {sources.data.map(x =>
             <div className={classes.listItem} key={x.path}>
               <Typography className={classes.pathText}>{x.path}</Typography>
               <div className={classes.flexGrow} />
-              <IconButton onClick={() => removeSource(x.path)}><CloseIcon /></IconButton>
+              <IconButton onClick={() => removeSourceFn(x.path)}><CloseIcon /></IconButton>
             </div>
           )}
         </div>
@@ -107,12 +97,12 @@ const SourceManager: React.FC = () => {
             onChange={e => setAddPath(e.target.value)}
             variant="outlined"
             fullWidth
-            disabled={addLoading}
+            disabled={addSource.isLoading}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddMenuClose} disabled={addLoading}>Cancel</Button>
-          <Button onClick={addSource} disabled={addLoading}>Add</Button>
+          <Button onClick={handleAddMenuClose} disabled={addSource.isLoading}>Cancel</Button>
+          <Button onClick={addSourceFn} disabled={addSource.isLoading}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>

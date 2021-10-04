@@ -3,7 +3,7 @@ import Result from '../models/Result';
 import {
   ChannelInformation,
   LoginInformation,
-  RefreshInformation,
+  RefreshInformation, SourceInformation,
   UserAccount,
   VideoInformation
 } from '../models/apiModels';
@@ -108,6 +108,14 @@ abstract class HttpClient {
     const body = JSON.stringify({ userId, username: username ? username : null, password: password ? password : null });
     return sendRequest('/api/users/update', { method: 'PATCH', body: body });
   }
+
+  public static getSources = (): Promise<Result<SourceInformation[]>> => sendRequest<SourceInformation[]>('/api/config/sources');
+
+  public static addSource = (path: string): Promise<Result> =>
+    sendRequest('/api/config/sources', { method: 'PUT', body: JSON.stringify({ path }) });
+
+  public static removeSource = (path: string): Promise<Result> =>
+    sendRequest('/api/config/sources', { method: 'DELETE', body: JSON.stringify({ path }) });
 }
 
 export default HttpClient;
