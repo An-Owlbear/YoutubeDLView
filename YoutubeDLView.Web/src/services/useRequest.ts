@@ -48,7 +48,7 @@ export const useRequest = <T>(requestFn: () => Promise<Result<T>>, requestDeps: 
   useEffect(() => {
     if (!options.enabled) return;
     sendRequest();
-  }, [...requestDeps]);
+  }, [...requestDeps, options.enabled]);
 
   return { error, isLoading, data, refetch: sendRequest };
 };
