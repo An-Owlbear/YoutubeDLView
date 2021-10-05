@@ -3,9 +3,10 @@ import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 import SearchVideo from '../components/SearchVideo';
-import { VideoInformation } from '../models/apiModels';
+import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
-import { useApiRequest } from '../services/useApiRequest';
+import { useList } from '../services/useList';
+import { useRequest } from '../services/useRequest';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,36 +25,18 @@ const SearchPage: React.FC = () => {
   const classes = useStyles();
   const { search } = useParams<{ search: string }>();
   const [session,] = useAtom(sessionAtom);
-  const [searchData, setSearchData] = useState({ search: search, skip: 0 });
-  const [videos, setVideos] = useState<VideoInformation[]>([]);
+  const [skip, setSkip] = useState(0);
   const [maxLoaded, setMaxLoaded] = useState(false);
-  const [error, loading, sendRequest] = useApiRequest<VideoInformation[]>(
-    `/api/search/${searchData.search}`,
-    'get',
-    true,
-    { params: { skip: searchData.skip } }
-  );
+  const { error, isLoading, data } = useRequest(() => HttpClient.searchVideos(search, skip), [search, skip]);
+  const videos = useList(search, data);
 
-  // Changes search data when the search parameter changes
+  // Checks if all possible results are loaded
   useEffect(() => {
-    setVideos([]);
-    setMaxLoaded(false);
-    setSearchData({ search: search, skip: 0 });
-  }, [search]);
-
-  // Loads search result
-  useEffect(() => {
-    const loadVideos = async () => {
-      const response = await sendRequest();
-      if (!response) return;
-      if (response.length < 30) setMaxLoaded(true);
-      setVideos([...videos, ...response]);
-    };
-    loadVideos();
-  }, [searchData]);
+    if (data && data.length < 30) setMaxLoaded(true);
+  }, [data]);
 
   const handleLoadButton = () => {
-    setSearchData(prevState => ({ ...prevState, skip: prevState.skip + 30 }));
+    setSkip(prevState => prevState + 30);
   };
 
   if (!session) return <Redirect to="/" />;
@@ -66,8 +49,8 @@ const SearchPage: React.FC = () => {
           )
         }
       </div>
-      {loading && <CircularProgress />}
-      {!loading && !maxLoaded && <Button variant="contained" color="primary" onClick={handleLoadButton}>Load more</Button>}
+      {isLoading && <CircularProgress />}
+      {!isLoading && !maxLoaded && <Button variant="contained" color="primary" onClick={handleLoadButton}>Load more</Button>}
     </>
   );
 };

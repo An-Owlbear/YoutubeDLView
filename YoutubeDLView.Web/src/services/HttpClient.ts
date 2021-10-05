@@ -116,6 +116,9 @@ abstract class HttpClient {
 
   public static removeSource = (path: string): Promise<Result> =>
     sendRequest('/api/config/sources', { method: 'DELETE', body: JSON.stringify({ path }) });
+
+  public static searchVideos = (path: string, skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
+    sendRequest<VideoInformation[]>(`/api/search/${path}?skip=${skip}&take=${take}`);
 }
 
 export default HttpClient;
