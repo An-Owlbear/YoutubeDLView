@@ -11,12 +11,10 @@ interface Request<T> {
 
 interface RequestOptions {
   enabled?: boolean;
-  keepPrevious?: boolean;
 }
 
 const defaultOptions: RequestOptions = {
   enabled: true,
-  keepPrevious: false
 };
 
 // Request hook that handles common states and error handling
@@ -33,12 +31,7 @@ export const useRequest = <T>(requestFn: () => Promise<Result<T>>, requestDeps: 
 
     const response = await requestFn();
     if (!response.success) setError(response.error);
-    else {
-        if (options.keepPrevious && Array.isArray(response.data) && Array.isArray(data)) {
-          const newData = [...data, ...response.data];
-          setData(newData as unknown as T );
-        } else setData(response.data);
-    }
+    setData(response.data);
 
     setIsLoading(false);
     return response;

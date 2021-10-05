@@ -1,10 +1,11 @@
 import { Button, CircularProgress, makeStyles } from '@material-ui/core';
 import { useAtom } from 'jotai';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
+import { useList } from '../services/useList';
 import { useRequest } from '../services/useRequest';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,13 +23,11 @@ const MainPage: React.FC = () => {
   const [session,] = useAtom(sessionAtom);
   const [skip, setSkip] = useState(0);
   const [maxLoaded, setMaxLoaded] = useState(false);
-  const { error, isLoading, data } = useRequest(() => HttpClient.GetVideos(skip), [skip], { keepPrevious: true });
-  const previousDataLength = useRef(0);
+  const { error, isLoading, data } = useRequest(() => HttpClient.GetVideos(skip), [skip]);
+  const videos = useList(data);
 
   useEffect(() => {
-    if (!data) return;
-    if (data.length - previousDataLength.current < 30) setMaxLoaded(true);
-    previousDataLength.current = data.length;
+    if (data && data.length > 30) setMaxLoaded(true);
   }, [data]);
 
   const handleLoadButton = () => {
@@ -41,7 +40,7 @@ const MainPage: React.FC = () => {
     <>
       <div className={classes.root}>
         {
-          data?.map(x =>
+          videos.map(x =>
             <VideoCard
               key={x.id}
               id={x.id}

@@ -5,6 +5,7 @@ import { Redirect, useParams } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
+import { useList } from '../services/useList';
 import { useRequest } from '../services/useRequest';
 
 const useStyles = makeStyles(theme => ({
@@ -38,19 +39,13 @@ const ChannelPage: React.FC = () => {
 
   const [skip, setSkip] = useState(0);
   const [maxLoaded, setMaxLoaded] = useState(false);
-  const videosRequest = useRequest(() => HttpClient.GetChannelVideos(id, skip), [id, skip], { keepPrevious: true, enabled: false });
+  const videosRequest = useRequest(() => HttpClient.GetChannelVideos(id, skip), [id, skip], { enabled: !!channelRequest.data });
+  const channelVideos = useList(id, videosRequest.data);
 
-  // Loads channel videos
+  // Checks if the maximum amount of videos has been loaded
   useEffect(() => {
-    // Doesn't run if channel is not loaded
-    if (!channelRequest.data) return;
-    const loadVideos = async () => {
-      const response = await videosRequest.refetch();
-      if (!response.success || !response.data) return;
-      if (response.data.length < 30) setMaxLoaded(true);
-    };
-    loadVideos();
-  }, [channelRequest.data, skip]);
+    if (videosRequest.data && videosRequest.data.length < 30) setMaxLoaded(true);
+  }, [videosRequest.data]);
 
   // Loads the next page of videos
   const handleLoadButton = () => {
@@ -70,7 +65,7 @@ const ChannelPage: React.FC = () => {
       {videosRequest.data &&
         <div className={classes.videos}>
           {
-            videosRequest.data.map(x =>
+            channelVideos.map(x =>
               <VideoCard
                 key={x.id}
                 id={x.id}
