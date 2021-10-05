@@ -59,12 +59,12 @@ const SignupPage: React.FC = () => {
   });
   const [validationError, setValidationError] = useState('');
   const signupRequest = useRequest(
-    () => HttpClient.Signup(values.username, values.password),
+    () => HttpClient.signup(values.username, values.password),
     [values.username, values.password],
     { enabled: false }
   );
   const loginRequest = useRequest(
-    () => HttpClient.Login(values.username, values.password),
+    () => HttpClient.login(values.username, values.password),
     [values.username, values.password],
     { enabled: false }
   );

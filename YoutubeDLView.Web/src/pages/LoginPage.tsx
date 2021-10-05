@@ -48,7 +48,7 @@ const LoginPage: React.FC = () => {
   const history = useHistory();
 
   // Checks if any users exist, and redirects the user to first time signup page if none do
-  const usersRequest = useRequest(HttpClient.GetUsers, []);
+  const usersRequest = useRequest(HttpClient.getUsers, []);
   useEffect(() => {
     if (usersRequest.data && usersRequest.data.length === 0) history.push('/signup');
   }, [usersRequest.data]);
@@ -58,7 +58,7 @@ const LoginPage: React.FC = () => {
     password: ''
   });
 
-  const loginRequest = useRequest(() => HttpClient.Login(values.username, values.password), [values], { enabled: false });
+  const loginRequest = useRequest(() => HttpClient.login(values.username, values.password), [values], { enabled: false });
   const [session, setSession] = useAtom(sessionAtom);
 
   const usernameError = () => loginRequest.error === 'User not found' || loginRequest.error === 'An error occurred';

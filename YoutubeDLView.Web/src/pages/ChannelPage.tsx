@@ -35,11 +35,11 @@ const ChannelPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [session,] = useAtom(sessionAtom);
 
-  const channelRequest = useRequest(() => HttpClient.GetChannel(id), [id]);
+  const channelRequest = useRequest(() => HttpClient.getChannel(id), [id]);
 
   const [skip, setSkip] = useState(0);
   const [maxLoaded, setMaxLoaded] = useState(false);
-  const videosRequest = useRequest(() => HttpClient.GetChannelVideos(id, skip), [id, skip], { enabled: !!channelRequest.data });
+  const videosRequest = useRequest(() => HttpClient.getChannelVideos(id, skip), [id, skip], { enabled: !!channelRequest.data });
   const channelVideos = useList(id, videosRequest.data);
 
   // Checks if the maximum amount of videos has been loaded

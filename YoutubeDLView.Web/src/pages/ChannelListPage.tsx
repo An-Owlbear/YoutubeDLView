@@ -22,7 +22,7 @@ const ChannelListPage: React.FC = () => {
   const [session,] = useAtom(sessionAtom);
   const [skip, setSkip] = useState(0);
   const [maxLoaded, setMaxLoaded] = useState(false);
-  const { error, isLoading, data } = useRequest(() => HttpClient.GetChannels(skip), [skip]);
+  const { error, isLoading, data } = useRequest(() => HttpClient.getChannels(skip), [skip]);
   const previousDataLength = useRef(0);
 
   useEffect(() => {

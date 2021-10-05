@@ -70,23 +70,23 @@ const sendRequest = async <T = undefined>(url: string, requestInit: RequestInit 
 };
 
 abstract class HttpClient {
-  public static GetVideo = (id: string): Promise<Result<VideoInformation>> =>
+  public static getVideo = (id: string): Promise<Result<VideoInformation>> =>
     sendRequest<VideoInformation>(`/api/videos/${id}`);
 
-  public static GetVideos = (skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
+  public static getVideos = (skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
     sendRequest<VideoInformation[]>(`/api/videos?skip=${skip}&take=${take}`);
 
-  public static GetChannel = (id: string): Promise<Result<ChannelInformation>> =>
+  public static getChannel = (id: string): Promise<Result<ChannelInformation>> =>
     sendRequest<ChannelInformation>(`/api/channels/${id}`);
 
-  public static GetChannels = (skip = 0, take = 30): Promise<Result<ChannelInformation[]>> =>
+  public static getChannels = (skip = 0, take = 30): Promise<Result<ChannelInformation[]>> =>
     sendRequest<ChannelInformation[]>(`/api/channels?skip=${skip}&take=${take}`);
 
-  public static GetChannelVideos = (id: string, skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
+  public static getChannelVideos = (id: string, skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
     sendRequest<VideoInformation[]>(`/api/channels/${id}/videos?skip=${skip}&take=${take}`);
 
   // Sends login request and sets tokens in localStorage
-  public static Login = async (username: string, password: string): Promise<Result<LoginInformation>> => {
+  public static login = async (username: string, password: string): Promise<Result<LoginInformation>> => {
     const body = JSON.stringify({ username, password });
     const response = await sendRequest<LoginInformation>('/api/auth/login', { method: 'POST', body });
     if (response.success && response.data) {
@@ -97,14 +97,14 @@ abstract class HttpClient {
   }
 
   // Sends a signup request
-  public static Signup = (username: string, password: string): Promise<Result> => {
+  public static signup = (username: string, password: string): Promise<Result> => {
     const body = JSON.stringify({ username, password });
     return sendRequest('/api/users/setup', { method: 'POST', body });
   }
 
-  public static GetUsers = (): Promise<Result<UserAccount[]>> => sendRequest<UserAccount[]>('/api/users');
+  public static getUsers = (): Promise<Result<UserAccount[]>> => sendRequest<UserAccount[]>('/api/users');
 
-  public static UpdateAccount = (userId: string, username: string, password: string): Promise<Result> => {
+  public static updateAccount = (userId: string, username: string, password: string): Promise<Result> => {
     const body = JSON.stringify({ userId, username: username ? username : null, password: password ? password : null });
     return sendRequest('/api/users/update', { method: 'PATCH', body: body });
   }

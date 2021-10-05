@@ -23,7 +23,7 @@ const MainPage: React.FC = () => {
   const [session,] = useAtom(sessionAtom);
   const [skip, setSkip] = useState(0);
   const [maxLoaded, setMaxLoaded] = useState(false);
-  const { error, isLoading, data } = useRequest(() => HttpClient.GetVideos(skip), [skip]);
+  const { error, isLoading, data } = useRequest(() => HttpClient.getVideos(skip), [skip]);
   const videos = useList(data);
 
   useEffect(() => {

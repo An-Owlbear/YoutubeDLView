@@ -55,7 +55,7 @@ const AccountPage: React.FC = () => {
 
   const [validationError, setValidationError] = useState('');
   const { error, isLoading, refetch } = useRequest(
-    () => HttpClient.UpdateAccount(session?.userId ?? '', values.username ?? '', values.password),
+    () => HttpClient.updateAccount(session?.userId ?? '', values.username ?? '', values.password),
     [session?.userId, values.username, values.password],
     { enabled: false }
   );

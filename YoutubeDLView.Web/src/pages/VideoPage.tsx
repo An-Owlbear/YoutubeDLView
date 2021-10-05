@@ -49,7 +49,7 @@ const VideoPage: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const [session,] = useAtom(sessionAtom);
-  const { error, isLoading, data } = useRequest(() => HttpClient.GetVideo(id), [id]);
+  const { error, isLoading, data } = useRequest(() => HttpClient.getVideo(id), [id]);
 
   if (!session) return <Redirect to="/login" />;
   return (
