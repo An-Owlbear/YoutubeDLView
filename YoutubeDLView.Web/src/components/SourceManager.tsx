@@ -1,3 +1,4 @@
+import { Add as AddIcon, Close as CloseIcon } from '@mui/icons-material';
 import {
   Button,
   Dialog,
@@ -5,11 +6,10 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  makeStyles,
   TextField,
-  Typography
-} from '@material-ui/core';
-import { Add as AddIcon, Close as CloseIcon } from '@material-ui/icons';
+  Typography,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useRef, useState } from 'react';
 import HttpClient from '../services/HttpClient';
 import { useRequest } from '../services/useRequest';
@@ -78,12 +78,12 @@ const SourceManager: React.FC = () => {
             <div className={classes.listItem} key={x.path}>
               <Typography className={classes.pathText}>{x.path}</Typography>
               <div className={classes.flexGrow} />
-              <IconButton onClick={() => removeSourceFn(x.path)}><CloseIcon /></IconButton>
+              <IconButton onClick={() => removeSourceFn(x.path)} size="large"><CloseIcon /></IconButton>
             </div>
           )}
         </div>
       }
-      <IconButton onClick={() => setAddMenuOpen(true)}>
+      <IconButton onClick={() => setAddMenuOpen(true)} size="large">
         <AddIcon />
       </IconButton>
       <Dialog open={addMenuOpen} onClose={handleAddMenuClose} disableScrollLock={true}>

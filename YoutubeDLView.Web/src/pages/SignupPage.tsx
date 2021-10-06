@@ -1,5 +1,6 @@
-import { Button, makeStyles, TextField, Typography } from '@material-ui/core';
-import { Error } from '@material-ui/icons';
+import { Error } from '@mui/icons-material';
+import { Button, TextField, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
@@ -13,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(5),
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: theme.shape.borderRadius,
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       width: '100%'
     },
     '& > *': {

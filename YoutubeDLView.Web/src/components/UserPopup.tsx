@@ -1,5 +1,6 @@
-import { List, ListItem, ListItemIcon, ListItemText, makeStyles, Paper } from '@material-ui/core';
-import { AccountCircle, ExitToApp } from '@material-ui/icons';
+import { AccountCircle, ExitToApp } from '@mui/icons-material';
+import { List, ListItem, ListItemIcon, ListItemText, Paper } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
 import React from 'react';

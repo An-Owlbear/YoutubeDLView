@@ -1,5 +1,6 @@
-import { Box, Button, makeStyles, TextField, Theme, Typography } from '@material-ui/core';
-import { Error } from '@material-ui/icons';
+import { Error } from '@mui/icons-material';
+import { Box, Button, TextField, Theme, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     border: '1px solid',
     borderColor: theme.palette.divider,
     borderRadius: '8px',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       width: '100%'
     },
     '& > *': {

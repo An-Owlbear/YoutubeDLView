@@ -1,5 +1,6 @@
-import { AppBar, Toolbar, Typography, makeStyles, IconButton, InputBase, alpha } from '@material-ui/core';
-import { Menu as MenuIcon, Search as SearchIcon } from '@material-ui/icons';
+import { Menu as MenuIcon, Search as SearchIcon } from '@mui/icons-material';
+import { AppBar, Toolbar, Typography, IconButton, InputBase, alpha } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 import { useAtom } from "jotai";
 import React, { ChangeEvent, FormEvent, useState } from 'react';
@@ -8,9 +9,6 @@ import { drawerOpenAtom, sessionAtom } from '../services/globalStore';
 import AccountMenu from './AccountMenu';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    zIndex: theme.zIndex.drawer + 1
-  },
   appBar: {
     justifyContent: 'space-between'
   },
@@ -72,10 +70,14 @@ const TopAppBar: React.FC = () => {
   };
 
   return (
-    <AppBar className={classes.root} position="fixed">
+    <AppBar position="fixed">
       <Toolbar className={classes.appBar}>
         <div className={classes.appBarSection}>
-          <IconButton className={classes.menuIcon} color="inherit" onClick={() => setDrawerOpen(true)}>
+          <IconButton
+            className={classes.menuIcon}
+            color="inherit"
+            onClick={() => setDrawerOpen(true)}
+            size="large">
             <MenuIcon />
           </IconButton>
           <Link className={classes.homeLink} to="/">
@@ -84,7 +86,7 @@ const TopAppBar: React.FC = () => {
         </div>
         <form className={classes.searchBar} onSubmit={handleSearch}>
           <InputBase classes={{root: classes.searchRoot}} placeholder="Search" value={search} onChange={handleSearchInput} />
-          <IconButton className={classes.searchIcon} type="submit">
+          <IconButton className={classes.searchIcon} type="submit" size="large">
             <SearchIcon />
           </IconButton>
         </form>

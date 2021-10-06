@@ -1,4 +1,5 @@
-import { CssBaseline, makeStyles } from '@material-ui/core';
+import { CssBaseline } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       alignSelf: 'center'
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       margin: theme.spacing(2)
     }
   }

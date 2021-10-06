@@ -1,4 +1,5 @@
-import { Avatar, makeStyles, Typography } from '@material-ui/core';
+import { Avatar, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(1),
     width: 300,
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       width: '100%'
     }
   },

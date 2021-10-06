@@ -1,4 +1,5 @@
-import { Avatar, makeStyles, Typography } from '@material-ui/core';
+import { Avatar, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { VideoInformation } from '../models/apiModels';

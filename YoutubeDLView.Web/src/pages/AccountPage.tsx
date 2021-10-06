@@ -1,5 +1,6 @@
-import { Button, makeStyles, TextField, Typography } from '@material-ui/core';
-import { Error } from '@material-ui/icons';
+import { Error } from '@mui/icons-material';
+import { Button, TextField, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Redirect } from 'react-router-dom';

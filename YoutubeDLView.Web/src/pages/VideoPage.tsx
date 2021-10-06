@@ -1,4 +1,5 @@
-import { Avatar, CircularProgress, makeStyles, Typography } from '@material-ui/core';
+import { Avatar, CircularProgress, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useAtom } from 'jotai';
 import React from 'react';
 import { Link, Redirect, useParams } from 'react-router-dom';

@@ -1,5 +1,5 @@
-import { IconButton, Popover } from '@material-ui/core';
-import { AccountCircle } from '@material-ui/icons';
+import { AccountCircle } from '@mui/icons-material';
+import { IconButton, Popover } from '@mui/material';
 import React, { useState } from 'react';
 import UserPopup from './UserPopup';
 
@@ -19,7 +19,7 @@ const AccountMenu: React.FC = () => {
 
   return (
     <div>
-      <IconButton color="inherit" onClick={handleAccountClick}>
+      <IconButton color="inherit" onClick={handleAccountClick} size="large">
         <AccountCircle />
       </IconButton>
       <Popover

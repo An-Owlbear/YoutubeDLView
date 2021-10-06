@@ -1,5 +1,6 @@
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
-import { AccountCircle, Home as HomeIcon, VideoLibrary } from '@material-ui/icons';
+import { AccountCircle, Home as HomeIcon, VideoLibrary } from '@mui/icons-material';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useAtom } from 'jotai';
 import React  from 'react';
 import { Link } from 'react-router-dom';
