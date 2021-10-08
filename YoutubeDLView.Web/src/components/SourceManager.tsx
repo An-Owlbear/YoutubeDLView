@@ -1,46 +1,28 @@
 import { Add as AddIcon, Close as CloseIcon } from '@mui/icons-material';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  TextField,
-  Typography,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, styled, TextField, Typography, } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import HttpClient from '../services/HttpClient';
 import { useRequest } from '../services/useRequest';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '100%'
-  },
-  list: {
-    width: '100%',
-    marginBottom: theme.spacing(2)
-  },
-  listItem: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%'
-  },
-  pathText: {
-    marginLeft: '12px'
-  },
-  flexGrow: {
-    flexGrow: 1
-  }
+const Root = styled('div')(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '100%'
+}));
+
+const SourceList = styled('div')(({ theme }) => ({
+  width: '100%',
+  marginBottom: theme.spacing(2)
+}));
+
+const SourceListItem = styled('div')(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  width: '100%'
 }));
 
 const SourceManager: React.FC = () => {
-  const classes = useStyles();
-
   const [addMenuOpen, setAddMenuOpen] = useState(false);
   const [addPath, setAddPath] = useState('');
   const removePath = useRef('');
@@ -71,17 +53,17 @@ const SourceManager: React.FC = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <Root>
       {!sources.isLoading && sources.data &&
-        <div className={classes.list}>
+        <SourceList>
           {sources.data.map(x =>
-            <div className={classes.listItem} key={x.path}>
-              <Typography className={classes.pathText}>{x.path}</Typography>
-              <div className={classes.flexGrow} />
+            <SourceListItem key={x.path}>
+              <Typography sx={{ marginLeft: '12px' }}>{x.path}</Typography>
+              <Box sx={{ flexGrow: 1 }} />
               <IconButton onClick={() => removeSourceFn(x.path)} size="large"><CloseIcon /></IconButton>
-            </div>
+            </SourceListItem>
           )}
-        </div>
+        </SourceList>
       }
       <IconButton onClick={() => setAddMenuOpen(true)} size="large">
         <AddIcon />
@@ -105,7 +87,7 @@ const SourceManager: React.FC = () => {
           <Button onClick={addSourceFn} disabled={addSource.isLoading}>Add</Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Root>
   );
 };
 

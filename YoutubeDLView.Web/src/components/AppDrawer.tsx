@@ -1,6 +1,5 @@
 import { AccountCircle, Home as HomeIcon, VideoLibrary } from '@mui/icons-material';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { useAtom } from 'jotai';
 import React  from 'react';
 import { Link } from 'react-router-dom';
@@ -10,22 +9,7 @@ interface AppDrawerProps {
   width: number;
 }
 
-const useStyles = makeStyles(() => ({
-  root: {
-    width: (props: AppDrawerProps) => props.width,
-    flexShrink: 0
-  },
-  drawerPaper: {
-    width: (props: AppDrawerProps) => props.width,
-  },
-  drawerContainer: {
-    overflow: 'auto'
-  }
-}));
-
 const AppDrawer: React.FC<AppDrawerProps> = (props: AppDrawerProps) => {
-  const classes = useStyles(props);
-
   const [open, setOpen] = useAtom(drawerOpenAtom);
 
   const handleClose = () => {
@@ -34,12 +18,11 @@ const AppDrawer: React.FC<AppDrawerProps> = (props: AppDrawerProps) => {
 
   return (
     <Drawer
-      className={classes.root}
       variant="temporary"
       anchor="left"
       open={open}
-      classes={{paper: classes.drawerPaper}}
       onClose={() => setOpen(false)}
+      sx={{ width: props.width, flexShrink: 0, '& .MuiDrawer-paper': { width: props.width }}}
     >
       <List>
         <ListItem button component={Link} to="/" onClick={handleClose}>

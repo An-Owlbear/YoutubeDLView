@@ -1,5 +1,4 @@
-import { Avatar, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { Avatar, styled, Typography } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { VideoInformation } from '../models/apiModels';
@@ -8,64 +7,63 @@ interface SearchVideoProps {
   video: VideoInformation
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    height: 225
+const Root = styled('div')(() => ({
+  display: 'flex',
+  height: 225
+}));
+
+const Thumbnail = styled('img')(() => ({
+  width: 400,
+  height: '100%'
+}));
+
+const VideoInfo = styled('div')(({ theme }) => ({
+  marginLeft: theme.spacing(2),
+  flexGrow: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  '& > *': {
+    margin: theme.spacing(0.5, 0),
+    textDecoration: 'none'
   },
-  thumbnail: {
-    width: 400,
-    height: '100%'
-  },
-  videoInfo: {
-    marginLeft: theme.spacing(2),
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    '& > *': {
-      margin: theme.spacing(0.5, 0),
-      textDecoration: 'none'
-    },
-    '& :first-child': {
-      marginTop: 0
-    }
-  },
-  channelInfo: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  avatar: {
-    width: 30,
-    height: 30,
-    fontSize: '0.9375rem',
-    marginRight: theme.spacing(1)
-  },
-  description: {
-    overflow: 'hidden',
-    whiteSpace: 'pre-wrap',
-    textOverflow: 'ellipsis'
+  '& :first-child': {
+    marginTop: 0
   }
 }));
 
-const SearchVideo: React.FC<SearchVideoProps> = (props: SearchVideoProps) => {
-  const classes = useStyles();
+const ChannelInfo = styled(Link)(() => ({
+  display: 'flex',
+  alignItems: 'center',
+}));
 
+const StyledAvatar = styled(Avatar)(() => ({ theme }) => ({
+  width: 30,
+  height: 30,
+  fontSize: '0.9375rem',
+  marginRight: theme.spacing(1)
+}));
+
+const DescriptionText = styled(Typography)(() => ({
+  overflow: 'hidden',
+  whiteSpace: 'pre-wrap',
+  textOverflow: 'ellipsis'
+}));
+
+const SearchVideo: React.FC<SearchVideoProps> = (props: SearchVideoProps) => {
   return (
-    <div className={classes.root}>
+    <Root>
       <Link to={`/videos/${props.video.id}`}>
-        <img className={classes.thumbnail} src={`/api/videos/${props.video.id}/thumbnail`} alt="" />
+        <Thumbnail src={`/api/videos/${props.video.id}/thumbnail`} alt="" />
       </Link>
-      <div className={classes.videoInfo}>
+      <VideoInfo>
         <Typography variant="h6" color="textPrimary" component={Link} to={`/videos/${props.video.id}`}>{props.video.title}</Typography>
-        <Link className={classes.channelInfo} to={`/channels/${props.video.channel.id}`}>
-          <Avatar className={classes.avatar}>{props.video.channel.name.charAt(0)}</Avatar>
+        <ChannelInfo to={`/channels/${props.video.channel.id}`}>
+          <StyledAvatar>{props.video.channel.name.charAt(0)}</StyledAvatar>
           <Typography variant="body1" color="textSecondary">{props.video.channel.name}</Typography>
-        </Link>
-        <Typography className={classes.description} variant="body2" color="textSecondary">{props.video.description}</Typography>
-      </div>
-    </div>
+        </ChannelInfo>
+        <DescriptionText variant="body2" color="textSecondary">{props.video.description}</DescriptionText>
+      </VideoInfo>
+    </Root>
   );
 };
 

@@ -1,59 +1,46 @@
 import { Menu as MenuIcon, Search as SearchIcon } from '@mui/icons-material';
 import { AppBar, Toolbar, Typography, IconButton, InputBase, alpha } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import clsx from 'clsx';
+import { styled } from '@mui/styles';
 import { useAtom } from "jotai";
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { drawerOpenAtom, sessionAtom } from '../services/globalStore';
 import AccountMenu from './AccountMenu';
 
-const useStyles = makeStyles((theme) => ({
-  appBar: {
-    justifyContent: 'space-between'
-  },
-  appBarSection: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    minWidth: 300
-  },
-  appBarEndSection: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end'
-  },
-  homeLink: {
-    color: 'inherit',
-    textDecoration: 'none'
-  },
-  menuIcon: {
-    marginRight: theme.spacing(2)
-  },
-  searchBar: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: 600,
-  },
-  searchRoot: {
-    flexGrow: 1,
-    color: 'inherit',
-    borderRadius: theme.shape.borderRadius,
-    padding: theme.spacing(0.5, 2),
-    marginRight: theme.spacing(1),
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:focus-within': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25)
-    }
-  },
-  searchIcon: {
-    color: 'inherit',
+const AppBarSection = styled('div')(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  minWidth: 300
+}));
+
+const HomeLink = styled(Link)(() => ({
+  color: 'inherit',
+  textDecoration: 'none'
+}));
+
+const SearchBar = styled('form')(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  width: 600,
+}));
+
+const SearchInput = styled(InputBase)(({ theme }) => ({
+  flexGrow: 1,
+  color: 'inherit',
+  borderRadius: theme.shape.borderRadius,
+  padding: theme.spacing(0.5, 2),
+  marginRight: theme.spacing(1),
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:focus-within': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25)
   }
 }));
 
+const AppBarEndSection = styled(AppBarSection)(() => ({
+  justifyContent: 'flex-end'
+}));
+
 const TopAppBar: React.FC = () => {
-  const classes = useStyles();
   const [session,] = useAtom(sessionAtom);
   const [, setDrawerOpen] = useAtom(drawerOpenAtom);
   const history = useHistory();
@@ -71,28 +58,29 @@ const TopAppBar: React.FC = () => {
 
   return (
     <AppBar position="fixed">
-      <Toolbar className={classes.appBar}>
-        <div className={classes.appBarSection}>
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <AppBarSection>
           <IconButton
-            className={classes.menuIcon}
             color="inherit"
             onClick={() => setDrawerOpen(true)}
-            size="large">
+            size="large"
+            sx={{ marginRight: 2 }}
+          >
             <MenuIcon />
           </IconButton>
-          <Link className={classes.homeLink} to="/">
+          <HomeLink to="/">
             <Typography variant="h6">YoutubeDLView</Typography>
-          </Link>
-        </div>
-        <form className={classes.searchBar} onSubmit={handleSearch}>
-          <InputBase classes={{root: classes.searchRoot}} placeholder="Search" value={search} onChange={handleSearchInput} />
-          <IconButton className={classes.searchIcon} type="submit" size="large">
+          </HomeLink>
+        </AppBarSection>
+        <SearchBar onSubmit={handleSearch}>
+          <SearchInput placeholder="Search" value={search} onChange={handleSearchInput} />
+          <IconButton sx={{ color: 'inherit' }} type="submit" size="large">
             <SearchIcon />
           </IconButton>
-        </form>
-        <div className={clsx(classes.appBarSection, classes.appBarEndSection)}>
+        </SearchBar>
+        <AppBarEndSection>
           {session && <AccountMenu />}
-        </div>
+        </AppBarEndSection>
       </Toolbar>
     </AppBar>
   );
