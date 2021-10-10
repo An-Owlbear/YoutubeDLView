@@ -1,5 +1,4 @@
-import { Button, CircularProgress } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { Button, CircularProgress, styled } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
@@ -9,18 +8,14 @@ import { sessionAtom } from '../services/globalStore';
 import { useList } from '../services/useList';
 import { useRequest } from '../services/useRequest';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginBottom: theme.spacing(2)
-  },
+const Root = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  marginBottom: theme.spacing(2)
 }));
 
 const MainPage: React.FC = () => {
-  const classes = useStyles();
-
   const [session,] = useAtom(sessionAtom);
   const [skip, setSkip] = useState(0);
   const [maxLoaded, setMaxLoaded] = useState(false);
@@ -39,7 +34,7 @@ const MainPage: React.FC = () => {
   if (!session) return <Redirect to="/login" />;
   return (
     <>
-      <div className={classes.root}>
+      <Root>
         {
           videos.map(x =>
             <VideoCard
@@ -51,7 +46,7 @@ const MainPage: React.FC = () => {
             />
           )
         }
-      </div>
+      </Root>
       {isLoading && <CircularProgress />}
       {!isLoading && !maxLoaded && <Button variant="contained" color="primary" onClick={handleLoadButton}>Load more</Button>}
     </>

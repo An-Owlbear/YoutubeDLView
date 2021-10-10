@@ -1,5 +1,4 @@
-import { CircularProgress } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { CircularProgress, styled } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
 import { Redirect } from 'react-router-dom';
@@ -8,18 +7,14 @@ import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
 import { useRequest } from '../services/useRequest';
 
-const useStyles = makeStyles(theme => ({
-  channels: {
-    width: '100%',
-    '& > *': {
-      marginBottom: theme.spacing(2)
-    }
+const Channels = styled('div')(({ theme }) => ({
+  width: '100%',
+  '& > *': {
+    marginBottom: theme.spacing(2)
   }
 }));
 
 const ChannelListPage: React.FC = () => {
-  const classes = useStyles();
-
   const [session,] = useAtom(sessionAtom);
   const [skip, setSkip] = useState(0);
   const [maxLoaded, setMaxLoaded] = useState(false);
@@ -35,7 +30,7 @@ const ChannelListPage: React.FC = () => {
   if (!session) return <Redirect to="/login" />;
   return (
     <>
-      <div className={classes.channels}>
+      <Channels>
         {data &&
           data.map(x =>
             <ChannelListItem
@@ -45,7 +40,7 @@ const ChannelListPage: React.FC = () => {
             />
           )
         }
-      </div>
+      </Channels>
       {isLoading && <CircularProgress />}
     </>
   );

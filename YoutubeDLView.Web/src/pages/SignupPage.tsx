@@ -1,6 +1,5 @@
 import { Error } from '@mui/icons-material';
-import { Button, TextField, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { Button, styled, TextField, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
@@ -8,49 +7,40 @@ import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
 import { useRequest } from '../services/useRequest';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: 450,
-    padding: theme.spacing(5),
-    border: `1px solid ${theme.palette.divider}`,
-    borderRadius: theme.shape.borderRadius,
-    [theme.breakpoints.down('sm')]: {
-      width: '100%'
-    },
-    '& > *': {
-      margin: theme.spacing(1, 0)
-    },
-    '& :first-child': {
-      marginTop: 0
-    },
-    '& :last-child': {
-      marginBottom: 0
-    }
+const Root = styled('form')(({ theme }) => ({
+  width: 450,
+  padding: theme.spacing(5),
+  border: `1px solid ${theme.palette.divider}`,
+  borderRadius: theme.shape.borderRadius,
+  [theme.breakpoints.down('sm')]: {
+    width: '100%'
   },
-  header: {
-    marginBottom: theme.spacing(2)
+  '& > :not(style)': {
+    margin: theme.spacing(1, 0)
   },
-  bottomContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
+  '& :first-child': {
+    marginTop: 0
   },
-  errorContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  errorIcon: {
-    marginRight: theme.spacing(1)
-  },
-  flexGrow: {
-    flexGrow: 1
+  '& :last-child': {
+    marginBottom: 0
   }
 }));
 
-const SignupPage: React.FC = () => {
-  const classes = useStyles();
+const BottomContainer = styled('div')(() => ({
+  display: 'flex',
+  alignItems: 'center'
+}));
 
+const ErrorContainer = styled('div')(() => ({
+  display: 'flex',
+  alignItems: 'center',
+}));
+
+const FlexGrow = styled('div')(() => ({
+  flexGrow: 1
+}));
+
+const SignupPage: React.FC = () => {
   const [session, setSession] = useAtom(sessionAtom);
   const history = useHistory();
   const [values, setValues] = useState({
@@ -96,8 +86,8 @@ const SignupPage: React.FC = () => {
 
   if (session) return <Redirect to="/" />;
   return (
-    <form className={classes.root} onSubmit={handleSignup}>
-      <Typography className={classes.header} variant="h5">Create first user</Typography>
+    <Root onSubmit={handleSignup}>
+      <Typography sx={{ marginBottom: 2 }} variant="h5">Create first user</Typography>
       <TextField
         name="username"
         label="Username"
@@ -128,17 +118,17 @@ const SignupPage: React.FC = () => {
         fullWidth
         disabled={signupRequest.isLoading || loginRequest.isLoading}
       />
-      <div className={classes.bottomContainer}>
+      <BottomContainer>
         {(validationError || signupRequest.error || loginRequest.error) &&
-        <div className={classes.errorContainer}>
-          <Error className={classes.errorIcon} color="error" />
+        <ErrorContainer>
+          <Error sx={{ marginRight: 1 }} color="error" />
           <Typography color="error">{`${validationError}${signupRequest.error}${loginRequest.error}`}</Typography>
-        </div>
+        </ErrorContainer>
         }
-        <div className={classes.flexGrow} />
+        <FlexGrow />
         <Button type="submit" variant="contained" color="primary" disableElevation disabled={signupRequest.isLoading || loginRequest.isLoading}>Signup</Button>
-      </div>
-    </form>
+      </BottomContainer>
+    </Root>
   );
 };
 

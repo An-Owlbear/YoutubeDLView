@@ -1,5 +1,4 @@
-import { Avatar, Button, CircularProgress, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { Avatar, Button, CircularProgress, styled, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
@@ -9,30 +8,28 @@ import { sessionAtom } from '../services/globalStore';
 import { useList } from '../services/useList';
 import { useRequest } from '../services/useRequest';
 
-const useStyles = makeStyles(theme => ({
-  channelHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: theme.spacing(4)
-  },
-  avatar: {
-    height: 80,
-    width: 80,
-    fontSize: '2.5rem',
-    marginRight: theme.spacing(3)
-  },
-  videos: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginBottom: theme.spacing(2)
-  }
+const ChannelHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: theme.spacing(4)
+}));
+
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  height: 80,
+  width: 80,
+  fontSize: '2.5rem',
+  marginRight: theme.spacing(3)
+}));
+
+const Videos = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  marginBottom: theme.spacing(2)
 }));
 
 const ChannelPage: React.FC = () => {
-  const classes = useStyles();
-
   const { id } = useParams<{ id: string }>();
   const [session,] = useAtom(sessionAtom);
 
@@ -58,13 +55,13 @@ const ChannelPage: React.FC = () => {
     <>
       {channelRequest.isLoading && <CircularProgress />}
       {!channelRequest.isLoading && channelRequest.data &&
-        <div className={classes.channelHeader}>
-          <Avatar className={classes.avatar}>{channelRequest.data.name.charAt(0)}</Avatar>
+        <ChannelHeader>
+          <StyledAvatar>{channelRequest.data.name.charAt(0)}</StyledAvatar>
           <Typography variant="h4">{channelRequest.data.name}</Typography>
-        </div>
+        </ChannelHeader>
       }
       {videosRequest.data &&
-        <div className={classes.videos}>
+        <Videos>
           {
             channelVideos.map(x =>
               <VideoCard
@@ -76,7 +73,7 @@ const ChannelPage: React.FC = () => {
               />
             )
           }
-        </div>
+        </Videos>
       }
       {videosRequest.isLoading && <CircularProgress />}
       {!videosRequest.isLoading && !maxLoaded && <Button variant="contained" color="primary" onClick={handleLoadButton}>Load more</Button>}

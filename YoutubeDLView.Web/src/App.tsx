@@ -1,6 +1,4 @@
-import { CssBaseline } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import clsx from 'clsx';
+import { CssBaseline, styled } from '@mui/material';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import '@fontsource/roboto';
@@ -18,32 +16,29 @@ import VideoPage from './pages/VideoPage';
 
 const drawerWidth = 250;
 
-const useStyles = makeStyles((theme) => ({
-  contentHeader: theme.mixins.toolbar,
-  content: {
-    margin: theme.spacing(5),
-    display: 'flex',
-    flexDirection: 'column',
-    alignContent: 'center',
-    '& > *': {
-      alignSelf: 'center'
-    },
-    [theme.breakpoints.down('sm')]: {
-      margin: theme.spacing(2)
-    }
+const ContentHeader = styled('div')(({ theme }) => theme.mixins.toolbar);
+
+const Content = styled('div')(({ theme }) => ({
+  margin: theme.spacing(5),
+  display: 'flex',
+  flexDirection: 'column',
+  alignContent: 'center',
+  '& > *': {
+    alignSelf: 'center'
+  },
+  [theme.breakpoints.down('sm')]: {
+    margin: theme.spacing(2)
   }
 }));
 
 export const App: React.FC = () =>  {
-  const classes = useStyles();
-
   return (
     <BrowserRouter>
       <CssBaseline />
       <TopAppBar />
       <AppDrawer width={drawerWidth} />
-      <div className={classes.contentHeader} />
-      <div className={clsx(classes.content)}>
+      <ContentHeader />
+      <Content>
         <Switch>
           <Route exact path="/" component={MainPage} />
           <Route exact path="/login" component={LoginPage} />
@@ -55,7 +50,7 @@ export const App: React.FC = () =>  {
           <Route exact path="/signup" component={SignupPage} />
           <Route exact path="/setup" component={SetupPage} />
         </Switch>
-      </div>
+      </Content>
     </BrowserRouter>
   );
 };

@@ -1,6 +1,5 @@
 import { Menu as MenuIcon, Search as SearchIcon } from '@mui/icons-material';
-import { AppBar, Toolbar, Typography, IconButton, InputBase, alpha } from '@mui/material';
-import { styled } from '@mui/styles';
+import { AppBar, Toolbar, Typography, IconButton, InputBase, alpha, styled } from '@mui/material';
 import { useAtom } from "jotai";
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';

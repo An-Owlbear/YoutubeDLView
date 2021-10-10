@@ -1,7 +1,5 @@
 import { Error } from '@mui/icons-material';
-import { Box, Button, TextField, Theme, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import clsx from 'clsx';
+import { Box, Button, styled, TextField, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
@@ -9,43 +7,31 @@ import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
 import { useRequest } from '../services/useRequest';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    width: '450px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    padding: theme.spacing(5),
-    outlineColor: theme.palette.divider,
-    border: '1px solid',
-    borderColor: theme.palette.divider,
-    borderRadius: '8px',
-    [theme.breakpoints.down('sm')]: {
-      width: '100%'
-    },
-    '& > *': {
-      marginTop: theme.spacing(3)
-    },
-    '& >:first-child': {
-      marginTop: 0
-    }
+const Root = styled('form')(({ theme }) => ({
+  width: '450px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  padding: theme.spacing(5),
+  outlineColor: theme.palette.divider,
+  border: '1px solid',
+  borderColor: theme.palette.divider,
+  borderRadius: '8px',
+  [theme.breakpoints.down('sm')]: {
+    width: '100%'
   },
-  errorBox: {
-    color: theme.palette.error.light,
-    marginRight: theme.spacing(2),
+  '& > :not(style)': {
+    marginTop: theme.spacing(3)
   },
-  errorIcon: {
-    marginRight: theme.spacing(1)
-  },
-  hidden: {
-    visibility: 'hidden'
-  },
-  flexGrow: {
-    flexGrow: 1
+  '& >:first-child': {
+    marginTop: 0
   }
 }));
 
+const FlexGrow = styled('div')(() => ({
+  flexGrow: 1
+}));
+
 const LoginPage: React.FC = () => {
-  const classes = useStyles();
   const history = useHistory();
 
   // Checks if any users exist, and redirects the user to first time signup page if none do
@@ -80,7 +66,7 @@ const LoginPage: React.FC = () => {
   // Redirects user to root if logged in, otherwise returns login form
   if (session) return <Redirect to="/" />;
   return (
-    <form className={classes.root} onSubmit={handleLogin}>
+    <Root onSubmit={handleLogin}>
       <Typography variant="h3">Login</Typography>
       <TextField
         id="username-input"
@@ -107,14 +93,14 @@ const LoginPage: React.FC = () => {
         error={passwordError()}
       />
       <Box display="flex">
-        <Box className={clsx(classes.errorBox, {[classes.hidden]: !loginRequest.error})} display="flex" alignItems="center">
-          <Error className={classes.errorIcon} />
+        <Box sx={{ display: 'flex', alignItems: 'center', color: 'error.light', marginRight: 2, visibility: loginRequest.error ? 'visible' : 'hidden' }}>
+          <Error sx={{ marginRight: 1 }} />
           <Typography>{loginRequest.error}</Typography>
         </Box>
-        <div className={classes.flexGrow} />
+        <FlexGrow />
         <Button type="submit" variant="contained" color="primary" disableElevation disabled={loginRequest.isLoading}>Login</Button>
       </Box>
-    </form>
+    </Root>
   );
 };
 

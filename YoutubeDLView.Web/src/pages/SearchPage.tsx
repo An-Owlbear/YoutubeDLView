@@ -1,5 +1,4 @@
-import { Button, CircularProgress } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { Button, CircularProgress, styled } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
@@ -9,21 +8,18 @@ import { sessionAtom } from '../services/globalStore';
 import { useList } from '../services/useList';
 import { useRequest } from '../services/useRequest';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '75%',
-    marginBottom: theme.spacing(2),
-    '& > *': {
-      margin: theme.spacing(2, 0)
-    },
-    '& :first-child': {
-      marginTop: 0
-    }
+const Root = styled('div')(({ theme }) => ({
+  width: '75%',
+  marginBottom: theme.spacing(2),
+  '& > *': {
+    margin: theme.spacing(2, 0)
+  },
+  '& :first-child': {
+    marginTop: 0
   }
 }));
 
 const SearchPage: React.FC = () => {
-  const classes = useStyles();
   const { search } = useParams<{ search: string }>();
   const [session,] = useAtom(sessionAtom);
   const [skip, setSkip] = useState(0);
@@ -43,13 +39,13 @@ const SearchPage: React.FC = () => {
   if (!session) return <Redirect to="/" />;
   return (
     <>
-      <div className={classes.root}>
+      <Root>
         {
           videos.map(x =>
             <SearchVideo key={x.id} video={x} />
           )
         }
-      </div>
+      </Root>
       {isLoading && <CircularProgress />}
       {!isLoading && !maxLoaded && <Button variant="contained" color="primary" onClick={handleLoadButton}>Load more</Button>}
     </>
