@@ -3,6 +3,7 @@ import { Box, Button, styled, TextField, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
+import { FlexGrow } from '../components/commonStlyed';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
 import { useRequest } from '../services/useRequest';
@@ -25,10 +26,6 @@ const Root = styled('form')(({ theme }) => ({
   '& >:first-child': {
     marginTop: 0
   }
-}));
-
-const FlexGrow = styled('div')(() => ({
-  flexGrow: 1
 }));
 
 const LoginPage: React.FC = () => {

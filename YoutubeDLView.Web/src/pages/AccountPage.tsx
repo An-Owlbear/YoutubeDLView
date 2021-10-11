@@ -3,6 +3,7 @@ import { Button, styled, TextField, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Redirect } from 'react-router-dom';
+import { FlexGrow } from '../components/commonStlyed';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
 import { useRequest } from '../services/useRequest';
@@ -33,10 +34,6 @@ const ErrorContainer = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center'
-}));
-
-const FlexGrow = styled('div')(() => ({
-  flexGrow: 1
 }));
 
 const AccountPage: React.FC = () => {

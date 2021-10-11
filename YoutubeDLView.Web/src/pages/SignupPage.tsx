@@ -3,6 +3,7 @@ import { Button, styled, TextField, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
+import { FlexGrow } from '../components/commonStlyed';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
 import { useRequest } from '../services/useRequest';
@@ -34,10 +35,6 @@ const BottomContainer = styled('div')(() => ({
 const ErrorContainer = styled('div')(() => ({
   display: 'flex',
   alignItems: 'center',
-}));
-
-const FlexGrow = styled('div')(() => ({
-  flexGrow: 1
 }));
 
 const SignupPage: React.FC = () => {
