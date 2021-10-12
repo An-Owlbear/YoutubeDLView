@@ -32,8 +32,9 @@ const SourceManager: React.FC = () => {
 
   // Adds an item to the sources list
   const addSourceFn = async () => {
-    await addSource.refetch();
-    if (addSource.error) return;
+    const response = await addSource.refetch();
+    setAddPath('');
+    if (!response.success) return;
     await sources.refetch();
     setAddMenuOpen(false);
   };
