@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Hellang.Middleware.ProblemDetails;
+using Hellang.Middleware.ProblemDetails.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -55,7 +57,9 @@ namespace YoutubeDLView.API
                 .AddScheme<AuthenticationSchemeOptions, JwtAuthHandler>("JwtAuthScheme", _ => { });
             services.AddAuthorization();
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "client"; });
-            
+
+            services.AddProblemDetails().AddControllers().AddProblemDetailsConventions();
+
             services.Configure<YoutubeDLViewConfig>(Configuration.GetSection("YoutubeDLViewConfig"));
 
             services.AddYoutubeDLViewDb();
