@@ -1,5 +1,16 @@
 import { Add as AddIcon, Close as CloseIcon } from '@mui/icons-material';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, styled, TextField, Typography, } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  styled,
+  TextField,
+  Typography,
+} from '@mui/material';
 import React, { useRef, useState } from 'react';
 import HttpClient from '../services/HttpClient';
 import { useRequest } from '../services/useRequest';
@@ -69,7 +80,7 @@ const SourceManager: React.FC = () => {
       <IconButton onClick={() => setAddMenuOpen(true)} size="large">
         <AddIcon />
       </IconButton>
-      <Dialog open={addMenuOpen} onClose={handleAddMenuClose} disableScrollLock={true}>
+      <Dialog open={addMenuOpen} onClose={handleAddMenuClose} disableScrollLock={true} maxWidth="xs" fullWidth>
         <DialogTitle>Enter video source path</DialogTitle>
         <DialogContent>
           <TextField
@@ -81,6 +92,8 @@ const SourceManager: React.FC = () => {
             variant="outlined"
             fullWidth
             disabled={addSource.isLoading}
+            margin="dense"
+            error={!!addSource.error}
           />
         </DialogContent>
         <DialogActions>
