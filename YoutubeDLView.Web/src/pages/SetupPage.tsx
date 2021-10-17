@@ -1,8 +1,9 @@
-import { styled } from '@mui/material';
+import { Button, styled } from '@mui/material';
 import { useAtom } from 'jotai';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import SourceManager from '../components/SourceManager';
+import { FlexGrow } from '../components/commonStlyed';
 import { sessionAtom } from '../services/globalStore';
 
 const Root = styled('div')(({ theme }) => ({
@@ -18,6 +19,11 @@ const Root = styled('div')(({ theme }) => ({
   }
 }));
 
+const BottomContainer = styled('div')(() => ({
+  display: 'flex',
+  width: '100%'
+}));
+
 const SetupPage: React.FC = () => {
   const [session,] = useAtom(sessionAtom);
 
@@ -25,6 +31,10 @@ const SetupPage: React.FC = () => {
   return (
     <Root>
       <SourceManager />
+      <BottomContainer>
+        <FlexGrow />
+        <Button variant="contained" component={Link} to="/">Done</Button>
+      </BottomContainer>
     </Root>
   );
 };
