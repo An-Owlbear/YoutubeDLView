@@ -66,7 +66,7 @@ const sendRequest = async <T = undefined>(url: string, requestInit: RequestInit 
   if (response.ok) return response.headers.get('Content-Length') !== '0' ?
     response.json().then((x: T) => Result.ok(x)) :
     Result.ok<T>();
-  return response.text().then(x => Result.failure<T>(x));
+  return response.text().then(x => Result.failure<T>(x ? x : response.statusText));
 };
 
 abstract class HttpClient {
@@ -103,6 +103,11 @@ abstract class HttpClient {
   }
 
   public static getUsers = (): Promise<Result<UserAccount[]>> => sendRequest<UserAccount[]>('/api/users');
+
+  public static addUser = (username: string, password: string): Promise<Result> => {
+    const body = JSON.stringify({ username, password });
+    return sendRequest('/api/users', { method: 'PUT', body });
+  }
 
   public static updateAccount = (userId: string, username: string, password: string): Promise<Result> => {
     const body = JSON.stringify({ userId, username: username ? username : null, password: password ? password : null });
