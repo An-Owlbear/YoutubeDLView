@@ -57,7 +57,7 @@ namespace YoutubeDLView.API.Controllers
         /// <response code="200">Successfully created account</response>
         /// <response code="400">Username already in use</response>
         /// <returns></returns>
-        [HttpPost("Create")]
+        [HttpPut]
         [Authorize(Roles = UserRoles.Administrator)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
