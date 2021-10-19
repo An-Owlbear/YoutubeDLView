@@ -63,5 +63,13 @@ namespace YoutubeDLView.Core.Interfaces
         /// <param name="userUpdate">The update information of the user</param>
         /// <returns></returns>
         Task<Result> UpdateUser(string userId, UserUpdate userUpdate);
+
+        /// <summary>
+        /// Deletes the given user, if it is not the only account, or the only administrator account
+        /// </summary>
+        /// <param name="userId">The id of the user to delete</param>
+        /// <param name="currentUser">The user performing the delete request</param>
+        /// <returns></returns>
+        Task<Result> DeleteUser(string userId, User currentUser);
     }
 }

@@ -96,5 +96,22 @@ namespace YoutubeDLView.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<UserResponse>> GetUsers() =>
             Ok(_userManager.Users.Select(x => new UserResponse(x)));
+
+        
+        /// <summary>
+        /// Deletes the requested user, if it is not the only user, or the only administrator
+        /// </summary>
+        /// <param name="userId">The id of the user to delete</param>
+        /// <returns></returns>
+        [HttpDelete("{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            Result<User> currentUser = _userManager.GetUser(User);
+            if (!currentUser.Success) return FromResult(currentUser);
+            Result deleteResult = await _userManager.DeleteUser(userId, currentUser.Data);
+            return FromResult(deleteResult);
+        }
     }
 }
