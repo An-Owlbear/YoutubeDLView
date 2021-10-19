@@ -81,5 +81,20 @@ namespace YoutubeDLView.Core.Services
             await _dbContext.SaveChangesAsync();
             return Result.Ok();
         }
+        
+        /// <inheritdoc />
+        public async Task<Result> DeleteUser(string userId, User currentUser)
+        {
+            // Checks user if valid for deletion
+            User deleteUser = await _dbContext.Users.FindAsync(userId);
+            if (deleteUser == null) return Result.Fail("User not found", 404);
+            if (_dbContext.Users.Count() == 1) return Result.Fail("Cannot delete only account"); 
+            if (currentUser.Role == UserRole.Administrator &&
+                _dbContext.Users.Count(x => x.Role == UserRole.Administrator) == 1)
+                return Result.Fail("Cannot delete only administrator account");
+            _dbContext.Users.Remove(deleteUser);
+            await _dbContext.SaveChangesAsync();
+            return Result.Ok();
+        }
     }
 }
