@@ -88,8 +88,7 @@ namespace YoutubeDLView.Core.Services
             // Checks user if valid for deletion
             User deleteUser = await _dbContext.Users.FindAsync(userId);
             if (deleteUser == null) return Result.Fail("User not found", 404);
-            if (_dbContext.Users.Count() == 1) return Result.Fail("Cannot delete only account"); 
-            if (currentUser.Role == UserRole.Administrator &&
+            if (deleteUser.Role == UserRole.Administrator &&
                 _dbContext.Users.Count(x => x.Role == UserRole.Administrator) == 1)
                 return Result.Fail("Cannot delete only administrator account");
             _dbContext.Users.Remove(deleteUser);
