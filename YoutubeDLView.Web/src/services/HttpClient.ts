@@ -114,6 +114,9 @@ abstract class HttpClient {
     return sendRequest('/api/users/update', { method: 'PATCH', body: body });
   }
 
+  public static deleteAccount = (userId: string): Promise<Result> =>
+    sendRequest(`/api/users/${userId}`, { method: 'DELETE' });
+
   public static getSources = (): Promise<Result<SourceInformation[]>> => sendRequest<SourceInformation[]>('/api/config/sources');
 
   public static addSource = (path: string): Promise<Result> =>
