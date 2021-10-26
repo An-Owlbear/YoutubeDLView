@@ -5,6 +5,7 @@ import '@fontsource/roboto';
 import AppDrawer from './components/AppDrawer';
 import TopAppBar from "./components/TopAppBar";
 import AccountPage from './pages/AccountPage';
+import AdminPage from './pages/AdminPage';
 import ChannelListPage from './pages/ChannelListPage';
 import ChannelPage from './pages/ChannelPage';
 import LoginPage from './pages/LoginPage';
@@ -49,6 +50,7 @@ export const App: React.FC = () =>  {
           <Route exact path="/account" component={AccountPage} />
           <Route exact path="/signup" component={SignupPage} />
           <Route exact path="/setup" component={SetupPage} />
+          <Route exact path="/admin" component={AdminPage} />
         </Switch>
       </Content>
     </BrowserRouter>
