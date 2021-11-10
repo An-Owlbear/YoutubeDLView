@@ -32,10 +32,10 @@ const LoginPage: React.FC = () => {
   const history = useHistory();
 
   // Checks if any users exist, and redirects the user to first time signup page if none do
-  const usersRequest = useRequest(HttpClient.getUsers, []);
+  const infoRequest = useRequest(HttpClient.getSystemInfo, []);
   useEffect(() => {
-    if (usersRequest.data && usersRequest.data.length === 0) history.push('/signup');
-  }, [usersRequest.data]);
+    if (infoRequest.data && !infoRequest.data.setup) history.push('/signup');
+  }, [infoRequest.data]);
 
   const [values, setValues] = useState({
     username: '',

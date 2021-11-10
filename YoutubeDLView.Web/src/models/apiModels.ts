@@ -34,3 +34,9 @@ export interface UserAccount {
 export interface SourceInformation {
   path: string;
 }
+
+export interface SystemInfo {
+  operatingSystem: string;
+  hostname: string;
+  setup: string;
+}

@@ -3,7 +3,7 @@ import Result from '../models/Result';
 import {
   ChannelInformation,
   LoginInformation,
-  RefreshInformation, SourceInformation,
+  RefreshInformation, SourceInformation, SystemInfo,
   UserAccount,
   VideoInformation
 } from '../models/apiModels';
@@ -127,6 +127,8 @@ abstract class HttpClient {
 
   public static searchVideos = (path: string, skip = 0, take = 30): Promise<Result<VideoInformation[]>> =>
     sendRequest<VideoInformation[]>(`/api/search/${path}?skip=${skip}&take=${take}`);
+
+  public static getSystemInfo = (): Promise<Result<SystemInfo>> => sendRequest<SystemInfo>('/api/config/info');
 }
 
 export default HttpClient;
