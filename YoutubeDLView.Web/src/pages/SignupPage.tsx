@@ -1,7 +1,7 @@
 import { Error } from '@mui/icons-material';
 import { Button, styled, TextField, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { FlexGrow } from '../components/commonStlyed';
 import HttpClient from '../services/HttpClient';
@@ -40,6 +40,13 @@ const ErrorContainer = styled('div')(() => ({
 const SignupPage: React.FC = () => {
   const [session, setSession] = useAtom(sessionAtom);
   const history = useHistory();
+  const infoRequest = useRequest(HttpClient.getSystemInfo, []);
+
+  useEffect(() => {
+    if (infoRequest.data && infoRequest.data.setup) history.push('/login');
+  }, [infoRequest.data]);
+
+
   const [values, setValues] = useState({
     username: '',
     password: '',
