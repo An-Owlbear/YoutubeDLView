@@ -19,9 +19,11 @@ namespace YoutubeDLView.Core.Entities
         {
             Id = Guid.NewGuid().ToString();
             Username = username;
-            Password = password;
+            Password = BCrypt.Net.BCrypt.HashPassword(password);
             Role = role;
             RefreshKey = refreshKey;
         }
+
+        public bool CheckPassword(string checkString) => BCrypt.Net.BCrypt.Verify(checkString, Password);
     }
 }

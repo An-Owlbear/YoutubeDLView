@@ -39,7 +39,7 @@ namespace YoutubeDLView.API.Controllers
         {
             User user = _userManager.Users.FirstOrDefault(x => x.Username == request.Username);
             if (user == null) return BadRequest("User not found");
-            if (user.Password != request.Password) return Unauthorized("Incorrect password");
+            if (!user.CheckPassword(request.Password)) return Unauthorized("Incorrect password");
 
             string accessToken = _tokenHandler.CreateAccessToken(user);
             string refreshToken = user.RefreshKey;
