@@ -24,7 +24,7 @@ const AdminPage: React.FC = () => {
     setTabValue(newValue);
   };
 
-  if (!session) return <Redirect to="/" />;
+  if (!session || session.role !== 'Administrator') return <Redirect to="/" />;
   return (
     <Root>
       <Tabs value={tabValue} onChange={handleTabChange}>
