@@ -1,4 +1,4 @@
-import { AccountCircle, ExitToApp } from '@mui/icons-material';
+import { AccountCircle, ExitToApp, Settings } from '@mui/icons-material';
 import { List, ListItem, ListItemIcon, ListItemText, Paper } from '@mui/material';
 import { useAtom } from 'jotai';
 import React from 'react';
@@ -10,7 +10,7 @@ interface UserPopupProps {
 }
 
 const UserPopup: React.FC<UserPopupProps> = (props: UserPopupProps) => {
-  const [, setSession] = useAtom(sessionAtom);
+  const [session, setSession] = useAtom(sessionAtom);
 
   const handleLogout = () => {
     setSession(null);
@@ -24,6 +24,12 @@ const UserPopup: React.FC<UserPopupProps> = (props: UserPopupProps) => {
           <ListItemIcon><AccountCircle /></ListItemIcon>
           <ListItemText>Account</ListItemText>
         </ListItem>
+        {session?.role === 'Administrator' &&
+          <ListItem button onClick={props.handleClose} component={Link} to="/admin">
+            <ListItemIcon><Settings /></ListItemIcon>
+            <ListItemText>Admin settings</ListItemText>
+          </ListItem>
+        }
         <ListItem button onClick={handleLogout}>
           <ListItemIcon><ExitToApp /></ListItemIcon>
           <ListItemText>Logout</ListItemText>
