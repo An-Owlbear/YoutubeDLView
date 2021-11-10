@@ -36,7 +36,7 @@ const ChannelInfo = styled(Link)(() => ({
   alignItems: 'center',
 }));
 
-const StyledAvatar = styled(Avatar)(() => ({ theme }) => ({
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
   width: 30,
   height: 30,
   fontSize: '0.9375rem',
