@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
+using YoutubeDLView.Core.ValueObjects;
 
 namespace YoutubeDLView.Core.Interfaces
 {
@@ -26,5 +27,11 @@ namespace YoutubeDLView.Core.Interfaces
         /// <param name="path">The path to remove</param>
         /// <returns></returns>
         public Task<Result> RemoveSource(string path);
+
+        /// <summary>
+        /// Returns information about the server
+        /// </summary>
+        /// <returns></returns>
+        public SystemInfo GetSystemInfo();
     }
 }

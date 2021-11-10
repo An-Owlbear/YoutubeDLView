@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Entities;
 using YoutubeDLView.Core.Interfaces;
+using YoutubeDLView.Core.ValueObjects;
 
 namespace YoutubeDLView.Core.Services
 {
@@ -42,5 +44,9 @@ namespace YoutubeDLView.Core.Services
             await _youtubeDlViewDb.SaveChangesAsync();
             return Result.Ok();
         }
+
+        /// <inheritdoc />
+        public SystemInfo GetSystemInfo() => new SystemInfo(Environment.OSVersion.VersionString,
+            Environment.MachineName, _youtubeDlViewDb.Users.Any());
     }
 }

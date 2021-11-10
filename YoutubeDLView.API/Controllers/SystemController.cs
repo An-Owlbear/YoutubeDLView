@@ -7,6 +7,7 @@ using YoutubeDLView.API.Models;
 using YoutubeDLView.Core.Common;
 using YoutubeDLView.Core.Constants;
 using YoutubeDLView.Core.Interfaces;
+using YoutubeDLView.Core.ValueObjects;
 
 namespace YoutubeDLView.API.Controllers
 {
@@ -32,10 +33,7 @@ namespace YoutubeDLView.API.Controllers
         /// <returns><see cref="SystemInfo"/>, containing information about the server</returns>
         [HttpGet("Info")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public SystemInfo GetSystemInfo()
-        {
-            return new SystemInfo();
-        }
+        public SystemInfo GetSystemInfo() => _configManager.GetSystemInfo();
 
         /// <summary>
         /// Returns the list of all video sources to the user
