@@ -24,13 +24,21 @@ const Root = styled('div')(() => ({
 
 const SourceList = styled('div')(({ theme }) => ({
   width: '100%',
-  marginBottom: theme.spacing(2)
+  marginBottom: theme.spacing(2),
+  border: `1px solid ${theme.palette.divider}`,
+  borderRadius: theme.shape.borderRadius,
+  '& > *': {
+    borderBottom: `1px solid ${theme.palette.divider}`
+  },
+  '& :last-child': {
+    border: 0
+  }
 }));
 
-const SourceListItem = styled('div')(() => ({
+const SourceListItem = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  width: '100%'
+  padding: theme.spacing(1)
 }));
 
 const SourceManager: React.FC = () => {

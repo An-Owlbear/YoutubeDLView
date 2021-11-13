@@ -7,13 +7,27 @@ import TabContent from '../components/TabContent';
 import UserManager from '../components/UserManager';
 import { sessionAtom } from '../services/globalStore';
 
-const Root = styled('div')(({ theme }) => ({
-  border: `1px solid ${theme.palette.divider}`,
-  width: '100%'
+const Root = styled('div')(() => ({
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  '& > *': {
+    width: '100%'
+  }
 }));
 
-const ContentContainer = styled('div')(({ theme }) => ({
-  margin: theme.spacing(1)
+const StyledTabs = styled(Tabs)(() => ({
+  maxWidth: '600px'
+}));
+
+const Divider = styled('div')(({ theme }) => ({
+  borderTop: `1px solid ${theme.palette.divider}`,
+  marginBottom: theme.spacing(3)
+}));
+
+const ContentContainer = styled('div')(() => ({
+  maxWidth: '600px'
 }));
 
 const AdminPage: React.FC = () => {
@@ -27,10 +41,11 @@ const AdminPage: React.FC = () => {
   if (!session || session.role !== 'Administrator') return <Redirect to="/" />;
   return (
     <Root>
-      <Tabs value={tabValue} onChange={handleTabChange}>
+      <StyledTabs value={tabValue} onChange={handleTabChange}>
         <Tab label="Sources" value="Sources" />
         <Tab label="Users" value="Users" />
-      </Tabs>
+      </StyledTabs>
+      <Divider />
       <ContentContainer>
         <TabContent value={tabValue} index="Sources">
           <SourceManager />
