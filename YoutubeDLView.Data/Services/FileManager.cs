@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using YoutubeDLView.Core.Common;
@@ -29,9 +30,10 @@ namespace YoutubeDLView.Data.Services
         /// <inheritdoc />
         public async Task ScanFiles()
         {
-            // Retrieves database service
+            // Retrieves database service and begins transaction
             using IServiceScope scope = _serviceProvider.CreateScope();
             IYoutubeDLViewDb youtubeDlViewDb = scope.ServiceProvider.GetRequiredService<IYoutubeDLViewDb>();
+            await using IDbContextTransaction transaction = await youtubeDlViewDb.Database.BeginTransactionAsync();
             
             // Prepares list of current videos to track videos to remove
             List<Video> removeVideos = await youtubeDlViewDb.Videos.AsNoTracking().ToListAsync();
@@ -82,8 +84,14 @@ namespace YoutubeDLView.Data.Services
 
             // Removes videos that were not found on rescan
             youtubeDlViewDb.Videos.RemoveRange(removeVideos);
-
             await youtubeDlViewDb.SaveChangesAsync();
+            
+            // Removes channels with no videos
+            IEnumerable<YtChannel> removeChannels = youtubeDlViewDb.Channels.Where(x => !x.Videos.Any());
+            youtubeDlViewDb.Channels.RemoveRange(removeChannels);
+            await youtubeDlViewDb.SaveChangesAsync();
+
+            await transaction.CommitAsync();
         }
 
         private async Task<IEnumerable<VideoJson>> ScanDirectory(string path)
