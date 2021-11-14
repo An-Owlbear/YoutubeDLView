@@ -39,15 +39,26 @@ const LoginPage: React.FC = () => {
 
   const [values, setValues] = useState({
     username: '',
-    password: ''
+    password: '',
+    usernameError: false,
+    passwordError: false,
+    errorMessage: ''
   });
 
-  const loginRequest = useRequest(() => HttpClient.login(values.username, values.password), [values], { enabled: false });
+  // Handles request errors
+  const handleError = (error: string) => {
+    const usernameError = loginRequest.error === 'User not found' || loginRequest.error === 'An error occurred';
+    const passwordError = loginRequest.error === 'Incorrect password' || loginRequest.error === 'An error occurred';
+    setValues({ ...values, usernameError, passwordError, errorMessage: error });
+  };
+
+  const loginRequest = useRequest(
+    () => HttpClient.login(values.username, values.password),
+    [values],
+    { enabled: false, errorHandler: handleError });
   const [session, setSession] = useAtom(sessionAtom);
 
-  const usernameError = () => loginRequest.error === 'User not found' || loginRequest.error === 'An error occurred';
-  const passwordError = () => loginRequest.error === 'Incorrect password' || loginRequest.error === 'An error occurred';
-
+  // Updates values from form changes
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
@@ -75,7 +86,7 @@ const LoginPage: React.FC = () => {
         variant="outlined"
         fullWidth
         disabled={loginRequest.isLoading}
-        error={usernameError()}
+        error={values.usernameError}
       />
       <TextField
         id="password-input"
@@ -87,12 +98,12 @@ const LoginPage: React.FC = () => {
         variant="outlined"
         fullWidth
         disabled={loginRequest.isLoading}
-        error={passwordError()}
+        error={values.passwordError}
       />
       <Box display="flex">
         <Box sx={{ display: 'flex', alignItems: 'center', color: 'error.light', marginRight: 2, visibility: loginRequest.error ? 'visible' : 'hidden' }}>
           <Error sx={{ marginRight: 1 }} />
-          <Typography>{loginRequest.error}</Typography>
+          <Typography>{values.errorMessage}</Typography>
         </Box>
         <FlexGrow />
         <Button type="submit" variant="contained" color="primary" disableElevation disabled={loginRequest.isLoading}>Login</Button>
