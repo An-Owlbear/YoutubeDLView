@@ -5,6 +5,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);1591</NoWarn>
         <SpaRoot>../YoutubeDLView.Web/</SpaRoot>
+        <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,11 +18,13 @@
     <ItemGroup>
       <ProjectReference Include="..\YoutubeDLView.Data\YoutubeDLView.Data.csproj" />
     </ItemGroup>
-    
-    <ItemGroup>
-        <BuildFiles Include="../YoutubeDLView.Web/build/**/*.*" />
-    </ItemGroup>
 
+
+    <ItemGroup>
+        <Content Remove="$(SpaRoot)**"/>
+        <None Remove="$(SpaRoot)**"/>
+    </ItemGroup>
+    
     <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
         <Exec WorkingDirectory="$(SpaRoot)" Command="yarn install" />
         <Exec WorkingDirectory="$(SpaRoot)" Command="yarn run build" />
