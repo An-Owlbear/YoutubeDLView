@@ -58,8 +58,8 @@ const VideoTitle = styled<ComponentType<TypographyProps<React.ElementType, { com
   display: '-webkit-box',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
-  webkitLineClamp: 2,
-  webkitBoxOrient: 'vertical'
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical'
 }));
 
 const VideoCard: React.FC<VideoCardProps> = (props: VideoCardProps) => {
