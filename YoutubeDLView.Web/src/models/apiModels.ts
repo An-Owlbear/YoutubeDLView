@@ -41,3 +41,11 @@ export interface SystemInfo {
   hostname: string;
   setup: string;
 }
+
+export interface ErrorResponse {
+  type: string;
+  title: string;
+  status: number;
+  detail: string;
+  traceId: string;
+}
