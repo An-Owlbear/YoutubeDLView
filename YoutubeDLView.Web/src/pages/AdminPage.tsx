@@ -2,6 +2,7 @@ import { styled, Tab, Tabs } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
+import GeneralAdminSettings from '../components/GeneralAdminSettings';
 import SourceManager from '../components/SourceManager';
 import TabContent from '../components/TabContent';
 import UserManager from '../components/UserManager';
@@ -32,7 +33,7 @@ const ContentContainer = styled('div')(() => ({
 
 const AdminPage: React.FC = () => {
   const [session,] = useAtom(sessionAtom);
-  const [tabValue, setTabValue] = useState('Sources');
+  const [tabValue, setTabValue] = useState('General');
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setTabValue(newValue);
@@ -42,11 +43,15 @@ const AdminPage: React.FC = () => {
   return (
     <Root>
       <StyledTabs value={tabValue} onChange={handleTabChange}>
+        <Tab label="General" value="General" />
         <Tab label="Sources" value="Sources" />
         <Tab label="Users" value="Users" />
       </StyledTabs>
       <Divider />
       <ContentContainer>
+        <TabContent value={tabValue} index="General">
+          <GeneralAdminSettings />
+        </TabContent>
         <TabContent value={tabValue} index="Sources">
           <SourceManager />
         </TabContent>

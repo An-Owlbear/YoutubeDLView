@@ -129,6 +129,8 @@ abstract class HttpClient {
     sendRequest<VideoInformation[]>(`/api/search/${path}?skip=${skip}&take=${take}`);
 
   public static getSystemInfo = (): Promise<Result<SystemInfo>> => sendRequest<SystemInfo>('/api/config/info');
+
+  public static scanVideos = (): Promise<Result> => sendRequest('/api/videos/scan', { method: 'POST' });
 }
 
 export default HttpClient;
