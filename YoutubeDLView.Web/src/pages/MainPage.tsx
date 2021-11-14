@@ -23,7 +23,7 @@ const MainPage: React.FC = () => {
   const videos = useList(data);
 
   useEffect(() => {
-    if (data && data.length > 30) setMaxLoaded(true);
+    if (data && data.length < 30) setMaxLoaded(true);
   }, [data]);
 
   const handleLoadButton = () => {
