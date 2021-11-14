@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import '@fontsource/roboto';
 import AppDrawer from './components/AppDrawer';
+import SnackbarDisplay from './components/SnackbarDisplay';
 import TopAppBar from "./components/TopAppBar";
 import AccountPage from './pages/AccountPage';
 import AdminPage from './pages/AdminPage';
@@ -53,6 +54,7 @@ export const App: React.FC = () =>  {
           <Route exact path="/admin" component={AdminPage} />
         </Switch>
       </Content>
+      <SnackbarDisplay />
     </BrowserRouter>
   );
 };
