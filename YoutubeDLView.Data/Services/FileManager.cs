@@ -33,6 +33,9 @@ namespace YoutubeDLView.Data.Services
             using IServiceScope scope = _serviceProvider.CreateScope();
             IYoutubeDLViewDb youtubeDlViewDb = scope.ServiceProvider.GetRequiredService<IYoutubeDLViewDb>();
             
+            // Prepares list of current videos to track videos to remove
+            List<Video> removeVideos = await youtubeDlViewDb.Videos.AsNoTracking().ToListAsync();
+
             // Retrieves lists of videos and joins them
             IEnumerable<VideoSource> sources = youtubeDlViewDb.VideoSources.ToList();
             IEnumerable<IEnumerable<VideoJson>> videoLists = await sources
@@ -70,8 +73,15 @@ namespace YoutubeDLView.Data.Services
                     .FirstOrDefaultAsync(x => x.Id == newVideo.Id);
 
                 if (dbVideo == null) await youtubeDlViewDb.Videos.AddAsync(newVideo);
-                else youtubeDlViewDb.Videos.Update(newVideo);
+                else
+                {
+                    youtubeDlViewDb.Videos.Update(newVideo);
+                    removeVideos.RemoveFirst(x => x.Id == newVideo.Id);
+                }
             }
+
+            // Removes videos that were not found on rescan
+            youtubeDlViewDb.Videos.RemoveRange(removeVideos);
 
             await youtubeDlViewDb.SaveChangesAsync();
         }
