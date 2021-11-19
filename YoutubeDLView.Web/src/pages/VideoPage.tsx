@@ -1,7 +1,7 @@
 import { Avatar, CircularProgress, styled, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import React from 'react';
-import { Link, Redirect, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import HttpClient from '../services/HttpClient';
 import { convertShortYTDate } from '../services/dateUtils';
 import { sessionAtom } from '../services/globalStore';
@@ -40,11 +40,11 @@ const ChannelContainer = styled('div')(({ theme }) => ({
 }));
 
 const VideoPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<'id'>() as { id: string };
   const [session,] = useAtom(sessionAtom);
   const { error, isLoading, data } = useRequest(() => HttpClient.getVideo(id), [id]);
 
-  if (!session) return <Redirect to="/login" />;
+  if (!session) return <Navigate to="/login" />;
   return (
     <>
       {isLoading && <CircularProgress/>}

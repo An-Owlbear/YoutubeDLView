@@ -1,7 +1,7 @@
 import { CircularProgress, styled } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { useEffect, useRef, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import ChannelListItem from '../components/ChannelListItem';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
@@ -27,7 +27,7 @@ const ChannelListPage: React.FC = () => {
     previousDataLength.current = data.length;
   }, [data]);
 
-  if (!session) return <Redirect to="/login" />;
+  if (!session) return <Navigate to="/login" />;
   return (
     <>
       <Channels>

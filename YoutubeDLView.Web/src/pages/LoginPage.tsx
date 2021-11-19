@@ -2,7 +2,7 @@ import { Error } from '@mui/icons-material';
 import { Box, Button, styled, TextField, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { FlexGrow } from '../components/commonStlyed';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
@@ -29,12 +29,12 @@ const Root = styled('form')(({ theme }) => ({
 }));
 
 const LoginPage: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // Checks if any users exist, and redirects the user to first time signup page if none do
   const infoRequest = useRequest(HttpClient.getSystemInfo, []);
   useEffect(() => {
-    if (infoRequest.data && !infoRequest.data.setup) history.push('/signup');
+    if (infoRequest.data && !infoRequest.data.setup) navigate('/signup');
   }, [infoRequest.data]);
 
   const [values, setValues] = useState({
@@ -72,7 +72,7 @@ const LoginPage: React.FC = () => {
   };
 
   // Redirects user to root if logged in, otherwise returns login form
-  if (session) return <Redirect to="/" />;
+  if (session) return <Navigate to="/" />;
   return (
     <Root onSubmit={handleLogin}>
       <Typography variant="h3">Login</Typography>

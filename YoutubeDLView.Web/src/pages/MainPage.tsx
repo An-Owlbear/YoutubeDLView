@@ -1,7 +1,7 @@
 import { Button, CircularProgress, styled } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
@@ -31,7 +31,7 @@ const MainPage: React.FC = () => {
   };
 
   // Redirects user to login if not logged in, otherwise returns main page content
-  if (!session) return <Redirect to="/login" />;
+  if (!session) return <Navigate to="/login" />;
   return (
     <>
       <Root>

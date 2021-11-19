@@ -1,6 +1,6 @@
 import { CssBaseline, styled } from '@mui/material';
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import '@fontsource/roboto';
 import AppDrawer from './components/AppDrawer';
 import SnackbarDisplay from './components/SnackbarDisplay';
@@ -41,18 +41,18 @@ export const App: React.FC = () =>  {
       <AppDrawer width={drawerWidth} />
       <ContentHeader />
       <Content>
-        <Switch>
-          <Route exact path="/" component={MainPage} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/videos/:id" component={VideoPage} />
-          <Route exact path="/channels" component={ChannelListPage} />
-          <Route exact path="/channels/:id" component={ChannelPage} />
-          <Route exact path="/search/:search" component={SearchPage}  />
-          <Route exact path="/account" component={AccountPage} />
-          <Route exact path="/signup" component={SignupPage} />
-          <Route exact path="/setup" component={SetupPage} />
-          <Route exact path="/admin" component={AdminPage} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/videos/:id" element={<VideoPage />} />
+          <Route path="/channels" element={<ChannelListPage />} />
+          <Route path="/channels/:id" element={<ChannelPage />} />
+          <Route path="/search/:search" element={<SearchPage />}  />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/setup" element={<SetupPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+        </Routes>
       </Content>
       <SnackbarDisplay />
     </BrowserRouter>

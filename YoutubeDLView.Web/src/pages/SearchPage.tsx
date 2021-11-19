@@ -1,7 +1,7 @@
 import { Button, CircularProgress, styled } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
-import { Redirect, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import SearchVideo from '../components/SearchVideo';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
@@ -20,7 +20,7 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 const SearchPage: React.FC = () => {
-  const { search } = useParams<{ search: string }>();
+  const { search } = useParams<'search'>() as { search: string };
   const [session,] = useAtom(sessionAtom);
   const [skip, setSkip] = useState(0);
   const [maxLoaded, setMaxLoaded] = useState(false);
@@ -36,7 +36,7 @@ const SearchPage: React.FC = () => {
     setSkip(prevState => prevState + 30);
   };
 
-  if (!session) return <Redirect to="/" />;
+  if (!session) return <Navigate to="/" />;
   return (
     <>
       <Root>

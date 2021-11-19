@@ -1,7 +1,7 @@
 import { Avatar, Button, CircularProgress, styled, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
-import { Redirect, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
@@ -30,9 +30,8 @@ const Videos = styled('div')(({ theme }) => ({
 }));
 
 const ChannelPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<'id'>() as { id: string };
   const [session,] = useAtom(sessionAtom);
-
   const channelRequest = useRequest(() => HttpClient.getChannel(id), [id]);
 
   const [skip, setSkip] = useState(0);
@@ -50,7 +49,7 @@ const ChannelPage: React.FC = () => {
     setSkip(prevState => prevState + 30);
   };
 
-  if (!session) return <Redirect to="/" />;
+  if (!session) return <Navigate to="/" />;
   return (
     <>
       {channelRequest.isLoading && <CircularProgress />}

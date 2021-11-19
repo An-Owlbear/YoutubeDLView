@@ -2,7 +2,7 @@ import { Error } from '@mui/icons-material';
 import { Button, styled, TextField, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { FlexGrow } from '../components/commonStlyed';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
@@ -39,11 +39,11 @@ const ErrorContainer = styled('div')(() => ({
 
 const SignupPage: React.FC = () => {
   const [session, setSession] = useAtom(sessionAtom);
-  const history = useHistory();
+  const navigate = useNavigate();
   const infoRequest = useRequest(HttpClient.getSystemInfo, []);
 
   useEffect(() => {
-    if (infoRequest.data && infoRequest.data.setup) history.push('/login');
+    if (infoRequest.data && infoRequest.data.setup) navigate('/login');
   }, [infoRequest.data]);
 
 
@@ -85,10 +85,10 @@ const SignupPage: React.FC = () => {
     const response = await loginRequest.refetch();
     if (loginRequest.error || !response.data) return;
     setSession(response.data);
-    history.push('/setup');
+    navigate('/setup');
   };
 
-  if (session) return <Redirect to="/" />;
+  if (session) return <Navigate to="/" />;
   return (
     <Root onSubmit={handleSignup}>
       <Typography sx={{ marginBottom: 2 }} variant="h5">Create first user</Typography>

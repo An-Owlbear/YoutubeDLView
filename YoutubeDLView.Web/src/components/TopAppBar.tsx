@@ -2,7 +2,7 @@ import { Menu as MenuIcon, Search as SearchIcon } from '@mui/icons-material';
 import { AppBar, Toolbar, Typography, IconButton, InputBase, alpha, styled } from '@mui/material';
 import { useAtom } from "jotai";
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { drawerOpenAtom, sessionAtom } from '../services/globalStore';
 import AccountMenu from './AccountMenu';
 
@@ -42,7 +42,7 @@ const AppBarEndSection = styled(AppBarSection)(() => ({
 const TopAppBar: React.FC = () => {
   const [session,] = useAtom(sessionAtom);
   const [, setDrawerOpen] = useAtom(drawerOpenAtom);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
 
   const handleSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +52,7 @@ const TopAppBar: React.FC = () => {
   const handleSearch = (event: FormEvent<HTMLElement>) => {
     event.preventDefault();
     if (!search) return;
-    history.push(`/search/${search}`);
+    navigate(`/search/${search}`);
   };
 
   return (

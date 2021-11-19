@@ -2,7 +2,7 @@ import { Error } from '@mui/icons-material';
 import { Button, styled, TextField, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { FlexGrow } from '../components/commonStlyed';
 import HttpClient from '../services/HttpClient';
 import { sessionAtom } from '../services/globalStore';
@@ -71,7 +71,7 @@ const AccountPage: React.FC = () => {
     if (!error && values.username && session) setSession({...session, username: values.username});
   };
 
-  if (!session) return <Redirect to="/" />;
+  if (!session) return <Navigate to="/" />;
   return (
     <Root onSubmit={handleUpdate}>
       <Typography variant="h5">Change account details</Typography>

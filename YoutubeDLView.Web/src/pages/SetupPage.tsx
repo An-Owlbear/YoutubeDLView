@@ -1,7 +1,7 @@
 import { Button, styled } from '@mui/material';
 import { useAtom } from 'jotai';
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import SourceManager from '../components/SourceManager';
 import { FlexGrow } from '../components/commonStlyed';
 import { sessionAtom } from '../services/globalStore';
@@ -27,7 +27,7 @@ const BottomContainer = styled('div')(() => ({
 const SetupPage: React.FC = () => {
   const [session,] = useAtom(sessionAtom);
 
-  if (!session) return <Redirect to="/" />;
+  if (!session) return <Navigate to="/" />;
   return (
     <Root>
       <SourceManager />

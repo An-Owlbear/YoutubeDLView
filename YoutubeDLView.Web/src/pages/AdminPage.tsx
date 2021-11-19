@@ -1,7 +1,7 @@
 import { styled, Tab, Tabs } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import GeneralAdminSettings from '../components/GeneralAdminSettings';
 import SourceManager from '../components/SourceManager';
 import TabContent from '../components/TabContent';
@@ -39,7 +39,7 @@ const AdminPage: React.FC = () => {
     setTabValue(newValue);
   };
 
-  if (!session || session.role !== 'Administrator') return <Redirect to="/" />;
+  if (!session || session.role !== 'Administrator') return <Navigate to="/" />;
   return (
     <Root>
       <StyledTabs value={tabValue} onChange={handleTabChange}>
