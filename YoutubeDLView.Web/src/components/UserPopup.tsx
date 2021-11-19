@@ -14,6 +14,7 @@ const UserPopup: React.FC<UserPopupProps> = (props: UserPopupProps) => {
 
   const handleLogout = () => {
     setSession(null);
+    localStorage.clear();
     props.handleClose();
   };
 
