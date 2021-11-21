@@ -1,0 +1,146 @@
+:root {
+  --accent: #1976D2;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.separator {
+  flex-grow: 1
+}
+
+nav {
+  background-color: var(--accent);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  height: 60px;
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0 40px;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.nav-links > * {
+  margin: 0 10px;
+}
+
+.nav-links > :first-child {
+  margin-left: 0;
+}
+
+.nav-links > :last-child {
+  margin-right: 0;
+}
+
+.nav-links {
+  font-size: 16px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+}
+
+#home-link {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+#nav-download-link {
+  color: black;
+  background-color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+
+#github-link {
+  display: block;
+}
+
+#github-link img {
+  width: 35px;
+  height: auto;
+  display: block;
+}
+
+#landing-page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#landing-page-content h1 {
+  margin-top: 100px;
+  font-size: 50px;
+  text-align: center;
+}
+
+#landing-page-content h2 {
+  max-width: 500px;
+  margin: 0 auto;
+  font-size: 24px;
+  font-weight: 500;
+  text-align: center;
+}
+
+#landing-download-btn {
+  padding: 10px 30px;
+  background-color: var(--accent);
+  color: white;
+  font-size: 24px;
+  text-decoration: none;
+  border-radius: 10px;
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+}
+
+#landing-download-btn > :first-child {
+  margin-right: 8px;
+}
+
+#landing-download-btn img {
+  width: 40px;
+  height: 40px;
+}
+
+#landing-screenshot {
+  margin-top: 100px;
+  width: 80%;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+}
+
+#feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 80px 5vw 0 5vw;
+  display: flex;
+  flex-flow: wrap;
+  max-width: 90vw;
+  justify-content: center;
+}
+
+#feature-list > * {
+  margin: 20px;
+  width: 250px;
+}
+
+#feature-list img {
+  height: 75px;
+  width: 75px;
+  display: block;
+  margin: 0 auto;
+}
+
+#feature-list p {
+  font-size: 24px;
+  text-align: center;
+}
