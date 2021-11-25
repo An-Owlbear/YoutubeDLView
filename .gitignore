@@ -1,6 +1,7 @@
 ﻿bin/
 obj/
 .idea/
+.vscode/
 
 YoutubeDLView.db*
 YoutubeDLView.API/client
