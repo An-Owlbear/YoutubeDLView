@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <title>YoutubeDLView - User guide</title>
+</head>
+<body>
+  <nav>
+    <ul class="nav-links">
+      <li><a id="home-link" href="/">YoutubeDLView</a></li>
+      <li class="separator"></li>
+      <li><a href="docs.html">User guide</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a id="nav-download-link" href="download.html">Download</a></li>
+      <li><a id="github-link" href="https://github.com/An-Owlbear/YoutubeDLView"><img alt="GitHub" src="images/github.svg"></a></li>
+    </ul>
+  </nav>
+
+  <section id="main-content" class="flex-row">
+    <aside id="docs-contents-list">
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#managing-users">Managing users</a></li>
+        <li><a href="#managing-videos">Managing videos</a></li>
+      </ul>
+    </aside>
+
+    <article id="docs-content">
+      <section id="installation">
+        <h1>Installation</h1>
+        <p>
+          To install YoutubeDLView, the .NET 5 runtime must be installed on your computer. Instructions on how to
+          install it can be found <a href="https://dotnet.microsoft.com/download/dotnet/5.0.">here</a><br>
+          After installing the .NET runtime, run the YoutubeDLView installer to install the program. Once the installer
+          completes you can access the interface from the url <a href="http://localhost:5000">http://localhost:5000.</a>
+        </p>
+      </section>
+      <section id="setup">
+        <h1>Setup</h1>
+        <p>
+          Once YoutubeDLView is installed, got to <a href="http://localhost:5000">http://localhost:5000</a> in your
+          browser, and you will be redirected to the account creation page, here you can enter a username and password
+          to create the first administrator account for your installation.<br>
+          Once the account is created, you can add directories on the for server to scan for videos.
+        </p>
+      </section>
+      <section id="managing-users">
+        <h1>Managing users</h1>
+        <p>
+          Users can be managed by administrator accounts in the administration settings section. This can be accessed by
+          clicking the top-right account icon when logged in to an administrator account, and clicking the admin
+          settings button. In this section users can be managed in the Users tab, here users can be created, deleted
+          and edited.
+        </p>
+      </section>
+      <section id="managing-videos">
+        <h1>Managing videos</h1>
+        <p>
+          Videos sources can be managed in the administrator settings section, which can accessed as detailed in the
+          <a href="#managing-users">managing users</a> section of the guide. In these settings, video sources can be
+          added or removed in the Videos tab.
+        </p>
+      </section>
+    </article>
+  </section>
+</body>
+</html>
