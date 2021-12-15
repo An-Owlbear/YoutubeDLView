@@ -199,6 +199,7 @@ nav {
   margin-top: 50px;
   font-size: 32px;
   font-weight: bold;
+  text-align: center;
 }
 
 #faq-list {
@@ -288,7 +289,7 @@ nav {
   }
 
   #main-content {
-    margin: 0 10px;
+    margin: 0 20px;
   }
 
   #download-list {
