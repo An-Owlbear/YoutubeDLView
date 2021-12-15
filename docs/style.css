@@ -273,3 +273,21 @@ nav {
   max-width: 100%;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
+
+@media only screen and (max-width: 600px) {
+  .nav-links {
+    padding: 0 20px;
+  }
+
+  .nav-links > *:first-child {
+    display: initial;
+  }
+
+  .nav-links > * {
+    display: none;
+  }
+
+  #main-content {
+    margin: 0 10px;
+  }
+}
