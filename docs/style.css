@@ -290,4 +290,20 @@ nav {
   #main-content {
     margin: 0 10px;
   }
+
+  #download-list {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 30px;
+  }
+
+  #download-list > * {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #download-list a {
+    width: 100%;
+    margin: 0;
+  }
 }
