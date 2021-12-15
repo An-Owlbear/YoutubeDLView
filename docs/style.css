@@ -250,7 +250,7 @@ nav {
   flex-grow: 1;
   padding: 50px 25px 25px;
   height: calc(100vh - 60px);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 #docs-content section {
@@ -266,4 +266,10 @@ nav {
 
 #docs-content p {
   line-height: 1.4;
+}
+
+#docs-content img,
+#docs-content video {
+  max-width: 100%;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
