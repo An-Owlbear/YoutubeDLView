@@ -19,7 +19,6 @@ a {
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
-  word-break: break-word;
 }
 
 /* Used to separate groups of elements in a flexbox */
