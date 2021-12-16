@@ -277,14 +277,19 @@ nav a {
   overflow-y: auto;
 }
 
-#docs-content section {
+#docs-content > * {
   max-width: 1000px;
   margin: 0 auto 50px auto;
 }
 
+#docs-content > h1 {
+  font-size: 48px;
+  margin-bottom: 25px;
+}
+
 #docs-content h2 {
   margin: 0;
-  font-size: 48px;
+  font-size: 36px;
   font-weight: bold;
 }
 
