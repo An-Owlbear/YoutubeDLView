@@ -9,10 +9,12 @@
   <script src="script.js" async></script>
 </head>
 <body>
+  <!-- Navigation bar -->
   <nav>
     <a id="home-link" href="/">YoutubeDLView</a>
     <div class="separator"></div>
     <button id="menu-button" onClick="toggleMenu()"><img src="images/menu.svg" alt="toggle menu button"></button>
+    <!-- Main navigation links, hidden in mobile view until toggled using the button above -->
     <ul id="nav-links">
       <li><a href="docs.html">User guide</a></li>
       <li><a href="faq.html">FAQ</a></li>
@@ -26,7 +28,9 @@
     </ul>
   </nav>
 
+  <!-- Main page content -->
   <main id="main-content" class="docs-page">
+    <!-- List of contents, displayed at the side in desktop view, and above main content in mobile view -->
     <aside id="docs-contents-list">
       <ul>
         <li><a href="#installation">Installation</a></li>
@@ -36,6 +40,7 @@
       </ul>
     </aside>
 
+    <!-- Main user guide content -->
     <article id="docs-content">
       <h1>Welcome to the YoutubeDLView user guide</h1>
       <p>

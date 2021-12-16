@@ -1,23 +1,28 @@
+/* Defines colour variables */
 :root {
   --accent: #1976D2;
   --link: #42A5F5;
 }
 
+/* Sets all elements to have border-box sizing */
 * {
   box-sizing: border-box;
 }
 
+/* Sets default hyperlink color */
 a {
   text-decoration: none;
   color: var(--link);
 }
 
+/* Sets default font and word-break setting for website */
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
   word-break: break-word;
 }
 
+/* Used to separate groups of elements in a flexbox */
 .separator {
   flex-grow: 1
 }
@@ -38,6 +43,7 @@ nav a {
   color: white;
 }
 
+/* Flexbox is used to arrange navigation links in a row, vertically aligning them to the center of the container */
 #nav-links {
   list-style: none;
   margin: 0;
@@ -47,10 +53,12 @@ nav a {
   align-items: center;
 }
 
+/* Sets default margins for all navigation links */
 #nav-links > * {
   margin: 0 10px;
 }
 
+/* Removes left margin for first nav link, and right margin for last */
 #nav-links > :first-child {
   margin-left: 0;
 }
@@ -67,6 +75,7 @@ nav a {
   color: white;
 }
 
+/* Hides the menu button in desktop view, and sets other styling */
 #menu-button {
   display: none;
   background: none;
@@ -84,6 +93,7 @@ nav a {
   font-weight: 500;
 }
 
+/* Adds different styling for download navigation link */
 #nav-links #nav-download-link {
   color: black;
   background-color: white;
@@ -101,10 +111,12 @@ nav a {
   display: block;
 }
 
+/* Hides github link text in desktop view */
 #github-link span {
   display: none;
 }
 
+/* Horizontally aligns all content in main section by default */
 #main-content {
   display: flex;
   flex-direction: column;
@@ -125,6 +137,7 @@ nav a {
   text-align: center;
 }
 
+/* Sets styling for download button, and sets it as a flexbox to align download icon and text within the button */
 #landing-download-btn {
   padding: 10px 30px;
   background-color: var(--accent);
@@ -145,6 +158,7 @@ nav a {
   height: 40px;
 }
 
+/* Sets image size and spacing, and shadow so it can be more easily distinguished from page background */
 #landing-screenshot {
   margin-top: 100px;
   width: 80%;
@@ -152,6 +166,7 @@ nav a {
   border-radius: 10px;
 }
 
+/* Sets feature list as a flexbox, and to wrap when the width becomes too small to fit all the items */
 #feature-list {
   list-style: none;
   padding: 0;
@@ -190,6 +205,10 @@ nav a {
   margin-top: 10px;
 }
 
+/*
+  Sets download list as a flexbox, so it can be changed to display items vertically in mobile view with little styling
+  changes
+*/
 #download-list {
   list-style: none;
   margin: 0;
@@ -242,6 +261,7 @@ nav a {
   font-size: 16px;
 }
 
+/* Content in a row instead of column for docs page */
 #main-content.docs-page {
   flex-direction: row;
 }
@@ -259,6 +279,7 @@ nav a {
   border-bottom: 1px solid #BDBDBD;
 }
 
+/* Sets size, color and spacing of contents list items, and transition for changing colour when hovered over */
 #docs-contents-list a {
   display: block;
   font-size: 16px;
@@ -267,10 +288,15 @@ nav a {
   transition: all 0.25s;
 }
 
+/* Changes contents list items colour when hovered over */
 #docs-contents-list a:hover {
   background-color: #BDBDBD;
 }
 
+/*
+  Main docs content fills remaining space not used by list of contents, and scrolls separately so list of contents
+  is always on screen
+*/
 #docs-content {
   flex-grow: 1;
   padding: 50px 25px 25px;
@@ -278,11 +304,13 @@ nav a {
   overflow-y: auto;
 }
 
+/* Horizontally aligns elements within docs-content to center */
 #docs-content > * {
   max-width: 1000px;
   margin: 0 auto 50px auto;
 }
 
+/* Sets font size and specific margins for headings within docs-content */
 #docs-content > h1 {
   font-size: 42px;
   margin-bottom: 25px;
@@ -298,12 +326,14 @@ nav a {
   line-height: 1.4;
 }
 
+/* Ensures videos and images on docs page don't overflow, and adds shadows so they are more easily distinguished */
 #docs-content img,
 #docs-content video {
   max-width: 100%;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+/* Specific css rules for mobile view */
 @media only screen and (max-width: 600px) {
   nav {
     padding: 0 20px;
@@ -313,10 +343,12 @@ nav a {
     padding: 0;
   }
 
+  /* Hides navigation links by default */
   #nav-links > * {
     display: none;
   }
 
+  /* Displays navigations links in a column below navigation bar */
   #nav-links.display {
     display: flex;
     flex-direction: column;
@@ -329,6 +361,7 @@ nav a {
     background-color: var(--accent);
   }
 
+  /* Displays navigation links when toggled */
   #nav-links.display > * {
     width: 100%;
     display: block;
@@ -341,6 +374,7 @@ nav a {
     display: block;
   }
 
+  /* Properly aligns github icon and text */
   #nav-links.display #github-link {
     display: flex;
     flex-direction: row;
@@ -352,21 +386,25 @@ nav a {
     margin-left: 10px;
   }
 
+  /* Displays toggle menu button in mobile view */
   #menu-button {
     display: block;
     margin-right: 0;
   }
 
+  /* Adds default margins for main content */
   #main-content {
     margin: 0 20px;
   }
 
+  /* Displays download buttons in a column */
   #download-list {
     flex-direction: column;
     width: 100%;
     padding: 0 30px;
   }
 
+  /* Makes download list icons wider to be easier to click */
   #download-list > * {
     width: 100%;
     margin-bottom: 10px;
@@ -377,19 +415,23 @@ nav a {
     margin: 0;
   }
 
+  /* Displays docs page elements in a column */
   #main-content.docs-page {
     margin: 0;
     flex-direction: column;
   }
 
+  /* Makes content list take up full screen width */
   #docs-contents-list {
     width: 100%;
   }
 
+  /* Resets minimum height of contents list to prevent it taking up too much space */
   #docs-contents-list ul {
     min-height: initial;
   }
 
+  /* Stops docs content from scrolling independently */
   #docs-content {
     padding-top: 25px;
     overflow-y: initial;
